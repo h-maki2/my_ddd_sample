@@ -1,0 +1,16 @@
+@startuml taskManagement
+
+entity task {
+    task_id: CHAR(26)
+    --
+    group_id: CHAR(26)
+    assignee: CHAR(26)
+    name: VARCHAR(50)
+    status: TINYINT
+    progress_rate: TINYINT
+    deadline: TIMESTAMP
+    overview: TEXT
+    parent_task_id(FK): CHAR(26)
+}
+
+@enduml
