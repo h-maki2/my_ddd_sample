@@ -1,0 +1,12 @@
+{
+    "name": "myvendor/ddd_common_lib",
+    "version": "1.0.0",
+    "description": "common library for ddd",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "dddCommonLib\\": "src/"
+        }
+    },
+    "require": {}
+}
