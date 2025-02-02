@@ -4,7 +4,7 @@ namespace dddCommonLib\domain\model;
 
 class DomainEventPublisher
 {
-    private static self $instance;
+    private static ?self $instance = null;
 
     private array $subscriberList = []; // DomainEventSubscriber[]
 
