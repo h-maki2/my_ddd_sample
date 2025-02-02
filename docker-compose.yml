@@ -50,7 +50,7 @@ services:
       dockerfile: Dockerfile
     container_name: identity_access
     volumes:
-      - ./identity_access:/var/www/html/identity_access
+      - .:/var/www/html
     ports:
       - "8080:80"
     networks:
@@ -62,7 +62,7 @@ services:
       dockerfile: Dockerfile
     container_name: task_management
     volumes:
-      - ./task_management:/var/www/html/task_management
+      - .:/var/www/html
     ports:
       - "8081:80"
     networks:
@@ -74,7 +74,7 @@ services:
       dockerfile: Dockerfile
     container_name: ddd_common_lib
     volumes:
-      - ./ddd_common_lib:/var/www/html/ddd_common_lib
+      - .:/var/www/html
 
 networks:
   app-network:
