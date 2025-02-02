@@ -8,16 +8,15 @@ class DomainEventPublisher
 
     private array $subscriberList = []; // DomainEventSubscriber[]
 
-    private function __construct()
+    private function __construct(){}
+
+    public static function instance(): self
     {
         if (self::$instance === null) {
             self::$instance = new self();
         }
-    }
 
-    public static function instance(): self
-    {
-        return new self();
+        return self::$instance;
     }
 
     public function subscribe(DomainEventSubscriber $subscriber): void
