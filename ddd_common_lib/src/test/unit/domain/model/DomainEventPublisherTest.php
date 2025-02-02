@@ -3,6 +3,8 @@
 use dddCommonLib\domain\model\DomainEvent;
 use dddCommonLib\domain\model\DomainEventPublisher;
 use dddCommonLib\domain\model\DomainEventSubscriber;
+use dddCommonLib\test\helpers\event\TestEvent;
+use dddCommonLib\test\helpers\event\TestEventSubscriber;
 use PHPUnit\Framework\TestCase;
 
 class DomainEventPublisherTest extends TestCase
@@ -65,48 +67,6 @@ class DomainEventPublisherTest extends TestCase
         // then
         // パブリッシュしたイベントがハンドリングされていないことを確認する
         $this->assertFalse($subscriber1->handled);
-    }
-}
-
-class TestEvent implements DomainEvent
-{
-    private DateTimeImmutable $occurredOn;
-    private int $eventVersion;
-
-    public function __construct()
-    {
-        $this->occurredOn = new DateTimeImmutable();
-        $this->eventVersion = 1;
-    }
-
-    public function occurredOn(): DateTimeImmutable
-    {
-        return $this->occurredOn;
-    }
-
-    public function eventVersion(): int
-    {
-        return $this->eventVersion;
-    }
-
-    public function eventType(): string
-    {
-        return self::class;
-    }
-}
-
-class TestEventSubscriber implements DomainEventSubscriber
-{
-    public bool $handled = false;
-
-    public function handleEvent(DomainEvent $aDomainEvent): void
-    {
-        $this->handled = true;
-    }
-
-    public function subscribedToEventType(): string
-    {
-        return TestEvent::class;
     }
 }
 
