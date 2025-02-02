@@ -45,13 +45,9 @@ services:
       - "3308:3306"
 
   identity_access:
-    environment:
-      - APACHE_DOCUMENT_ROOT=/var/www/html/identity_access/src/public
     build:
-      context: .
+      context: ./identity_access
       dockerfile: Dockerfile
-      args:
-        APACHE_DOCUMENT_ROOT: /var/www/html/identity_access/src/public
     container_name: identity_access
     volumes:
       - ./identity_access:/var/www/html/identity_access
@@ -61,13 +57,9 @@ services:
       - app-network
 
   task_management:
-    environment:
-      - APACHE_DOCUMENT_ROOT=/var/www/html/task_management/src/public
     build:
-      context: .
+      context: ./task_management
       dockerfile: Dockerfile
-      args:
-        APACHE_DOCUMENT_ROOT: /var/www/html/task_management/src/public
     container_name: task_management
     volumes:
       - ./task_management:/var/www/html/task_management
@@ -78,7 +70,7 @@ services:
 
   ddd_common_lib:
     build:
-      context: .
+      context: ./ddd_common_lib
       dockerfile: Dockerfile
     container_name: ddd_common_lib
     volumes:
