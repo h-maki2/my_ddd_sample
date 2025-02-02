@@ -22,7 +22,7 @@ class DomainEventPublisher
 
     public function subscribe(DomainEventSubscriber $subscriber): void
     {
-        $this->addSubscrober($subscriber);
+        $this->addSubscriber($subscriber);
     }
 
     public function publish(DomainEvent $domainEvent): void
@@ -39,7 +39,7 @@ class DomainEventPublisher
         $this->subscriberList = [];
     }
 
-    private function addSubscrober(DomainEventSubscriber $subscriber): void
+    private function addSubscriber(DomainEventSubscriber $subscriber): void
     {
         $this->subscriberList[] = $subscriber;
     }
