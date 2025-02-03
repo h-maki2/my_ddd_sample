@@ -11,8 +11,4 @@ interface DomainEvent
     public function eventVersion(): int;
 
     public function eventType(): string;
-
-    public function toStoredEvent(): StoredEvent;
-
-    public function jsonSerialize(): string;
 }
