@@ -1,6 +1,6 @@
 <?php
 
-namespace dddCommonLib\domain\model;
+namespace dddCommonLib\domain\model\domainEvent;
 
 class DomainEventPublisher
 {

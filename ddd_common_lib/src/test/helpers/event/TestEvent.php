@@ -3,7 +3,7 @@
 namespace dddCommonLib\test\helpers\event;
 
 use DateTimeImmutable;
-use dddCommonLib\domain\model\DomainEvent;
+use dddCommonLib\domain\model\domainEvent\DomainEvent;
 
 class TestEvent implements DomainEvent
 {

@@ -1,6 +1,6 @@
 <?php
 
-use dddCommonLib\domain\eventStore\JsonSerializer;
+use dddCommonLib\domain\model\eventStore\JsonSerializer;
 use dddCommonLib\test\helpers\event\TestEvent;
 use PHPUnit\Framework\TestCase;
 

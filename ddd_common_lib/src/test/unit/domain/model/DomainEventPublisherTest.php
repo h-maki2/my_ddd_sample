@@ -1,8 +1,8 @@
 <?php
 
-use dddCommonLib\domain\model\DomainEvent;
-use dddCommonLib\domain\model\DomainEventPublisher;
-use dddCommonLib\domain\model\DomainEventSubscriber;
+use dddCommonLib\domain\model\domainEvent\DomainEvent;
+use dddCommonLib\domain\model\domainEvent\DomainEventPublisher;
+use dddCommonLib\domain\model\domainEvent\DomainEventSubscriber;
 use dddCommonLib\test\helpers\event\TestEvent;
 use dddCommonLib\test\helpers\event\TestEventSubscriber;
 use PHPUnit\Framework\TestCase;

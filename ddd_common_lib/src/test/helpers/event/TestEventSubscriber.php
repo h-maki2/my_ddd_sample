@@ -2,8 +2,8 @@
 
 namespace dddCommonLib\test\helpers\event;
 
-use dddCommonLib\domain\model\DomainEvent;
-use dddCommonLib\domain\model\DomainEventSubscriber;
+use dddCommonLib\domain\model\domainEvent\DomainEvent;
+use dddCommonLib\domain\model\domainEvent\DomainEventSubscriber;
 
 class TestEventSubscriber implements DomainEventSubscriber
 {

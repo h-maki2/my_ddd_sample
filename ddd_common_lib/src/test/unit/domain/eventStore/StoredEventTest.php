@@ -1,7 +1,7 @@
 <?php
 
-use dddCommonLib\domain\eventStore\JsonSerializer;
-use dddCommonLib\domain\eventStore\StoredEvent;
+use dddCommonLib\domain\model\eventStore\JsonSerializer;
+use dddCommonLib\domain\model\eventStore\StoredEvent;
 use dddCommonLib\test\helpers\event\TestEvent;
 use PHPUnit\Framework\TestCase;
 

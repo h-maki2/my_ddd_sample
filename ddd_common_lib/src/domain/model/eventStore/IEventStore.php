@@ -1,6 +1,6 @@
 <?php
 
-namespace dddCommonLib\domain\eventStore;
+namespace dddCommonLib\domain\model\eventStore;
 
 interface IEventStore
 {
