@@ -37,7 +37,7 @@ class StoredEventTest extends TestCase
 
         // when
         // StoredEventのインスタンス生成
-        $storedEvent = StoredEvent::reconstruct($eventType, $occurredOn, $eventBody);
+        $storedEvent = StoredEvent::reconstruct($eventType, $occurredOn, $eventBody, '1');
 
         // ドメインイベントを復元する
         $reconstructedTestEvent = $storedEvent->toDomainEvent();

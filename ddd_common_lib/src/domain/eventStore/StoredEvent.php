@@ -10,16 +10,19 @@ class StoredEvent
     readonly string $eventBody;
     readonly DateTimeImmutable $occurredOn;
     readonly string $eventType;
+    readonly string $eventId;
 
     private function __construct(
         string $anEventType, 
         DateTimeImmutable $anOccurredOn, 
-        string $anEventBody
+        string $anEventBody,
+        string $anEventId
     )
     {
         $this->eventType = $anEventType;
         $this->occurredOn = $anOccurredOn;
         $this->eventBody = $anEventBody;
+        $this->eventId = $anEventId;
     }
 
     public static function fromDomainEvent(DomainEvent $aDomainEvent): self
@@ -28,20 +31,23 @@ class StoredEvent
         return new self(
             $aDomainEvent->eventType(),
             $aDomainEvent->occurredOn(),
-            $eventBody
+            $eventBody,
+            '0'
         );
     }
 
     public static function reconstruct(
         string $eventType,
         DateTimeImmutable $occurredOn,
-        string $eventBody
+        string $eventBody,
+        string $eventId
     ): self
     {
         return new StoredEvent(
             $eventType,
             $occurredOn,
-            $eventBody
+            $eventBody,
+            $eventId
         );
     }
 
