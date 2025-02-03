@@ -32,12 +32,16 @@ class StoredEvent
         );
     }
 
-    public static function fromJsonArray(array $jsonArray): self
+    public static function reconstruct(
+        string $eventType,
+        DateTimeImmutable $occurredOn,
+        string $eventBody
+    ): self
     {
         return new StoredEvent(
-            $jsonArray['eventType'],
-            new DateTimeImmutable($jsonArray['occurredOn']),
-            $jsonArray['eventBody']
+            $eventType,
+            $occurredOn,
+            $eventBody
         );
     }
 
