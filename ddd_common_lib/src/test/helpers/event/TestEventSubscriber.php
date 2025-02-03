@@ -14,6 +14,11 @@ class TestEventSubscriber implements DomainEventSubscriber
         $this->handled = true;
     }
 
+    public function isSubscribedTo(DomainEvent $aDomainEvent): bool
+    {
+        return $this->subscribedToEventType() === $aDomainEvent->eventType();
+    }
+
     public function subscribedToEventType(): string
     {
         return TestEvent::class;
