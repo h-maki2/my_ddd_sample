@@ -3,6 +3,7 @@
 namespace dddCommonLib\domain\model\eventStore;
 
 use DateTimeImmutable;
+use dddCommonLib\domain\model\common\JsonSerializer;
 use dddCommonLib\domain\model\domainEvent\DomainEvent;
 
 class StoredEvent
