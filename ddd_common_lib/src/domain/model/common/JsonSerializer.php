@@ -1,6 +1,6 @@
 <?php
 
-namespace dddCommonLib\domain\model\eventStore;
+namespace dddCommonLib\domain\model\common;
 
 use DateTime;
 use DateTimeImmutable;
