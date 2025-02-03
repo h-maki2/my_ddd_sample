@@ -45,11 +45,6 @@ class StoredEvent
         );
     }
 
-    public function serialize(): string
-    {
-        return JsonSerializer::serialize($this);
-    }
-
     public function toDomainEvent(): DomainEvent
     {
         return JsonSerializer::deserialize($this->eventBody, $this->eventType);
