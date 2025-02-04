@@ -66,14 +66,22 @@ class Exchange
         return new self($exchangeName, ExchangeType::TOPIC, $isDurable, $channel, $connection, $routingKey);
     }
 
-    public function setQueue(string $queueName): void
+    public function setQueue(string $queueName): self
     {
         if ($queueName === '') {
             throw new InvalidArgumentException('キュー名が空です。');
         }
 
-        $this->channel->queue_declare($queueName, false, $this->isDurable, false, false);
-        $this->channel->queue_bind($queueName, $this->exchangeName);
+        $channel = $this->channel;
+        $channel->queue_declare($queueName, false, $this->isDurable, false, false);
+
+        if ($this->isFanout()) {
+            $channel->queue_bind($queueName, $this->exchangeName);
+        } elseif ($this->isTopic()) {
+            $channel->queue_bind($queueName, $this->exchangeName, $this->routingKey);
+        }
+
+        return new self($this->exchangeName, $this->exchangeType, $this->isDurable, $channel, $this->connection, $this->routingKey);
     }
 
     public function isFanout(): bool
