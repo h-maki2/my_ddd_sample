@@ -2,6 +2,7 @@
 
 namespace dddCommonLib\adapter\messaging\rabbitmq;
 
+use InvalidArgumentException;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 
@@ -63,6 +64,16 @@ class Exchange
         $channel = $connection->channel();
         $channel->exchange_declare($exchangeName, ExchangeType::TOPIC, false, $isDurable, false);
         return new self($exchangeName, ExchangeType::TOPIC, $isDurable, $channel, $connection, $routingKey);
+    }
+
+    public function setQueue(string $queueName): void
+    {
+        if ($queueName === '') {
+            throw new InvalidArgumentException('キュー名が空です。');
+        }
+
+        $this->channel->queue_declare($queueName, false, $this->isDurable, false, false);
+        $this->channel->queue_bind($queueName, $this->exchangeName);
     }
 
     public function isFanout(): bool

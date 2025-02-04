@@ -2,7 +2,8 @@
 
 namespace dddCommonLib\adapter\messaging\rabbitmq;
 
-enum ExchangeType: string {
+enum ExchangeType: string 
+{
     case FANOUT = 'fanout';
     case DIRECT = 'direct';
     case TOPIC = 'topic';
