@@ -11,17 +11,23 @@ class Exchange
     readonly ExchangeType $exchangeType;
     readonly bool $isDurable;
     readonly AMQPChannel $channel;
+    private AMQPStreamConnection $connection;
+    readonly ?string $routingKey;
 
     private function __construct(
         string $exchangeName,
         ExchangeType $exchangeType,
         bool $isDurable,
-        AMQPChannel $channel
+        AMQPChannel $channel,
+        AMQPStreamConnection $connection,
+        ?string $routingKey = null
     ) {
         $this->exchangeName = $exchangeName;
         $this->exchangeType = $exchangeType;
         $this->isDurable = $isDurable;
         $this->channel = $channel;
+        $this->connection = $connection;
+        $this->routingKey = $routingKey;
     }
 
     public static function fanOutInstance(
@@ -30,16 +36,23 @@ class Exchange
         bool $isDurable
     ): self
     {
-        $channel = self::exchangeDeclare($connectionSettings, $exchangeName, $isDurable, ExchangeType::FANOUT);
-        return new self($exchangeName, ExchangeType::FANOUT, $isDurable, $channel);
+        $connection = new AMQPStreamConnection(
+            $connectionSettings->hostName, 
+            $connectionSettings->port, 
+            $connectionSettings->userName, 
+            $connectionSettings->password
+        );
+        $channel = $connection->channel();
+        $channel->exchange_declare($exchangeName, ExchangeType::FANOUT, false, $isDurable, false);
+        return new self($exchangeName, ExchangeType::FANOUT, $isDurable, $channel, $connection);
     }
 
-    private static function exchangeDeclare(
+    public static function topicInstance(
         ConnectionSettings $connectionSettings,
         string $exchangeName,
         bool $isDurable,
-        ExchangeType $exchangeType
-    ): AMQPChannel
+        string $routingKey
+    ): self
     {
         $connection = new AMQPStreamConnection(
             $connectionSettings->hostName, 
@@ -48,7 +61,23 @@ class Exchange
             $connectionSettings->password
         );
         $channel = $connection->channel();
-        $channel->exchange_declare($exchangeName, $exchangeType->value, false, $isDurable, false);
-        return $channel;
+        $channel->exchange_declare($exchangeName, ExchangeType::TOPIC, false, $isDurable, false);
+        return new self($exchangeName, ExchangeType::TOPIC, $isDurable, $channel, $connection, $routingKey);
+    }
+
+    public function isFanout(): bool
+    {
+        return $this->exchangeType->isFanout();
+    }
+
+    public function isTopic(): bool
+    {
+        return $this->exchangeType->isTopic();
+    }
+
+    public function close(): void
+    {
+        $this->channel->close();
+        $this->connection->close();
     }
 }

@@ -12,4 +12,19 @@ enum ExchangeType: string {
     {
         return $this === self::FANOUT;
     }
+
+    public function isDirect(): bool
+    {
+        return $this === self::DIRECT;
+    }
+
+    public function isTopic(): bool
+    {
+        return $this === self::TOPIC;
+    }
+
+    public function isHeaders(): bool
+    {
+        return $this === self::HEADERS;
+    }
 }
