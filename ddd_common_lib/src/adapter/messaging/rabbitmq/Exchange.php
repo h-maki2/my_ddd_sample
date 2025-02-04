@@ -8,13 +8,13 @@ use PhpAmqpLib\Connection\AMQPStreamConnection;
 class Exchange
 {
     readonly string $exchangeName;
-    readonly string $exchangeType;
+    readonly ExchangeType $exchangeType;
     readonly bool $isDurable;
     readonly AMQPChannel $channel;
 
     private function __construct(
         string $exchangeName,
-        string $exchangeType,
+        ExchangeType $exchangeType,
         bool $isDurable,
         AMQPChannel $channel
     ) {
@@ -30,16 +30,15 @@ class Exchange
         bool $isDurable
     ): self
     {
-        $exchangeType = 'fanout';
-        $channel = self::exchangeDeclare($connectionSettings, $exchangeName, $isDurable, $exchangeType);
-        return new self($exchangeName, $exchangeType, $isDurable, $channel);
+        $channel = self::exchangeDeclare($connectionSettings, $exchangeName, $isDurable, ExchangeType::FANOUT);
+        return new self($exchangeName, ExchangeType::FANOUT, $isDurable, $channel);
     }
 
     private static function exchangeDeclare(
         ConnectionSettings $connectionSettings,
         string $exchangeName,
         bool $isDurable,
-        string $exchangeType
+        ExchangeType $exchangeType
     ): AMQPChannel
     {
         $connection = new AMQPStreamConnection(
@@ -49,7 +48,7 @@ class Exchange
             $connectionSettings->password
         );
         $channel = $connection->channel();
-        $channel->exchange_declare($exchangeName, $exchangeType, false, $isDurable, false);
+        $channel->exchange_declare($exchangeName, $exchangeType->value, false, $isDurable, false);
         return $channel;
     }
 }
