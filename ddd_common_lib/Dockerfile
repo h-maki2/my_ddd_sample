@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y \
     git \
     libonig-dev \
     libxml2-dev \
-    && docker-php-ext-install pdo_mysql mbstring xml
+    && docker-php-ext-install pdo_mysql mbstring xml sockets
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
