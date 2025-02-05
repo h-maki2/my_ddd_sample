@@ -14,15 +14,15 @@ class MessageProducer
         $this->exchange = $exchange;
     }
 
-    public function send(string $sendMessage): void
+    public function send(string $message): void
     {
         if ($this->exchange->isFanout()) {
-            $this->sendByFanout($sendMessage);
+            $this->sendByFanout($message);
             return;
         }
 
         if ($this->exchange->isTopic()) {
-            $this->sendByTopic($sendMessage);
+            $this->sendByTopic($message);
             return;
         }
     }
@@ -37,23 +37,33 @@ class MessageProducer
         return $this->exchange->isDurable ? 2 : 1;
     }
 
-    private function sendByFanout(string $sendMessage): void
+    private function sendByFanout(string $message): void
     {
         if (!$this->exchange->isFanout()) {
             throw new RuntimeException('エクスチェンジのタイプがファンアウトではありません。type: ' . $this->exchange->exchangeType->value);
         }
 
-        $message = new AMQPMessage($sendMessage, ['delivery_mode' => $this->deliveryMode()]);
-        $this->exchange->channel->basic_publish($message, $this->exchange->exchangeName);
+        $this->exchange->channel->basic_publish($this->sendingMessage($message), $this->exchange->exchangeName);
     }
 
-    private function sendByTopic(string $sendMessage): void
+    private function sendByTopic(string $message): void
     {
         if (!$this->exchange->isTopic()) {
             throw new RuntimeException('エクスチェンジのタイプがトピックではありません。type: ' . $this->exchange->exchangeType->value);
         }
 
-        $message = new AMQPMessage($sendMessage, ['delivery_mode' => $this->deliveryMode()]);
-        $this->exchange->channel->basic_publish($message, $this->exchange->exchangeName, $this->exchange->routingKey);
+        $this->exchange->channel->basic_publish(
+            $this->sendingMessage($message), 
+            $this->exchange->exchangeName, 
+            $this->exchange->routingKey
+        );
+    }
+
+    private function sendingMessage(string $message): AMQPMessage
+    {
+        return new AMQPMessage($message, [
+            'delivery_mode' => $this->deliveryMode(),
+            $this->exchange->headerName() => $this->exchange->headerParams()
+        ]);
     }
 }

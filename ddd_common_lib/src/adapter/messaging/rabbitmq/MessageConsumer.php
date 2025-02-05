@@ -8,9 +8,8 @@ class MessageConsumer
 
     public function __construct(
         Exchange $exchange,
-        string $queueName,
     )
     {
-        $this->exchange = $exchange->setQueue($queueName);
+        $this->exchange = $exchange;
     }
 }
