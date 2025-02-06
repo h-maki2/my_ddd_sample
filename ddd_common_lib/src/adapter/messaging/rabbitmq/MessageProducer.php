@@ -63,7 +63,7 @@ class MessageProducer
     {
         return new AMQPMessage($message, [
             'delivery_mode' => $this->deliveryMode(),
-            $this->exchange->headerName() => $this->exchange->headerParams()
+            'application_headers' => RabbitMqRetryCount::initialize()->toAmqpTable()
         ]);
     }
 }

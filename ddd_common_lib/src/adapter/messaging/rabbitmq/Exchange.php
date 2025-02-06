@@ -20,9 +20,6 @@ class Exchange
     private const DLX_QUEUE_NAME = 'dlx_queue';
     private const DLX_ROUTING_KEY = 'dlx_routing_key';
 
-    private const HEADER_NAME = 'application_headers';
-    private const RETRY_COUNT_KEY_NAME = 'retry_count';
-
     private function __construct(
         string $exchangeName,
         ExchangeType $exchangeType,
@@ -137,16 +134,6 @@ class Exchange
     {
         $this->channel->close();
         $this->connection->close();
-    }
-
-    public function headerParams(): AMQPTable
-    {
-        return new AMQPTable([self::RETRY_COUNT_KEY_NAME => 0]);
-    }
-
-    public function headerName(): string
-    {
-        return self::HEADER_NAME;
     }
 
     private static function dlxSettingParams(): AMQPTable
