@@ -2,7 +2,6 @@
 
 namespace dddCommonLib\adapter\messaging\rabbitmq;
 
-use PhpAmqpLib\Message\AMQPMessage;
 use RuntimeException;
 
 class MessageProducer
@@ -14,7 +13,7 @@ class MessageProducer
         $this->exchange = $exchange;
     }
 
-    public function send(string $message): void
+    public function send(RabbitMqMessage $message): void
     {
         if ($this->exchange->isFanout()) {
             $this->sendByFanout($message);
@@ -32,38 +31,38 @@ class MessageProducer
         $this->exchange->close();
     }
 
-    private function deliveryMode(): int
+    public function deliveryMode(): RabbitMqDeliveryMode
     {
-        return $this->exchange->isDurable ? 2 : 1;
+        return $this->exchange->isDurable ? RabbitMqDeliveryMode::PERSISTENT : RabbitMqDeliveryMode::NON_PERSISTENT;
     }
 
-    private function sendByFanout(string $message): void
+    private function sendByFanout(RabbitMqMessage $message): void
     {
         if (!$this->exchange->isFanout()) {
             throw new RuntimeException('エクスチェンジのタイプがファンアウトではありません。type: ' . $this->exchange->exchangeType->value);
         }
 
-        $this->exchange->channel->basic_publish($this->sendingMessage($message), $this->exchange->exchangeName);
+        if (!$this->deliveryMode()->equals($message->deliveryMode())) {
+            throw new RuntimeException('delivery_modeが一致しません。メッセージのdelivery_mode: ' . $message->deliveryMode()->value . 'エクスチェンジのdelivery_mode' . $this->deliveryMode()->value);
+        }
+
+        $this->exchange->channel->basic_publish($message->value, $this->exchange->exchangeName);
     }
 
-    private function sendByTopic(string $message): void
+    private function sendByTopic(RabbitMqMessage $message): void
     {
         if (!$this->exchange->isTopic()) {
             throw new RuntimeException('エクスチェンジのタイプがトピックではありません。type: ' . $this->exchange->exchangeType->value);
         }
 
+        if (!$this->deliveryMode()->equals($message->deliveryMode())) {
+            throw new RuntimeException('delivery_modeが一致しません。メッセージのdelivery_mode: ' . $message->deliveryMode()->value . 'エクスチェンジのdelivery_mode' . $this->deliveryMode()->value);
+        }
+
         $this->exchange->channel->basic_publish(
-            $this->sendingMessage($message), 
+            $message->value, 
             $this->exchange->exchangeName, 
             $this->exchange->routingKey
         );
-    }
-
-    private function sendingMessage(string $message): AMQPMessage
-    {
-        return new AMQPMessage($message, [
-            'delivery_mode' => $this->deliveryMode(),
-            'application_headers' => RabbitMqRetryCount::initialize()->toAmqpTable()
-        ]);
     }
 }

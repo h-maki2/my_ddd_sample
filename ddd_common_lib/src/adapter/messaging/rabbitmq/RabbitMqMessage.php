@@ -43,6 +43,11 @@ class RabbitMqMessage
     {
         return new self($value);
     }
+    
+    public function deliveryMode(): RabbitMqDeliveryMode
+    {
+        return RabbitMqDeliveryMode::from($this->value->get(self::DELIVERY_MODE_KEY));
+    }
 
     public function hasReachedMaxRetryCount(): bool
     {
