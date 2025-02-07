@@ -13,7 +13,7 @@ class Exchange
     readonly ExchangeType $exchangeType;
     readonly bool $isDurable;
     readonly AMQPChannel $channel;
-    private AMQPStreamConnection $connection;
+    readonly AMQPStreamConnection $connection;
 
     private const DLX_EXCHANGE_NAME = 'dlx_exchange';
 

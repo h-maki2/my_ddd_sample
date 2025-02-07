@@ -41,6 +41,11 @@ class MessageConsumer
         return $this->queue->channel;
     }
 
+    public function close(): void
+    {
+        $this->queue->close();
+    }
+
     private function handle(
         callable $filteredDispatch
     ): callable
@@ -71,6 +76,10 @@ class MessageConsumer
 
     private function filteredMessageType(Notification $notification): bool
     {
+        if ($this->messageTypeList === []) {
+            return true;
+        }
+
         return in_array($notification->notificationType, $this->messageTypeList);
     }
 }
