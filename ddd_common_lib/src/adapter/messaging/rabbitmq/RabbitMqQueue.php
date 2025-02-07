@@ -4,6 +4,7 @@ namespace dddCommonLib\adapter\messaging\rabbitmq;
 
 use InvalidArgumentException;
 use PhpAmqpLib\Channel\AMQPChannel;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Wire\AMQPTable;
 
 class RabbitMqQueue
@@ -15,7 +16,7 @@ class RabbitMqQueue
     private const DLX_QUEUE_NAME = 'dlx_queue';
     private const DLX_ROUTING_KEY = 'dlx_routing_key';
 
-    public function __construct(
+    private function __construct(
         AMQPChannel $channel,
         string $queueName,
         string $routingKey
@@ -26,7 +27,24 @@ class RabbitMqQueue
         $this->routingKey = $routingKey;
     }
 
-    public static function declareQueue(
+    public static function fromInstance(
+        ConnectionSettings $connectionSettings,
+        string $queueName,
+        bool $isDurable,
+    )
+    {
+        $connection = new AMQPStreamConnection(
+            $connectionSettings->hostName, 
+            $connectionSettings->port, 
+            $connectionSettings->userName, 
+            $connectionSettings->password
+        );
+        $channel = $connection->channel();
+        $channel->queue_declare($queueName, false, $isDurable, false, false, false, self::dlxSettingParams());
+        return new self($channel, $queueName, '');
+    }
+
+    public static function fromInstanceWithBindExchange(
         Exchange $exchange,
         string $queueName,
         string $routingKey = ''
@@ -43,7 +61,7 @@ class RabbitMqQueue
             false, 
             false,
             false,
-            self::dlxSettingParams($exchange->exchangeName)
+            self::dlxSettingParams()
         );
         $channel->queue_bind($queueName, $exchange->exchangeName, $routingKey);
         return new self($channel, $queueName, $routingKey);
@@ -63,10 +81,10 @@ class RabbitMqQueue
         return new self($channel, self::DLX_QUEUE_NAME, self::DLX_ROUTING_KEY);
     }
 
-    private static function dlxSettingParams(string $exchangeName): AMQPTable
+    private static function dlxSettingParams(): AMQPTable
     {
         return new AMQPTable([
-            'x-dead-letter-exchange' => $exchangeName,
+            'x-dead-letter-exchange' => Exchange::dlxExchangeName(),
             'x-dead-letter-routing-key' => self::DLX_ROUTING_KEY
         ]);
     }
