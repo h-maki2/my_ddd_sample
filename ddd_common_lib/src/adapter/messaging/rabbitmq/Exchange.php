@@ -86,6 +86,19 @@ class Exchange
         return new self(self::DLX_EXCHANGE_NAME, ExchangeType::DIRECT, true, $channel, $connection);
     }
 
+    public function queueInstance(
+        string $queueName,
+        string $routingKey = ''
+    ): RabbitMqQueue
+    {
+        return RabbitMqQueue::declareQueue($this, $queueName, $routingKey);
+    }
+
+    public function dlxQueueInstance(): RabbitMqQueue
+    {
+        return RabbitMqQueue::declareDlxQueue($this);
+    }
+
     public function isFanout(): bool
     {
         return $this->exchangeType->isFanout();
