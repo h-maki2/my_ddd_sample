@@ -2,37 +2,75 @@
 
 namespace dddCommonLib\adapter\messaging\rabbitmq;
 
+use dddCommonLib\domain\model\common\JsonSerializer;
+use dddCommonLib\domain\model\notification\Notification;
 use Exception;
+use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Message\AMQPMessage;
 
 class MessageConsumer
 {
-    private Exchange $exchange;
+    private RabbitMqQueue $queue;
+    private string $exchangeName;
+    private array $messageTypeList;
 
     public function __construct(
-        Exchange $exchange,
+        RabbitMqQueue $queue,
+        string $exchangeName,
+        array $messageTypeList,
+        callable $filteredDispatch
     )
     {
-        $this->exchange = $exchange;
+        $this->queue = $queue;
+        $this->exchangeName = $exchangeName;
+        $this->messageTypeList = $messageTypeList;
+
+        $this->queue->channel->basic_consume(
+            $this->queue->queueName, 
+            '', 
+            false, 
+            false, 
+            false, 
+            false, 
+            $this->handle($filteredDispatch)
+        );
     }
 
-    private function callBack(
-        $dispachProcessing
+    public function channel(): AMQPChannel
+    {
+        return $this->queue->channel;
+    }
+
+    private function handle(
+        callable $filteredDispatch
     ): callable
     {
-        $channel = $this->exchange->channel;
-        return function (AMQPMessage $message) use ($dispachProcessing, $channel) {
+        $channel = $this->queue->channel;
+        return function (AMQPMessage $message) use ($filteredDispatch, $channel) {
            $reconstructedMessage = RabbitMqMessage::reconstruct($message);
+           $notification = $this->notificationFrom($reconstructedMessage);
+           if (!$this->filteredMessageType($notification)) {
+               return;
+           }
 
            try {
-                $dispachProcessing($reconstructedMessage);
+                $filteredDispatch($notification);
+                $channel->basic_ack($reconstructedMessage->deliveryTag());
            } catch (Exception $e) {
-               
-           }
-
-           if ($reconstructedMessage->hasReachedMaxRetryCount()) {
-              
+                if ($reconstructedMessage->hasReachedMaxRetryCount()) {
+                    
+                }
            }
         };
+    }
+
+    private function notificationFrom(RabbitMqMessage $message): Notification
+    {
+        return JsonSerializer::deserialize($message->messageBody(), Notification::class);
+    }
+
+    private function filteredMessageType(Notification $notification): bool
+    {
+        return in_array($notification->notificationType, $this->messageTypeList);
     }
 }

@@ -4,21 +4,22 @@ namespace dddCommonLib\adapter\messaging\rabbitmq;
 
 class MessageProducer
 {
-    readonly RabbitMqQueue $queue;
     readonly Exchange $exchange;
 
-    public function __construct(RabbitMqQueue $queue, Exchange $exchange)
+    public function __construct(Exchange $exchange)
     {
-        $this->queue = $queue;
         $this->exchange = $exchange;
     }
 
-    public function send(RabbitMqMessage $message): void
+    public function send(
+        RabbitMqMessage $message,
+        string $routingKey = ''
+    ): void
     {
-        $this->queue->channel->basic_publish(
+        $this->exchange->channel->basic_publish(
             $message->value,
             $this->exchange->exchangeName,
-            $this->queue->routingKey
+            $routingKey
         );
     }
 

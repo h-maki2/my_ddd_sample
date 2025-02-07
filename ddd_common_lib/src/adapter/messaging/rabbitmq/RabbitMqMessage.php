@@ -54,6 +54,16 @@ class RabbitMqMessage
         return $this->retryCount()->hasReachedMaxRetryCount();
     }
 
+    public function deliveryTag(): int
+    {
+        return $this->value->get('delivery_tag');
+    }
+
+    public function messageBody(): string
+    {
+        return $this->value->body;
+    }
+
     private function retryCount(): RabbitMqRetryCount
     {
         $headers = $this->value->get(self::HEADER_KEY);
