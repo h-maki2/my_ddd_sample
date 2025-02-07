@@ -1,0 +1,65 @@
+<?php
+
+namespace dddCommonLib\adapter\messaging\rabbitmq;
+
+use InvalidArgumentException;
+use PhpAmqpLib\Channel\AMQPChannel;
+use PhpAmqpLib\Wire\AMQPTable;
+
+class RabbitMqQueue
+{
+    readonly AMQPChannel $channel;
+
+    private const DLX_QUEUE_NAME = 'dlx_queue';
+    private const DLX_ROUTING_KEY = 'dlx_routing_key';
+
+    public function __construct(AMQPChannel $channel)
+    {
+        $this->channel = $channel;
+    }
+
+    public static function declareQueue(
+        Exchange $exchange,
+        string $queueName,
+        string $routingKey = ''
+    ): self
+    {
+        if ($exchange->isTopic() && empty($routingKey)) {
+            throw new InvalidArgumentException('トピックエクスチェンジの場合は、ルーティングキーを指定してください。');
+        }
+        $channel = $exchange->channel;
+        $channel->queue_declare(
+            $queueName, 
+            false, 
+            $exchange->isDurable, 
+            false, 
+            false,
+            false,
+            self::dlxSettingParams($exchange->exchangeName)
+        );
+        $channel->queue_bind($queueName, $exchange->exchangeName, $routingKey);
+        return new self($channel);
+    }
+
+    public static function declareDlxQueue(
+        Exchange $exchange
+    ): self
+    {
+        $channel = $exchange->channel;
+        $channel->queue_declare(self::DLX_QUEUE_NAME, false, true, false, false);
+        $channel->queue_bind(
+            self::DLX_QUEUE_NAME, 
+            $exchange->exchangeName, 
+            self::DLX_ROUTING_KEY
+        );
+        return new self($channel);
+    }
+
+    private static function dlxSettingParams(string $exchangeName): AMQPTable
+    {
+        return new AMQPTable([
+            'x-dead-letter-exchange' => $exchangeName,
+            'x-dead-letter-routing-key' => self::DLX_ROUTING_KEY
+        ]);
+    }
+}

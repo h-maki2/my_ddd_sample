@@ -14,33 +14,27 @@ class Exchange
     readonly bool $isDurable;
     readonly AMQPChannel $channel;
     private AMQPStreamConnection $connection;
-    readonly ?string $routingKey;
 
     private const DLX_EXCHANGE_NAME = 'dlx_exchange';
-    private const DLX_QUEUE_NAME = 'dlx_queue';
-    private const DLX_ROUTING_KEY = 'dlx_routing_key';
 
     private function __construct(
         string $exchangeName,
         ExchangeType $exchangeType,
         bool $isDurable,
         AMQPChannel $channel,
-        AMQPStreamConnection $connection,
-        ?string $routingKey = null
+        AMQPStreamConnection $connection
     ) {
         $this->exchangeName = $exchangeName;
         $this->exchangeType = $exchangeType;
         $this->isDurable = $isDurable;
         $this->channel = $channel;
         $this->connection = $connection;
-        $this->routingKey = $routingKey;
     }
 
     public static function fanOutInstance(
         ConnectionSettings $connectionSettings,
         string $exchangeName,
-        bool $isDurable,
-        string $queueName
+        bool $isDurable
     ): self
     {
         $connection = new AMQPStreamConnection(
@@ -51,25 +45,13 @@ class Exchange
         );
         $channel = $connection->channel();
         $channel->exchange_declare($exchangeName, ExchangeType::FANOUT, false, $isDurable, false);
-        $channel->queue_declare(
-            $queueName, 
-            false, 
-            $isDurable, 
-            false, 
-            false,
-            false,
-            self::dlxSettingParams()
-        );
-        $channel->queue_bind($queueName, $exchangeName);
         return new self($exchangeName, ExchangeType::FANOUT, $isDurable, $channel, $connection);
     }
 
     public static function topicInstance(
         ConnectionSettings $connectionSettings,
         string $exchangeName,
-        bool $isDurable,
-        string $routingKey,
-        string $queueName
+        bool $isDurable
     ): self
     {
         $connection = new AMQPStreamConnection(
@@ -80,17 +62,7 @@ class Exchange
         );
         $channel = $connection->channel();
         $channel->exchange_declare($exchangeName, ExchangeType::TOPIC, false, $isDurable, false);
-        $channel->queue_declare(
-            $queueName, 
-            false, 
-            $isDurable, 
-            false, 
-            false,
-            false,
-            self::dlxSettingParams()
-        );
-        $channel->queue_bind($queueName, $exchangeName, $routingKey);
-        return new self($exchangeName, ExchangeType::TOPIC, $isDurable, $channel, $connection, $routingKey);
+        return new self($exchangeName, ExchangeType::TOPIC, $isDurable, $channel, $connection);
     }
 
     public static function dlxInstance(
@@ -111,13 +83,7 @@ class Exchange
             true, 
             false
         );
-        $channel->queue_declare(self::DLX_QUEUE_NAME, false, true, false, false);
-        $channel->queue_bind(
-            self::DLX_QUEUE_NAME, 
-            self::DLX_EXCHANGE_NAME, 
-            self::DLX_ROUTING_KEY
-        );
-        return new self(self::DLX_EXCHANGE_NAME, ExchangeType::DIRECT, true, $channel, $connection, self::DLX_ROUTING_KEY);
+        return new self(self::DLX_EXCHANGE_NAME, ExchangeType::DIRECT, true, $channel, $connection);
     }
 
     public function isFanout(): bool
@@ -134,13 +100,5 @@ class Exchange
     {
         $this->channel->close();
         $this->connection->close();
-    }
-
-    private static function dlxSettingParams(): AMQPTable
-    {
-        return new AMQPTable([
-            'x-dead-letter-exchange' => self::DLX_EXCHANGE_NAME,
-            'x-dead-letter-routing-key' => self::DLX_ROUTING_KEY
-        ]);
     }
 }
