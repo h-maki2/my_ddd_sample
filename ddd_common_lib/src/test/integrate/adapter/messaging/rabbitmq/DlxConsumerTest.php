@@ -74,7 +74,7 @@ class DlxConsumerTest extends TestCase
         $this->dlxQueue->close();
     }
 
-    public function test_コンシェーマのメッセージ受信に3回失敗した場合、DLXにメッセージが転送されログに出力される()
+    public function test_コンシェーマのメッセージ受信に3回失敗した場合、DLXにメッセージが転送される()
     {
         // given
         // バックグランドでコンシューマを起動する
