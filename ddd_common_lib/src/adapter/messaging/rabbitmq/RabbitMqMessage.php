@@ -16,7 +16,7 @@ class RabbitMqMessage
         $this->value = $value;
     }
 
-    public static function get(
+    public static function fromInstance(
         string $message,
         RabbitMqDeliveryMode $deliveryMode
     ): self

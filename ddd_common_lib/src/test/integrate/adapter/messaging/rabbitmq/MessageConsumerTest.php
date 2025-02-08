@@ -18,6 +18,7 @@ class MessageConsumerTest extends TestCase
     private string $testExchangeName;
     private string $testQueueName;
     private MessageProducer $producer;
+    private ?Notification $catchedNotification;
 
     public function setUp(): void
     {
@@ -51,14 +52,14 @@ class MessageConsumerTest extends TestCase
     public function test_コンシューマーでメッセージを受信できる()
     {
         // given
+        $this->catchedNotification = null;
         // コンシューマを作成する
-        $messageBody = null;
         $consumer = new MessageConsumer(
             $this->queue,
             $this->testExchangeName,
             [],
-            function (Notification $notification) use (&$messageBody) {
-                $messageBody = $notification;
+            function (Notification $notification) {
+               $this->catchedNotification = $notification;
             }
         );
 
@@ -66,18 +67,20 @@ class MessageConsumerTest extends TestCase
         $testEvent = new TestEvent();
         $storedEvent = StoredEvent::fromDomainEvent($testEvent);
         $notification = Notification::fromStoredEvent($storedEvent);
-        $message = RabbitMqMessage::get($notification->serialize(), RabbitMqDeliveryMode::PERSISTENT);
+        $message = RabbitMqMessage::fromInstance($notification->serialize(), RabbitMqDeliveryMode::PERSISTENT);
 
         // when
         // メッセージを送信する
         $this->producer->send($message);
 
         // メッセージを受信する
-        while ($consumer->channel()->is_consuming() && $messageBody === null) {
+        while ($consumer->channel()->is_consuming() && $this->catchedNotification === null) {
             $consumer->channel()->wait(null, false, 5); // 5秒でタイムアウト
         }
 
         // then
-        $this->assertNotNull($messageBody);
+        // 適切にメッセージが受信されていることを確認する
+        $this->assertEquals($notification, $this->catchedNotification);
+        $this->assertEquals($testEvent, $this->catchedNotification->toDomainEvent());
     }
 }

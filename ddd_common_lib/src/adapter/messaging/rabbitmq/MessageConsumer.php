@@ -54,7 +54,7 @@ class MessageConsumer
         return function (AMQPMessage $message) use ($filteredDispatch, $channel) {
            $reconstructedMessage = RabbitMqMessage::reconstruct($message);
            $notification = $this->notificationFrom($reconstructedMessage);
-           if (!$this->filteredMessageType($notification)) {
+           if ($this->filteredMessageType($notification)) {
                return;
            }
 
@@ -77,9 +77,9 @@ class MessageConsumer
     private function filteredMessageType(Notification $notification): bool
     {
         if ($this->messageTypeList === []) {
-            return true;
+            return false;
         }
 
-        return in_array($notification->notificationType, $this->messageTypeList);
+        return !in_array($notification->notificationType, $this->messageTypeList);
     }
 }
