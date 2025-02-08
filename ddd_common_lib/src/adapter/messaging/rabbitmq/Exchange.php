@@ -44,8 +44,9 @@ class Exchange
             $connectionSettings->password
         );
         $channel = $connection->channel();
-        $channel->exchange_declare($exchangeName, ExchangeType::FANOUT, false, $isDurable, false);
-        return new self($exchangeName, ExchangeType::FANOUT, $isDurable, $channel, $connection);
+        $exchangeType = ExchangeType::FANOUT;
+        $channel->exchange_declare($exchangeName, $exchangeType->value, false, $isDurable, false);
+        return new self($exchangeName, $exchangeType, $isDurable, $channel, $connection);
     }
 
     public static function topicInstance(
@@ -61,8 +62,9 @@ class Exchange
             $connectionSettings->password
         );
         $channel = $connection->channel();
-        $channel->exchange_declare($exchangeName, ExchangeType::TOPIC, false, $isDurable, false);
-        return new self($exchangeName, ExchangeType::TOPIC, $isDurable, $channel, $connection);
+        $exchangeType = ExchangeType::TOPIC;
+        $channel->exchange_declare($exchangeName, $exchangeType->value, false, $isDurable, false);
+        return new self($exchangeName, $exchangeType, $isDurable, $channel, $connection);
     }
 
     public static function dlxInstance(
@@ -76,14 +78,15 @@ class Exchange
             $connectionSettings->password
         );
         $channel = $connection->channel();
+        $exchangeType = ExchangeType::DIRECT;
         $channel->exchange_declare(
             self::DLX_EXCHANGE_NAME, 
-            ExchangeType::DIRECT, 
+            $exchangeType->value, 
             false, 
             true, 
             false
         );
-        return new self(self::DLX_EXCHANGE_NAME, ExchangeType::DIRECT, true, $channel, $connection);
+        return new self(self::DLX_EXCHANGE_NAME, $exchangeType, true, $channel, $connection);
     }
 
     public function isFanout(): bool

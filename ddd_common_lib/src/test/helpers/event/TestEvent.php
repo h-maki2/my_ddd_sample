@@ -5,25 +5,11 @@ namespace dddCommonLib\test\helpers\event;
 use DateTimeImmutable;
 use dddCommonLib\domain\model\domainEvent\DomainEvent;
 
-class TestEvent implements DomainEvent
+class TestEvent extends DomainEvent
 {
-    private DateTimeImmutable $occurredOn;
-    private int $eventVersion;
-
     public function __construct()
     {
-        $this->occurredOn = new DateTimeImmutable();
-        $this->eventVersion = 1;
-    }
-
-    public function occurredOn(): DateTimeImmutable
-    {
-        return $this->occurredOn;
-    }
-
-    public function eventVersion(): int
-    {
-        return $this->eventVersion;
+        parent::__construct(1);
     }
 
     public function eventType(): string

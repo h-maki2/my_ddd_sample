@@ -3,12 +3,29 @@
 namespace dddCommonLib\domain\model\domainEvent;
 
 use DateTimeImmutable;
+use InvalidArgumentException;
 
-interface DomainEvent
+abstract class DomainEvent
 {
-    public function occurredOn(): DateTimeImmutable;
+    protected string $occurredOn;
+    protected int $eventVersion;
 
-    public function eventVersion(): int;
+    public function __construct(int $eventVersion)
+    {
+        $occurredOn = new DateTimeImmutable();
+        $this->occurredOn = $occurredOn->format('Y-m-d H:i:s');
+        $this->eventVersion = $eventVersion;
+    }
 
-    public function eventType(): string;
+    public function occurredOn(): string
+    {
+        return $this->occurredOn;
+    }
+
+    public function eventVersion(): int
+    {
+        return $this->eventVersion;
+    }
+
+    abstract public function eventType(): string;
 }

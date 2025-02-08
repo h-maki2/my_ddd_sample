@@ -5,21 +5,26 @@ namespace dddCommonLib\domain\model\eventStore;
 use DateTimeImmutable;
 use dddCommonLib\domain\model\common\JsonSerializer;
 use dddCommonLib\domain\model\domainEvent\DomainEvent;
+use InvalidArgumentException;
 
 class StoredEvent
 {
     readonly string $eventBody;
-    readonly DateTimeImmutable $occurredOn;
+    readonly string $occurredOn;
     readonly string $eventType;
     readonly string $eventId;
 
     private function __construct(
         string $anEventType, 
-        DateTimeImmutable $anOccurredOn, 
+        string $anOccurredOn, 
         string $anEventBody,
         string $anEventId
     )
     {
+        if (strtotime($anOccurredOn) === false) {
+            throw new InvalidArgumentException('OccurredOn is not a valid date');
+        }
+
         $this->eventType = $anEventType;
         $this->occurredOn = $anOccurredOn;
         $this->eventBody = $anEventBody;
@@ -39,7 +44,7 @@ class StoredEvent
 
     public static function reconstruct(
         string $eventType,
-        DateTimeImmutable $occurredOn,
+        string $occurredOn,
         string $eventBody,
         string $eventId
     ): self

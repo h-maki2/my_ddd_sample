@@ -27,7 +27,10 @@ class DomainEventPublisher
     public function publish(DomainEvent $domainEvent): void
     {
         foreach ($this->subscriberList as $subscriber) {
-            if ($subscriber->isSubscribedTo($domainEvent)) {
+            if (
+                $subscriber->subscribedToEventType() === $domainEvent->eventType() ||
+                $subscriber->subscribedToEventType() === DomainEvent::class
+            ) {
                 $subscriber->handleEvent($domainEvent);
             }
         }

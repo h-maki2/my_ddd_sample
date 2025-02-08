@@ -18,12 +18,7 @@ class JsonSerializer
         foreach ($properties as $property) {
             $property->setAccessible(true);
             $value = $property->getValue($serializeObject);
-
-            if ($value instanceof DateTimeImmutable) {
-                $targetList[$property->getName()] = $value->format(DateTime::ATOM);
-            } else {
-                $targetList[$property->getName()] = $value;
-            }
+            $targetList[$property->getName()] = $value;
         }
 
         return json_encode($targetList, JSON_THROW_ON_ERROR);
@@ -38,10 +33,6 @@ class JsonSerializer
         foreach ($eventDataArray as $property => $value) {
             $prop = $reflection->getProperty($property);
             $prop->setAccessible(true);
-
-            if ($prop->getName() === 'occurredOn') {
-                $value = new DateTimeImmutable($value);
-            }
 
             $prop->setValue($instance, $value);
         }

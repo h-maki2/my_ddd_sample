@@ -19,7 +19,7 @@ class JsonSerializerTest extends TestCase
         $deserializedEvent = JsonSerializer::deserialize($serializedEvent, TestEvent::class);
 
         // then
-        $this->assertEquals($event->occurredOn()->format('Y-m-d'), $deserializedEvent->occurredOn()->format('Y-m-d'));
+        $this->assertEquals($event->occurredOn(), $deserializedEvent->occurredOn());
         $this->assertEquals($event->eventVersion(), $deserializedEvent->eventVersion());
         $this->assertEquals($event->eventType(), $deserializedEvent->eventType());
     }

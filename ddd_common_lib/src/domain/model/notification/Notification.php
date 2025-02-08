@@ -10,20 +10,20 @@ use dddCommonLib\domain\model\eventStore\StoredEvent;
 
 class Notification
 {
-    readonly DomainEvent $domainEvent;
+    readonly string $eventBody;
     readonly string $notificationId;
     readonly string $notificationType;
-    readonly DateTimeImmutable $occurredOn;
+    readonly string $occurredOn;
     readonly int $version;
 
     private function __construct(
-        DomainEvent $domainEvent,
+        string $eventBody,
         string $notificationId,
         string $notificationType,
-        DateTimeImmutable $occurredOn,
+        string $occurredOn,
         int $version
     ) {
-        $this->domainEvent = $domainEvent;
+        $this->eventBody = $eventBody;
         $this->notificationId = $notificationId;
         $this->notificationType = $notificationType;
         $this->occurredOn = $occurredOn;
@@ -34,7 +34,7 @@ class Notification
     {
         $domainEvent = $storedEvent->toDomainEvent();
         return new self(
-            $domainEvent,
+            $storedEvent->eventBody,
             $storedEvent->eventId,
             $storedEvent->eventType,
             $storedEvent->occurredOn,
@@ -45,5 +45,10 @@ class Notification
     public function serialize(): string
     {
         return JsonSerializer::serialize($this);
+    }
+
+    public function toDomainEvent(): DomainEvent
+    {
+        return JsonSerializer::deserialize($this->eventBody, $this->notificationType);
     }
 }
