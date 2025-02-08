@@ -45,6 +45,11 @@ class MessageConsumer
         return $this->queue->channel;
     }
 
+    public function queueName(): string
+    {
+        return $this->queue->queueName;
+    }
+
     public function close(): void
     {
         $this->queue->close();
@@ -56,7 +61,6 @@ class MessageConsumer
             try {
                 $this->channel()->wait(null, false, self::WAIT_SECONDS); // 5秒間メッセージを待つ
             } catch (AMQPTimeoutException $e) {
-                echo "No messages received. Sleeping for 5 seconds...\n";
                 sleep(self::SLEEP_SECONDS);
             }
         }
@@ -78,8 +82,12 @@ class MessageConsumer
                 $filteredDispatch($notification);
                 $channel->basic_ack($reconstructedMessage->deliveryTag());
            } catch (Exception $e) {
-                if ($reconstructedMessage->hasReachedMaxRetryCount()) {
-                    
+                $retrievedMessage = $reconstructedMessage->retrieve();
+                if ($retrievedMessage->hasReachedMaxRetryCount()) {
+                    $channel->basic_nack($reconstructedMessage->deliveryTag(), false, false);
+                } else {
+                    $channel->basic_publish($retrievedMessage, '', $this->queueName());
+                    $channel->basic_ack($reconstructedMessage->deliveryTag());
                 }
            }
         };

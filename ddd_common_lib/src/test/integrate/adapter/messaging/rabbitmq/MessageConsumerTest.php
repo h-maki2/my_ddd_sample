@@ -45,7 +45,7 @@ class MessageConsumerTest extends TestCase
 
     public function tearDown(): void
     {
-        $this->queue->channel->queue_purge($this->testQueueName);
+        $this->queue->channel->queue_delete($this->testQueueName);
         $this->queue->close();
     }
 
