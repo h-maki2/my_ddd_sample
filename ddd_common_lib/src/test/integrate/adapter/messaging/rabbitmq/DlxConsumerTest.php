@@ -99,11 +99,14 @@ class DlxConsumerTest extends TestCase
         // メッセージを送信する
         $this->producer->send($message);
 
+        // when
+        // DLX用のコンシェーマを起動する
         while ($dlxConsumer->channel()->is_consuming() && $this->catchedMessage === null) {
             $dlxConsumer->channel()->wait();
         }
 
         // then
-        $this->assertNotNull($this->catchedMessage);
+        // 送信したメッセージと受信したメッセージが一致していることを確認する
+        $this->assertEquals($message->messageBody(), $this->catchedMessage->messageBody());
     }
 }
