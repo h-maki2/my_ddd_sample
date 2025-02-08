@@ -6,6 +6,7 @@ use dddCommonLib\domain\model\common\JsonSerializer;
 use dddCommonLib\domain\model\notification\Notification;
 use Exception;
 use PhpAmqpLib\Channel\AMQPChannel;
+use PhpAmqpLib\Exception\AMQPTimeoutException;
 use PhpAmqpLib\Message\AMQPMessage;
 
 class MessageConsumer
@@ -13,6 +14,9 @@ class MessageConsumer
     private RabbitMqQueue $queue;
     private string $exchangeName;
     private array $messageTypeList;
+
+    private const WAIT_SECONDS = 5;
+    private const SLEEP_SECONDS = 5;
 
     public function __construct(
         RabbitMqQueue $queue,
@@ -44,6 +48,18 @@ class MessageConsumer
     public function close(): void
     {
         $this->queue->close();
+    }
+
+    public function listen(): void
+    {
+        while ($this->channel()->is_consuming()) {
+            try {
+                $this->channel()->wait(null, false, self::WAIT_SECONDS); // 5秒間メッセージを待つ
+            } catch (AMQPTimeoutException $e) {
+                echo "No messages received. Sleeping for 5 seconds...\n";
+                sleep(self::WAIT_SECONDS);
+            }
+        }
     }
 
     private function handle(
