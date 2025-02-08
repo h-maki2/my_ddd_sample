@@ -40,7 +40,7 @@ class MessageConsumer extends ACousumer
                 if ($retrievedMessage->hasReachedMaxRetryCount()) {
                     $channel->basic_nack($reconstructedMessage->deliveryTag(), false, false);
                 } else {
-                    $channel->basic_publish($retrievedMessage, '', $this->queueName());
+                    $channel->basic_publish($retrievedMessage->value, '', $this->queueName());
                     $channel->basic_ack($reconstructedMessage->deliveryTag());
                 }
            }
