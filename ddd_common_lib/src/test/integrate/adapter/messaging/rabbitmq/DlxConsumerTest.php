@@ -78,7 +78,7 @@ class DlxConsumerTest extends TestCase
     {
         // given
         // バックグランドでコンシューマを起動する
-        exec('php src/test/integrate/adapter/messaging/rabbitmq/consumerInBackgroundProcess.php > output.log 2>&1 &');
+        exec('php src/test/integrate/adapter/messaging/rabbitmq/consumerInBackgroundProcess.php');
 
         sleep(2);
 
