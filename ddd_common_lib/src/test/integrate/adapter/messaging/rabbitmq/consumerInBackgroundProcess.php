@@ -1,8 +1,11 @@
 <?php
 
+require_once 'vendor/autoload.php';
+
 use dddCommonLib\adapter\messaging\rabbitmq\ConnectionSettings;
 use dddCommonLib\adapter\messaging\rabbitmq\Exchange;
 use dddCommonLib\adapter\messaging\rabbitmq\MessageConsumer;
+use dddCommonLib\adapter\messaging\rabbitmq\RabbitMqMessage;
 use dddCommonLib\adapter\messaging\rabbitmq\RabbitMqQueue;
 use dddCommonLib\domain\model\notification\Notification;
 use dddCommonLib\test\helpers\adapter\messaging\rabbitmq\TestExchangeName;
@@ -23,16 +26,18 @@ $exchange = Exchange::fanOutInstance(
 // キューを作成する
 $queue = RabbitMqQueue::fromInstanceWithBindExchange(
     $exchange,
-    $this->testQueueName
+    $testQueueName
 );
 
 $consumer = new MessageConsumer(
-    $this->queue,
-    $this->testExchangeName,
+    $queue,
+    $testExchangeName,
     [],
     function (Notification $notification) {
        throw new Exception('DLXにメッセージを転送します');
     }
 );
+
+print("コンシューマーを起動します");
 
 $consumer->listen();

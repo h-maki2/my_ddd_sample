@@ -1,0 +1,10 @@
+コンシューマーを起動します
+Fatal error: Uncaught PhpAmqpLib\Exception\AMQPBasicCancelException: Channel was canceled in /var/www/html/ddd_common_lib/vendor/php-amqplib/php-amqplib/PhpAmqpLib/Channel/AMQPChannel.php:924
+Stack trace:
+#0 [internal function]: PhpAmqpLib\Channel\AMQPChannel->basic_cancel_from_server(Object(PhpAmqpLib\Wire\AMQPBufferReader))
+#1 /var/www/html/ddd_common_lib/vendor/php-amqplib/php-amqplib/PhpAmqpLib/Channel/AbstractChannel.php(218): call_user_func(Array, Object(PhpAmqpLib\Wire\AMQPBufferReader))
+#2 /var/www/html/ddd_common_lib/vendor/php-amqplib/php-amqplib/PhpAmqpLib/Channel/AbstractChannel.php(367): PhpAmqpLib\Channel\AbstractChannel->dispatch('60,30', '\x1Famq.ctag-f-QGe...', NULL)
+#3 /var/www/html/ddd_common_lib/src/adapter/messaging/rabbitmq/ACousumer.php(56): PhpAmqpLib\Channel\AbstractChannel->wait(NULL, false, 5)
+#4 /var/www/html/ddd_common_lib/src/test/integrate/adapter/messaging/rabbitmq/consumerInBackgroundProcess.php(43): dddCommonLib\adapter\messaging\rabbitmq\ACousumer->listen()
+#5 {main}
+  thrown in /var/www/html/ddd_common_lib/vendor/php-amqplib/php-amqplib/PhpAmqpLib/Channel/AMQPChannel.php on line 924

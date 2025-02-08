@@ -15,18 +15,14 @@ class DlxConsumer extends ACousumer
         RabbitMqQueue $queue,
         string $exchangeName,
         array $messageTypeList,
-        IRabbitMqLogService $logService
+        callable $filteredDispatch
     )
     {
-        $this->logService = $logService;
-
         parent::__construct(
             $queue, 
             $exchangeName, 
             $messageTypeList, 
-            function (RabbitMqMessage $message) {
-                $this->logService->log($message);
-            }
+            $filteredDispatch
         );
     }
 

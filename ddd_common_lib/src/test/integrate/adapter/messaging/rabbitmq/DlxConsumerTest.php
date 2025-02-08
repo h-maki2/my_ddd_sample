@@ -5,6 +5,7 @@ use dddCommonLib\adapter\messaging\rabbitmq\DlxConsumer;
 use dddCommonLib\adapter\messaging\rabbitmq\Exchange;
 use dddCommonLib\adapter\messaging\rabbitmq\MessageConsumer;
 use dddCommonLib\adapter\messaging\rabbitmq\MessageProducer;
+use dddCommonLib\adapter\messaging\rabbitmq\RabbitMqMessage;
 use dddCommonLib\adapter\messaging\rabbitmq\RabbitMqQueue;
 use dddCommonLib\domain\model\notification\Notification;
 use dddCommonLib\test\helpers\adapter\messaging\rabbitmq\InMemoryRabbitMqLogService;
@@ -24,6 +25,7 @@ class DlxConsumerTest extends TestCase
     private MessageConsumer $consumer;
     private Exchange $dlxExchange;
     private InMemoryRabbitMqLogService $logService;
+    private ?RabbitMqMessage $catchedMessage;
 
     public function setUp(): void
     {
@@ -76,16 +78,19 @@ class DlxConsumerTest extends TestCase
     {
         // given
         // バックグランドでコンシューマを起動する
-        exec('php consumerInBackgroundProcess.php > /dev/null 2>&1 &');
+        exec('php src/test/integrate/adapter/messaging/rabbitmq/consumerInBackgroundProcess.php > output.log 2>&1 &');
 
         sleep(2);
 
         // DLX用のコンシェーマを作成する
+        $this->catchedMessage = null;
         $dlxConsumer = new DlxConsumer(
             $this->dlxQueue,
             $this->dlxExchange->exchangeName,
             [],
-            $this->logService
+            function (RabbitMqMessage $message) {
+                $this->catchedMessage = $message;
+            }
         );
 
         // 送信するメッセージを作成する
@@ -94,13 +99,11 @@ class DlxConsumerTest extends TestCase
         // メッセージを送信する
         $this->producer->send($message);
 
-        $testLogList = [];
-        while ($dlxConsumer->channel()->is_consuming() || $testLogList === []) {
+        while ($dlxConsumer->channel()->is_consuming() && $this->catchedMessage === null) {
             $dlxConsumer->channel()->wait();
-            $testLogList = $this->logService->findAll();
         }
 
         // then
-        $this->assertEquals(1, count($testLogList));
+        $this->assertNotNull($this->catchedMessage);
     }
 }
