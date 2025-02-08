@@ -2,21 +2,13 @@
 
 namespace dddCommonLib\adapter\messaging\rabbitmq;
 
-use dddCommonLib\domain\model\common\JsonSerializer;
-use dddCommonLib\domain\model\notification\Notification;
 use Exception;
-use PhpAmqpLib\Channel\AMQPChannel;
-use PhpAmqpLib\Exception\AMQPTimeoutException;
 use PhpAmqpLib\Message\AMQPMessage;
 
-class MessageConsumer
+class MessageConsumer extends ACousumer
 {
-    private RabbitMqQueue $queue;
-    private string $exchangeName;
-    private array $messageTypeList;
-
-    private const WAIT_SECONDS = 5;
-    private const SLEEP_SECONDS = 5;
+    protected const WAIT_SECONDS = 5;
+    protected const SLEEP_SECONDS = 5;
 
     public function __construct(
         RabbitMqQueue $queue,
@@ -25,48 +17,10 @@ class MessageConsumer
         callable $filteredDispatch
     )
     {
-        $this->queue = $queue;
-        $this->exchangeName = $exchangeName;
-        $this->messageTypeList = $messageTypeList;
-
-        $this->queue->channel->basic_consume(
-            $this->queue->queueName, 
-            '', 
-            false, 
-            false, 
-            false, 
-            false, 
-            $this->handle($filteredDispatch)
-        );
+        parent::__construct($queue, $exchangeName, $messageTypeList, $filteredDispatch);
     }
 
-    public function channel(): AMQPChannel
-    {
-        return $this->queue->channel;
-    }
-
-    public function queueName(): string
-    {
-        return $this->queue->queueName;
-    }
-
-    public function close(): void
-    {
-        $this->queue->close();
-    }
-
-    public function listen(): void
-    {
-        while ($this->channel()->is_consuming()) {
-            try {
-                $this->channel()->wait(null, false, self::WAIT_SECONDS); // 5秒間メッセージを待つ
-            } catch (AMQPTimeoutException $e) {
-                sleep(self::SLEEP_SECONDS);
-            }
-        }
-    }
-
-    private function handle(
+    protected function handle(
         callable $filteredDispatch
     ): callable
     {
@@ -93,12 +47,13 @@ class MessageConsumer
         };
     }
 
-    private function filteredMessageType(Notification $notification): bool
+    protected function waitSeconds(): int
     {
-        if ($this->messageTypeList === []) {
-            return false;
-        }
+        return self::WAIT_SECONDS;
+    }
 
-        return !in_array($notification->notificationType, $this->messageTypeList);
+    protected function sleepSeconds(): int
+    {
+        return self::SLEEP_SECONDS;
     }
 }
