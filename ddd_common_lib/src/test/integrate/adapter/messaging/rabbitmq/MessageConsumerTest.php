@@ -9,7 +9,7 @@ use dddCommonLib\adapter\messaging\rabbitmq\RabbitMqMessage;
 use dddCommonLib\adapter\messaging\rabbitmq\RabbitMqQueue;
 use dddCommonLib\domain\model\eventStore\StoredEvent;
 use dddCommonLib\domain\model\notification\Notification;
-use dddCommonLib\test\helpers\event\TestEvent;
+use dddCommonLib\test\helpers\domain\model\event\TestEvent;
 use PHPUnit\Framework\TestCase;
 
 class MessageConsumerTest extends TestCase

@@ -1,6 +1,6 @@
 <?php
 
-namespace dddCommonLib\test\helpers\event;
+namespace dddCommonLib\test\helpers\domain\model\event;
 
 use dddCommonLib\domain\model\domainEvent\DomainEvent;
 use dddCommonLib\domain\model\domainEvent\DomainEventSubscriber;

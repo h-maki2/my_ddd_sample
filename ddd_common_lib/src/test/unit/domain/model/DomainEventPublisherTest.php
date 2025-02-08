@@ -3,8 +3,8 @@
 use dddCommonLib\domain\model\domainEvent\DomainEvent;
 use dddCommonLib\domain\model\domainEvent\DomainEventPublisher;
 use dddCommonLib\domain\model\domainEvent\DomainEventSubscriber;
-use dddCommonLib\test\helpers\event\TestEvent;
-use dddCommonLib\test\helpers\event\TestEventSubscriber;
+use dddCommonLib\test\helpers\domain\model\event\TestEvent;
+use dddCommonLib\test\helpers\domain\model\event\TestEventSubscriber;
 use PHPUnit\Framework\TestCase;
 
 class DomainEventPublisherTest extends TestCase

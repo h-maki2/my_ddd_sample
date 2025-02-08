@@ -1,7 +1,7 @@
 <?php
 
 use dddCommonLib\domain\model\common\JsonSerializer;
-use dddCommonLib\test\helpers\event\TestEvent;
+use dddCommonLib\test\helpers\domain\model\event\TestEvent;
 use PHPUnit\Framework\TestCase;
 
 class JsonSerializerTest extends TestCase
