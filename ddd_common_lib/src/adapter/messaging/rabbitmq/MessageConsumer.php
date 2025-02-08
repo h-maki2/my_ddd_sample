@@ -57,7 +57,7 @@ class MessageConsumer
                 $this->channel()->wait(null, false, self::WAIT_SECONDS); // 5秒間メッセージを待つ
             } catch (AMQPTimeoutException $e) {
                 echo "No messages received. Sleeping for 5 seconds...\n";
-                sleep(self::WAIT_SECONDS);
+                sleep(self::SLEEP_SECONDS);
             }
         }
     }
@@ -66,7 +66,7 @@ class MessageConsumer
         callable $filteredDispatch
     ): callable
     {
-        $channel = $this->queue->channel;
+        $channel = $this->channel();
         return function (AMQPMessage $message) use ($filteredDispatch, $channel) {
            $reconstructedMessage = RabbitMqMessage::reconstruct($message);
            $notification = $this->notificationFrom($reconstructedMessage);

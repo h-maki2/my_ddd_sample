@@ -2,6 +2,7 @@
 
 namespace dddCommonLib\adapter\messaging\rabbitmq;
 
+use dddCommonLib\domain\model\notification\Notification;
 use PhpAmqpLib\Message\AMQPMessage;
 
 class RabbitMqMessage
@@ -17,11 +18,11 @@ class RabbitMqMessage
     }
 
     public static function fromInstance(
-        string $message,
+        Notification $notification,
         RabbitMqDeliveryMode $deliveryMode
     ): self
     {
-        $amqpMessage = new AMQPMessage($message, [
+        $amqpMessage = new AMQPMessage($notification->serialize(), [
             self::DELIVERY_MODE_KEY => $deliveryMode->value,
             self::HEADER_KEY => RabbitMqRetryCount::initialize()->toAmqpTable()
         ]);

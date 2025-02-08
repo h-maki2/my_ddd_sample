@@ -67,7 +67,7 @@ class MessageConsumerTest extends TestCase
         $testEvent = new TestEvent();
         $storedEvent = StoredEvent::fromDomainEvent($testEvent);
         $notification = Notification::fromStoredEvent($storedEvent);
-        $message = RabbitMqMessage::fromInstance($notification->serialize(), RabbitMqDeliveryMode::PERSISTENT);
+        $message = RabbitMqMessage::fromInstance($notification, RabbitMqDeliveryMode::PERSISTENT);
 
         // when
         // メッセージを送信する
@@ -75,7 +75,7 @@ class MessageConsumerTest extends TestCase
 
         // メッセージを受信する
         while ($consumer->channel()->is_consuming() && $this->catchedNotification === null) {
-            $consumer->channel()->wait(null, false, 5); // 5秒でタイムアウト
+            $consumer->channel()->wait(null, false, 5);
         }
 
         // then
