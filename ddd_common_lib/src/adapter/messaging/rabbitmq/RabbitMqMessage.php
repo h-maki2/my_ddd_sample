@@ -2,6 +2,7 @@
 
 namespace dddCommonLib\adapter\messaging\rabbitmq;
 
+use dddCommonLib\domain\model\common\JsonSerializer;
 use dddCommonLib\domain\model\notification\Notification;
 use PhpAmqpLib\Message\AMQPMessage;
 
@@ -63,6 +64,11 @@ class RabbitMqMessage
     public function messageBody(): string
     {
         return $this->value->body;
+    }
+
+    public function toNotification(): Notification
+    {
+        return JsonSerializer::deserialize($this->messageBody(), Notification::class);
     }
 
     private function retryCount(): RabbitMqRetryCount

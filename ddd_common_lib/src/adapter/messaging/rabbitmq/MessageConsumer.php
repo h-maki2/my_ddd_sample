@@ -73,7 +73,7 @@ class MessageConsumer
         $channel = $this->channel();
         return function (AMQPMessage $message) use ($filteredDispatch, $channel) {
            $reconstructedMessage = RabbitMqMessage::reconstruct($message);
-           $notification = $this->notificationFrom($reconstructedMessage);
+           $notification = $reconstructedMessage->toNotification();
            if ($this->filteredMessageType($notification)) {
                return;
            }
@@ -91,11 +91,6 @@ class MessageConsumer
                 }
            }
         };
-    }
-
-    private function notificationFrom(RabbitMqMessage $message): Notification
-    {
-        return JsonSerializer::deserialize($message->messageBody(), Notification::class);
     }
 
     private function filteredMessageType(Notification $notification): bool

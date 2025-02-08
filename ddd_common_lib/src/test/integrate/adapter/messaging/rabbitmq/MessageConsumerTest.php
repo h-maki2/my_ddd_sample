@@ -7,8 +7,10 @@ use dddCommonLib\adapter\messaging\rabbitmq\MessageProducer;
 use dddCommonLib\adapter\messaging\rabbitmq\RabbitMqDeliveryMode;
 use dddCommonLib\adapter\messaging\rabbitmq\RabbitMqMessage;
 use dddCommonLib\adapter\messaging\rabbitmq\RabbitMqQueue;
+use dddCommonLib\domain\model\common\JsonSerializer;
 use dddCommonLib\domain\model\eventStore\StoredEvent;
 use dddCommonLib\domain\model\notification\Notification;
+use dddCommonLib\test\helpers\adapter\messaging\rabbitmq\TestRabbitMqMessageFactory;
 use dddCommonLib\test\helpers\domain\model\event\TestEvent;
 use PHPUnit\Framework\TestCase;
 
@@ -64,10 +66,7 @@ class MessageConsumerTest extends TestCase
         );
 
         // 送信するメッセージを作成する
-        $testEvent = new TestEvent();
-        $storedEvent = StoredEvent::fromDomainEvent($testEvent);
-        $notification = Notification::fromStoredEvent($storedEvent);
-        $message = RabbitMqMessage::fromInstance($notification, RabbitMqDeliveryMode::PERSISTENT);
+        $message = TestRabbitMqMessageFactory::create();
 
         // when
         // メッセージを送信する
@@ -80,7 +79,6 @@ class MessageConsumerTest extends TestCase
 
         // then
         // 適切にメッセージが受信されていることを確認する
-        $this->assertEquals($notification, $this->catchedNotification);
-        $this->assertEquals($testEvent, $this->catchedNotification->toDomainEvent());
+        $this->assertEquals($message->toNotification(), $this->catchedNotification);
     }
 }
