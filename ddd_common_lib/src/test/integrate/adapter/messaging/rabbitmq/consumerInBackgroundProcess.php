@@ -33,7 +33,7 @@ $consumer = new MessageConsumer(
     $queue,
     $testExchangeName,
     [],
-    function (Notification $notification) {
+    function (string $messageBody) {
        throw new Exception('DLXにメッセージを転送します');
     }
 );

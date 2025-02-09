@@ -60,8 +60,9 @@ class MessageConsumerTest extends TestCase
             $this->queue,
             $this->testExchangeName,
             [],
-            function (Notification $notification) {
-               $this->catchedNotification = $notification;
+            function (string $messageBody) {
+                $notification = JsonSerializer::deserialize($messageBody, Notification::class);
+                $this->catchedNotification = $notification;
             }
         );
 

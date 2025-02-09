@@ -33,7 +33,7 @@ class MessageConsumer extends ACousumer
            }
 
            try {
-                $filteredDispatch($notification);
+                $filteredDispatch($reconstructedMessage->messageBody());
                 $channel->basic_ack($reconstructedMessage->deliveryTag());
            } catch (Exception $e) {
                 $retrievedMessage = $reconstructedMessage->retrieve();

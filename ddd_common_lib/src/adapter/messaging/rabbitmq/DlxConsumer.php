@@ -33,7 +33,7 @@ class DlxConsumer extends ACousumer
         $channel = $this->channel();
         return function (AMQPMessage $message) use ($filteredDispatch, $channel) {
             $rabbitMqMessage = RabbitMqMessage::reconstruct($message);
-            $filteredDispatch($rabbitMqMessage);
+            $filteredDispatch($rabbitMqMessage->messageBody());
             $channel->basic_ack($rabbitMqMessage->deliveryTag()); // 処理完了後にACK
         };
     }

@@ -7,6 +7,7 @@ use dddCommonLib\adapter\messaging\rabbitmq\MessageConsumer;
 use dddCommonLib\adapter\messaging\rabbitmq\MessageProducer;
 use dddCommonLib\adapter\messaging\rabbitmq\RabbitMqMessage;
 use dddCommonLib\adapter\messaging\rabbitmq\RabbitMqQueue;
+use dddCommonLib\domain\model\common\JsonSerializer;
 use dddCommonLib\domain\model\notification\Notification;
 use dddCommonLib\test\helpers\adapter\messaging\rabbitmq\InMemoryRabbitMqLogService;
 use dddCommonLib\test\helpers\adapter\messaging\rabbitmq\TestExchangeName;
@@ -26,6 +27,7 @@ class DlxConsumerTest extends TestCase
     private Exchange $dlxExchange;
     private InMemoryRabbitMqLogService $logService;
     private ?RabbitMqMessage $catchedMessage;
+    private ?Notification $catchedNotification;
 
     public function setUp(): void
     {
@@ -61,8 +63,6 @@ class DlxConsumerTest extends TestCase
         $this->dlxQueue = RabbitMqQueue::declareDlxQueue(
             $this->dlxExchange
         );
-
-        $this->logService = new InMemoryRabbitMqLogService();
     }
 
     public function tearDown(): void
@@ -78,18 +78,19 @@ class DlxConsumerTest extends TestCase
     {
         // given
         // バックグランドでコンシューマを起動する
-        exec('php src/test/integrate/adapter/messaging/rabbitmq/consumerInBackgroundProcess.php');
+        exec('php src/test/integrate/adapter/messaging/rabbitmq/consumerInBackgroundProcess.php > output.log 2>&1 &');
 
         sleep(2);
 
         // DLX用のコンシェーマを作成する
-        $this->catchedMessage = null;
+        $this->catchedNotification = null;
         $dlxConsumer = new DlxConsumer(
             $this->dlxQueue,
             $this->dlxExchange->exchangeName,
             [],
-            function (RabbitMqMessage $message) {
-                $this->catchedMessage = $message;
+            function (string $messageBody) {
+                $notification = JsonSerializer::deserialize($messageBody, Notification::class);
+                $this->catchedNotification = $notification;
             }
         );
 
@@ -101,12 +102,13 @@ class DlxConsumerTest extends TestCase
 
         // when
         // DLX用のコンシェーマを起動する
-        while ($dlxConsumer->channel()->is_consuming() && $this->catchedMessage === null) {
+        while ($dlxConsumer->channel()->is_consuming() && $this->catchedNotification === null) {
             $dlxConsumer->channel()->wait();
         }
 
         // then
         // 送信したメッセージと受信したメッセージが一致していることを確認する
-        $this->assertEquals($message->messageBody(), $this->catchedMessage->messageBody());
+        $expectedNotification = JsonSerializer::deserialize($message->messageBody(), Notification::class); 
+        $this->assertEquals($expectedNotification , $this->catchedNotification);
     }
 }
