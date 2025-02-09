@@ -35,8 +35,14 @@ abstract class ExchangeListener
 
     protected function attachToQueue(): void
     {
-        $this->queue = RabbitMqQueue::fromInstance(
+        $exchange = Exchange::fanOutInstance(
             $this->connectionSettings(),
+            $this->exchangeName(),
+            true
+        );
+
+        $this->queue = RabbitMqQueue::fromInstanceWithBindExchange(
+            $exchange,
             $this->queueName(),
             true
         );

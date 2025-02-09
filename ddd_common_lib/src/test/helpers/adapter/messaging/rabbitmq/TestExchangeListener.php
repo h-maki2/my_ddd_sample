@@ -4,30 +4,44 @@ namespace dddCommonLib\test\helpers\adapter\messaging\rabbitmq;
 
 use dddCommonLib\adapter\messaging\rabbitmq\ConnectionSettings;
 use dddCommonLib\adapter\messaging\rabbitmq\ExchangeListener;
+use dddCommonLib\adapter\messaging\rabbitmq\RabbitMqQueue;
 use dddCommonLib\domain\model\common\JsonSerializer;
 use dddCommonLib\domain\model\notification\Notification;
+use dddCommonLib\test\helpers\domain\model\event\OtherTestEvent;
 use dddCommonLib\test\helpers\domain\model\event\TestEvent;
 
 class TestExchangeListener extends ExchangeListener
 {
     private array $handledEventList = [];
 
+    public function testHandle(int $eventCount): void
+    {
+        while ($this->consumer->channel()->is_consuming() && count($this->handledEventList) < $eventCount) {
+            $this->consumer->channel()->wait();
+        }
+    }
+
+    public function queue(): RabbitMqQueue
+    {
+        return $this->queue;
+    }
+
     public function handledEventList(): array
     {
         return $this->handledEventList;
     }
 
-    protected function exchangeName(): string
+    public function exchangeName(): string
     {
         return TestExchangeName::TEST_EXCHANGE_NAME->value;
     }
 
-    protected function queueName(): string
+    public function queueName(): string
     {
         return self::class;
     }
 
-    protected function connectionSettings(): ConnectionSettings
+    public function connectionSettings(): ConnectionSettings
     {
         return new ConnectionSettings('rabbitmq', 'user', 'password', 5672);
     }
@@ -35,7 +49,8 @@ class TestExchangeListener extends ExchangeListener
     protected function listensTo(): array
     {
         return [
-            TestEvent::class
+            TestEvent::class,
+            OtherTestEvent::class
         ];
     }
 
