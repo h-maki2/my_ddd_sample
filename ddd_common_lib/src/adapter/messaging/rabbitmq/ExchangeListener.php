@@ -24,7 +24,7 @@ abstract class ExchangeListener
 
     abstract protected function connectionSettings(): ConnectionSettings;
 
-    abstract protected function  listensTo(): array;
+    abstract protected function listensTo(): array;
 
     abstract protected function filteredDispatch(): callable;
 
