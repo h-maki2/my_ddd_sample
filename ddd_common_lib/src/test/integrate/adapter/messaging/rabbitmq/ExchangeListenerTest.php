@@ -58,8 +58,8 @@ class ExchangeListenerTest extends TestCase
 
         // when
         // メッセージを受信する
-        $eventCount = 3;
-        $this->listener->testHandle($eventCount);
+        $handledEventCount = 2;
+        $this->listener->testHandle($handledEventCount);
 
         // then
         // 対象のイベントが受信されていることを確認
