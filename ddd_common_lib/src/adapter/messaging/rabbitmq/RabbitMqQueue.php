@@ -30,23 +30,6 @@ class RabbitMqQueue
         $this->connection = $connection;
     }
 
-    public static function fromInstance(
-        ConnectionSettings $connectionSettings,
-        string $queueName,
-        bool $isDurable,
-    )
-    {
-        $connection = new AMQPStreamConnection(
-            $connectionSettings->hostName, 
-            $connectionSettings->port, 
-            $connectionSettings->userName, 
-            $connectionSettings->password
-        );
-        $channel = $connection->channel();
-        $channel->queue_declare($queueName, false, $isDurable, false, false, false, self::dlxSettingParams());
-        return new self($channel, $queueName, '', $connection);
-    }
-
     public static function fromInstanceWithBindExchange(
         Exchange $exchange,
         string $queueName,
