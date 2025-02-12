@@ -2,8 +2,10 @@
 
 namespace dddCommonLib\adapter\messaging\rabbitmq;
 
+use dddCommonLib\adapter\messaging\rabbitmq\exceptions\NotExistsQueueException;
 use dddCommonLib\adapter\messaging\rabbitmq\exceptions\NotSendMessageException;
 use Exception;
+use RuntimeException;
 
 class MessageProducer
 {
@@ -28,8 +30,16 @@ class MessageProducer
                 $this->exchange->channel->basic_publish(
                     $message->value,
                     $this->exchange->exchangeName,
-                    $routingKey
+                    $routingKey,
+                    true
                 );
+
+                $this->exchange->channel->set_return_listener(function ($reply_code, $reply_text, $exchange, $routing_key, $message) {
+                    throw new NotExistsQueueException('Message could not be routed: ' . $reply_text);
+                });
+
+            } catch (NotExistsQueueException $e) {
+                throw new $e;
             } catch (Exception $e) {
                 $currentRetryCount++;
 
@@ -38,7 +48,7 @@ class MessageProducer
                 if ($currentRetryCount < self::MAX_RETRY_COUNT) {
                     sleep($waitTime);
                 } else {
-                    throw new NotSendMessageException($e->getMessage());
+                    throw new RuntimeException($e->getMessage());
                 }
             }
         }

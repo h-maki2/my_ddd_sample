@@ -4,4 +4,6 @@ namespace dddCommonLib\adapter\messaging\rabbitmq\exceptions;
 
 use RuntimeException;
 
-class NotSendMessageException extends RuntimeException {}
+class NotExistsQueueException extends RuntimeException
+{
+}
