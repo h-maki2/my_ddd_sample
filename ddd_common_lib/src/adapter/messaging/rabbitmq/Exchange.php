@@ -28,7 +28,8 @@ class Exchange
         $this->exchangeName = $exchangeName;
         $this->exchangeType = $exchangeType;
         $this->isDurable = $isDurable;
-        $this->channel = $channel->confirm_select();
+        $this->channel = $channel;
+        $this->channel->confirm_select();
         $this->connection = $connection;
     }
 

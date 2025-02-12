@@ -31,6 +31,7 @@ class MessageProducer
                     $message,
                     $routingKey
                 );
+                break;
             } catch (NotExistsQueueException $e) {
                 throw new $e;
             } catch (Exception $e) {
