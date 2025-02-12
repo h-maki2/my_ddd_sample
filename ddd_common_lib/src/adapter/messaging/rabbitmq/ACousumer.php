@@ -23,13 +23,7 @@ abstract class ACousumer
         $this->exchangeName = $exchangeName;
         $this->messageTypeList = $messageTypeList;
 
-        $this->queue->channel->basic_consume(
-            $this->queue->queueName, 
-            '', 
-            false, 
-            false, 
-            false, 
-            false, 
+        $this->queue->consume(
             $this->handle($filteredDispatch)
         );
     }
@@ -51,13 +45,7 @@ abstract class ACousumer
 
     public function listen(): void
     {
-        while ($this->channel()->is_consuming()) {
-            try {
-                $this->channel()->wait(null, false, $this->waitSeconds()); // 5秒間メッセージを待つ
-            } catch (AMQPTimeoutException $e) {
-                sleep($this->sleepSeconds());
-            }
-        }
+        $this->queue->run($this->waitSeconds(), $this->sleepSeconds());
     }
 
     abstract protected function handle(callable $filteredDispatch): callable;

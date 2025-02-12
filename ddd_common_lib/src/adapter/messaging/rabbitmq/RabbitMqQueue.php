@@ -5,6 +5,7 @@ namespace dddCommonLib\adapter\messaging\rabbitmq;
 use InvalidArgumentException;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Exception\AMQPTimeoutException;
 use PhpAmqpLib\Wire\AMQPTable;
 
 class RabbitMqQueue
@@ -73,6 +74,50 @@ class RabbitMqQueue
             'x-dead-letter-exchange' => Exchange::dlxExchangeName(),
             'x-dead-letter-routing-key' => self::DLX_ROUTING_KEY
         ]);
+    }
+
+    public function consume(
+        callable $filteredDispatch
+    ): void
+    {
+        $this->channel->basic_consume(
+            $this->queueName, 
+            '', 
+            false, 
+            false, 
+            false, 
+            false, 
+            $filteredDispatch
+        );
+    }
+
+    public function run(
+        int $waitSeconds,
+        int $sleepSeconds
+    )
+    {
+        while ($this->channel->is_consuming()) {
+            try {
+                $this->channel->wait(null, false, $waitSeconds); // 5秒間メッセージを待つ
+            } catch (AMQPTimeoutException $e) {
+                sleep($sleepSeconds);
+            }
+        }
+    }
+
+    public function ack(int $deliveryTag): void
+    {
+        $this->channel->basic_ack($deliveryTag);
+    }
+
+    public function nack(int $deliveryTag): void
+    {
+        $this->channel->basic_nack($deliveryTag, false, false);
+    }
+
+    public function requeueMessage(RabbitMqMessage $message): void
+    {
+        $this->channel->basic_publish($message->value, '', $this->queueName);
     }
 
     public function close(): void

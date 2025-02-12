@@ -24,8 +24,7 @@ class MessageConsumer extends ACousumer
         callable $filteredDispatch
     ): callable
     {
-        $channel = $this->channel();
-        return function (AMQPMessage $message) use ($filteredDispatch, $channel) {
+        return function (AMQPMessage $message) use ($filteredDispatch) {
            $reconstructedMessage = RabbitMqMessage::reconstruct($message);
            $notification = $reconstructedMessage->toNotification();
            if ($this->filteredMessageType($notification)) {
@@ -34,14 +33,14 @@ class MessageConsumer extends ACousumer
 
            try {
                 $filteredDispatch($reconstructedMessage->messageBody());
-                $channel->basic_ack($reconstructedMessage->deliveryTag());
+                $this->queue->ack($reconstructedMessage->deliveryTag());
            } catch (Exception $e) {
                 $retrievedMessage = $reconstructedMessage->retrieve();
                 if ($retrievedMessage->hasReachedMaxRetryCount()) {
-                    $channel->basic_nack($reconstructedMessage->deliveryTag(), false, false);
+                    $this->queue->nack($reconstructedMessage->deliveryTag());
                 } else {
-                    $channel->basic_publish($retrievedMessage->value, '', $this->queueName());
-                    $channel->basic_ack($reconstructedMessage->deliveryTag());
+                    $this->queue->requeueMessage($retrievedMessage, '', $this->queueName());
+                    $this->queue->ack($reconstructedMessage->deliveryTag());
                 }
            }
         };
