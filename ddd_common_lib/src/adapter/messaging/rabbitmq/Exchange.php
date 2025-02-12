@@ -2,6 +2,7 @@
 
 namespace dddCommonLib\adapter\messaging\rabbitmq;
 
+use dddCommonLib\adapter\messaging\rabbitmq\exceptions\NotExistsQueueException;
 use InvalidArgumentException;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
@@ -27,7 +28,7 @@ class Exchange
         $this->exchangeName = $exchangeName;
         $this->exchangeType = $exchangeType;
         $this->isDurable = $isDurable;
-        $this->channel = $channel;
+        $this->channel = $channel->confirm_select();
         $this->connection = $connection;
     }
 
@@ -46,6 +47,7 @@ class Exchange
         $channel = $connection->channel();
         $exchangeType = ExchangeType::FANOUT;
         $channel->exchange_declare($exchangeName, $exchangeType->value, false, $isDurable, false);
+        $channel->set_return_listener(self::errorCallBackWhenNotExistsQueue());
         return new self($exchangeName, $exchangeType, $isDurable, $channel, $connection);
     }
 
@@ -64,6 +66,7 @@ class Exchange
         $channel = $connection->channel();
         $exchangeType = ExchangeType::TOPIC;
         $channel->exchange_declare($exchangeName, $exchangeType->value, false, $isDurable, false);
+        $channel->set_return_listener(self::errorCallBackWhenNotExistsQueue());
         return new self($exchangeName, $exchangeType, $isDurable, $channel, $connection);
     }
 
@@ -89,6 +92,21 @@ class Exchange
         return new self(self::DLX_EXCHANGE_NAME, $exchangeType, true, $channel, $connection);
     }
 
+    public function publish(
+        RabbitMqMessage $message,
+        string $routingKey = ''
+    )
+    {
+        $this->channel->basic_publish(
+            $message->value,
+            $this->exchangeName,
+            $routingKey,
+            true
+        );
+
+        $this->channel->wait_for_pending_acks();
+    }
+
     public function isFanout(): bool
     {
         return $this->exchangeType->isFanout();
@@ -108,5 +126,12 @@ class Exchange
     public static function dlxExchangeName(): string
     {
         return self::DLX_EXCHANGE_NAME;
+    }
+
+    private static function errorCallBackWhenNotExistsQueue(): callable
+    {
+        return function ($reply_code, $reply_text, $exchange, $routing_key, $message) {
+            throw new NotExistsQueueException('Message could not be routed: ' . $reply_text);
+        };
     }
 }

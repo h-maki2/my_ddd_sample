@@ -27,17 +27,10 @@ class MessageProducer
 
         while ($currentRetryCount < self::MAX_RETRY_COUNT) {
             try {
-                $this->exchange->channel->basic_publish(
-                    $message->value,
-                    $this->exchange->exchangeName,
-                    $routingKey,
-                    true
+                $this->exchange->publish(
+                    $message,
+                    $routingKey
                 );
-
-                $this->exchange->channel->set_return_listener(function ($reply_code, $reply_text, $exchange, $routing_key, $message) {
-                    throw new NotExistsQueueException('Message could not be routed: ' . $reply_text);
-                });
-
             } catch (NotExistsQueueException $e) {
                 throw new $e;
             } catch (Exception $e) {
