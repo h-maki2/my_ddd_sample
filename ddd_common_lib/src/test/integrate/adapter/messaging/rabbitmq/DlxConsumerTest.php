@@ -25,7 +25,6 @@ class DlxConsumerTest extends TestCase
     private RabbitMqQueue $dlxQueue;
     private MessageConsumer $consumer;
     private Exchange $dlxExchange;
-    private InMemoryRabbitMqLogService $logService;
     private ?RabbitMqMessage $catchedMessage;
     private ?Notification $catchedNotification;
 
