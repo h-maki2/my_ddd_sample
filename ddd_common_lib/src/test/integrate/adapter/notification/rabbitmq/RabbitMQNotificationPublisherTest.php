@@ -16,7 +16,6 @@ class RabbitMQNotificationPublisherTest extends TestCase
     private InMemoryEventStore $eventStore;
     private RabbitMQNotificationPublisher $publisher;
     private InMemoryPublishedNotificationTrackerStore $publishedNotificationTrackerStore;
-    private IEventStoreLogService $eventStoreLogService;
 
     public function setUp(): void
     {

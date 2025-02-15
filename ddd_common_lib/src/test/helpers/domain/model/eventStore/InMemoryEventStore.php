@@ -13,7 +13,7 @@ class InMemoryEventStore implements IEventStore
     {
         $result = [];
         foreach ($this->storedEventList as $storedEventId => $storedEvent) {
-            if ($storedEventId < $aStoredEventId) {
+            if ($storedEventId <= $aStoredEventId) {
                 continue;
             }
 

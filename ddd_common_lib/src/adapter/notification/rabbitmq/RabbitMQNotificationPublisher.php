@@ -55,6 +55,9 @@ class RabbitMQNotificationPublisher
         }
 
         $this->trackMostRecentPublishedNotification($storedEventList, $publishedNotificationTracker);
+
+        $this->messageProducer->close();
+        $this->dlxMessageProducer->close();
     }
 
     private function attachToMessageProducer(ConnectionSettings $connectionSettings, string $exchangeName): void

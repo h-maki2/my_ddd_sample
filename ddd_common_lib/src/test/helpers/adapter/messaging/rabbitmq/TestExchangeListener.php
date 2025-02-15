@@ -21,9 +21,10 @@ class TestExchangeListener extends ExchangeListener
         }
     }
 
-    public function queue(): RabbitMqQueue
+    public function deleteQueue(): void
     {
-        return $this->queue;
+        $this->queue->delete();
+        $this->queue->close();
     }
 
     public function handledEventList(): array
@@ -39,6 +40,21 @@ class TestExchangeListener extends ExchangeListener
     public function queueName(): string
     {
         return self::class;
+    }
+
+    public function hasHandledNotification(Notification $notification): bool
+    {
+        foreach ($this->handledEventList() as $handledNotification) {
+            if (
+                $handledNotification->eventBody === $notification->eventBody &&
+                $handledNotification->notificationType === $notification->notificationType &&
+                $handledNotification->occurredOn === $notification->occurredOn
+            ) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function connectionSettings(): ConnectionSettings
@@ -64,6 +80,6 @@ class TestExchangeListener extends ExchangeListener
 
     private function addHandledEventList(Notification $notification): void
     {
-        $this->handledEventList[] = $notification->notificationType;
+        $this->handledEventList[] = $notification;
     }
 }

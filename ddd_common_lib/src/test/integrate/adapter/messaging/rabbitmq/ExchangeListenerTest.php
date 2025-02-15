@@ -20,8 +20,6 @@ class ExchangeListenerTest extends TestCase
     {
         $this->listener = new TestExchangeListener();
 
-        $this->queue = $this->listener->queue();
-
         $exchange = Exchange::fanOutInstance(
             $this->listener->connectionSettings(),
             $this->listener->exchangeName(),
@@ -32,8 +30,7 @@ class ExchangeListenerTest extends TestCase
 
     public function tearDown(): void
     {
-        $this->queue->delete();
-        $this->queue->close();
+        $this->listener->deleteQueue();
     }
 
     public function test_対象のイベントを受信できる()
@@ -63,9 +60,9 @@ class ExchangeListenerTest extends TestCase
 
         // then
         // 対象のイベントが受信されていることを確認
-        $this->assertContains(TestEvent::class, $this->listener->handledEventList());
-        $this->assertContains(OtherTestEvent::class, $this->listener->handledEventList());
-        $this->assertNotContains(NotTargetEvent::class, $this->listener->handledEventList());
+        $this->assertContainsEquals($受信対象のメッセージ1, $this->listener->handledEventList());
+        $this->assertContains($受信対象のメッセージ2, $this->listener->handledEventList());
+        $this->assertNotContains($受信対象外のメッセージ, $this->listener->handledEventList());
     }
 }
 
