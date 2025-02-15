@@ -48,7 +48,6 @@ class Exchange
         $channel = $connection->channel();
         $exchangeType = ExchangeType::FANOUT;
         $channel->exchange_declare($exchangeName, $exchangeType->value, false, $isDurable, false);
-        $channel->set_return_listener(self::errorCallBackWhenNotExistsQueue());
         return new self($exchangeName, $exchangeType, $isDurable, $channel, $connection);
     }
 
@@ -67,7 +66,6 @@ class Exchange
         $channel = $connection->channel();
         $exchangeType = ExchangeType::TOPIC;
         $channel->exchange_declare($exchangeName, $exchangeType->value, false, $isDurable, false);
-        $channel->set_return_listener(self::errorCallBackWhenNotExistsQueue());
         return new self($exchangeName, $exchangeType, $isDurable, $channel, $connection);
     }
 
@@ -104,8 +102,6 @@ class Exchange
             $routingKey,
             true
         );
-
-        $this->channel->wait_for_pending_acks();
     }
 
     public function isFanout(): bool
@@ -127,12 +123,5 @@ class Exchange
     public static function dlxExchangeName(): string
     {
         return self::DLX_EXCHANGE_NAME;
-    }
-
-    private static function errorCallBackWhenNotExistsQueue(): callable
-    {
-        return function ($reply_code, $reply_text, $exchange, $routing_key, $message) {
-            throw new NotExistsQueueException('Message could not be routed: ' . $reply_text);
-        };
     }
 }

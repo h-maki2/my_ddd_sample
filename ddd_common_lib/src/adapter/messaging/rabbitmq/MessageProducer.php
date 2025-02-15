@@ -9,7 +9,7 @@ use RuntimeException;
 
 class MessageProducer
 {
-    readonly Exchange $exchange;
+    private Exchange $exchange;
 
     private const MAX_RETRY_COUNT = 5;
 
@@ -32,8 +32,6 @@ class MessageProducer
                     $routingKey
                 );
                 break;
-            } catch (NotExistsQueueException $e) {
-                throw new $e;
             } catch (Exception $e) {
                 $currentRetryCount++;
 

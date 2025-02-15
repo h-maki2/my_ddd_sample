@@ -35,7 +35,7 @@ class Notification
         $domainEvent = $storedEvent->toDomainEvent();
         return new self(
             $storedEvent->eventBody,
-            $storedEvent->eventId,
+            $storedEvent->storedEventId,
             $storedEvent->eventType,
             $storedEvent->occurredOn,
             $domainEvent->eventVersion()

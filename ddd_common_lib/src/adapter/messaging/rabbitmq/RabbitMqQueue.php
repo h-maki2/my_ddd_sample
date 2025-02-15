@@ -10,9 +10,8 @@ use PhpAmqpLib\Wire\AMQPTable;
 
 class RabbitMqQueue
 {
-    readonly AMQPChannel $channel;
-    readonly string $queueName;
-    readonly string $routingKey;
+    private AMQPChannel $channel;
+    private string $queueName;
     private AMQPStreamConnection $connection;
 
     private const DLX_QUEUE_NAME = 'dlx_queue';
@@ -21,13 +20,11 @@ class RabbitMqQueue
     private function __construct(
         AMQPChannel $channel,
         string $queueName,
-        string $routingKey,
         AMQPStreamConnection $connection
     )
     {
         $this->channel = $channel;
         $this->queueName = $queueName;
-        $this->routingKey = $routingKey;
         $this->connection = $connection;
     }
 
@@ -51,7 +48,7 @@ class RabbitMqQueue
             self::dlxSettingParams()
         );
         $channel->queue_bind($queueName, $exchange->exchangeName, $routingKey);
-        return new self($channel, $queueName, $routingKey, $exchange->connection);
+        return new self($channel, $queueName, $exchange->connection);
     }
 
     public static function declareDlxQueue(
@@ -65,7 +62,7 @@ class RabbitMqQueue
             $exchange->exchangeName, 
             self::DLX_ROUTING_KEY
         );
-        return new self($channel, self::DLX_QUEUE_NAME, self::DLX_ROUTING_KEY, $exchange->connection);
+        return new self($channel, self::DLX_QUEUE_NAME, $exchange->connection);
     }
 
     private static function dlxSettingParams(): AMQPTable

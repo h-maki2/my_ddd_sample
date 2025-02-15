@@ -12,13 +12,13 @@ class StoredEvent
     readonly string $eventBody;
     readonly string $occurredOn;
     readonly string $eventType;
-    readonly string $eventId;
+    readonly string $storedEventId;
 
     private function __construct(
         string $anEventType, 
         string $anOccurredOn, 
         string $anEventBody,
-        string $anEventId
+        string $anstoredEventId
     )
     {
         if (strtotime($anOccurredOn) === false) {
@@ -28,7 +28,7 @@ class StoredEvent
         $this->eventType = $anEventType;
         $this->occurredOn = $anOccurredOn;
         $this->eventBody = $anEventBody;
-        $this->eventId = $anEventId;
+        $this->storedEventId = $anstoredEventId;
     }
 
     public static function fromDomainEvent(DomainEvent $aDomainEvent): self
@@ -46,14 +46,14 @@ class StoredEvent
         string $eventType,
         string $occurredOn,
         string $eventBody,
-        string $eventId
+        string $storedEventId
     ): self
     {
         return new StoredEvent(
             $eventType,
             $occurredOn,
             $eventBody,
-            $eventId
+            $storedEventId
         );
     }
 
