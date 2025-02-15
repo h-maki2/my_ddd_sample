@@ -17,7 +17,12 @@ class InMemoryEventStore implements IEventStore
                 continue;
             }
 
-            $result[] = $storedEvent;
+            $result[] = StoredEvent::reconstruct(
+                $storedEvent->eventType,
+                $storedEvent->occurredOn,
+                $storedEvent->eventBody,
+                $storedEventId
+            );
         }
 
         return $result;
@@ -25,6 +30,11 @@ class InMemoryEventStore implements IEventStore
 
     public function append(StoredEvent $storedEvent): void
     {
-        $this->storedEventList[] = $storedEvent;
+        $this->storedEventList[$this->nextStoredEventId()] = $storedEvent;
+    }
+
+    private function nextStoredEventId(): int
+    {
+        return count($this->storedEventList) + 1;
     }
 }
