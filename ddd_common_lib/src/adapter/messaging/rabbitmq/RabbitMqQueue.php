@@ -93,9 +93,9 @@ class RabbitMqQueue
         int $sleepSeconds
     )
     {
-        while ($this->channel->is_consuming()) {
+        while ($this->isSendingMessageToConsumer()) {
             try {
-                $this->channel->wait(null, false, $waitSeconds); // 5秒間メッセージを待つ
+                $this->wait($waitSeconds); // 5秒間メッセージを待つ
             } catch (AMQPTimeoutException $e) {
                 sleep($sleepSeconds);
             }
@@ -121,5 +121,20 @@ class RabbitMqQueue
     {
         $this->channel->close();
         $this->connection->close();
+    }
+
+    public function isSendingMessageToConsumer(): bool
+    {
+        return $this->channel->is_consuming();
+    }
+
+    public function wait(int $waitSeconds): void
+    {
+        $this->channel->wait(null, false, $waitSeconds);
+    }
+
+    public function delete(): void
+    {
+        $this->channel->queue_delete($this->queueName);
     }
 }

@@ -47,7 +47,7 @@ class MessageConsumerTest extends TestCase
 
     public function tearDown(): void
     {
-        $this->queue->channel->queue_delete($this->testQueueName);
+        $this->queue->delete();
         $this->queue->close();
     }
 
@@ -74,8 +74,8 @@ class MessageConsumerTest extends TestCase
         $this->producer->send($message);
 
         // メッセージを受信する
-        while ($consumer->channel()->is_consuming() && $this->catchedNotification === null) {
-            $consumer->channel()->wait(null, false, 5);
+        while ($this->queue->isSendingMessageToConsumer() && $this->catchedNotification === null) {
+            $this->queue->wait(5);
         }
 
         // then

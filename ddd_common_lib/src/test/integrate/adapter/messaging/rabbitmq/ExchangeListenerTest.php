@@ -32,7 +32,7 @@ class ExchangeListenerTest extends TestCase
 
     public function tearDown(): void
     {
-        $this->queue->channel->queue_delete($this->listener->queueName());
+        $this->queue->delete();
         $this->queue->close();
     }
 

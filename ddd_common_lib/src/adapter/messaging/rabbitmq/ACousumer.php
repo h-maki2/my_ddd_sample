@@ -28,16 +28,6 @@ abstract class ACousumer
         );
     }
 
-    public function channel(): AMQPChannel
-    {
-        return $this->queue->channel;
-    }
-
-    public function queueName(): string
-    {
-        return $this->queue->queueName;
-    }
-
     public function close(): void
     {
         $this->queue->close();

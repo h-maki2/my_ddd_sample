@@ -16,8 +16,8 @@ class TestExchangeListener extends ExchangeListener
 
     public function testHandle(int $handledEventCount): void
     {
-        while ($this->consumer->channel()->is_consuming() && count($this->handledEventList) < $handledEventCount) {
-            $this->consumer->channel()->wait();
+        while ($this->queue->isSendingMessageToConsumer() && count($this->handledEventList) < $handledEventCount) {
+            $this->queue->wait(30);
         }
     }
 

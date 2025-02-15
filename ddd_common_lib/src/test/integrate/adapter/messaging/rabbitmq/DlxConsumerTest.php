@@ -67,10 +67,10 @@ class DlxConsumerTest extends TestCase
 
     public function tearDown(): void
     {
-        $this->queue->channel->queue_delete($this->testQueueName);
+        $this->queue->delete();
         $this->queue->close();
 
-        $this->dlxQueue->channel->queue_delete($this->dlxQueue->queueName);
+        $this->dlxQueue->delete();
         $this->dlxQueue->close();
     }
 
@@ -101,9 +101,8 @@ class DlxConsumerTest extends TestCase
         $this->producer->send($message);
 
         // when
-        // DLX用のコンシェーマを起動する
-        while ($dlxConsumer->channel()->is_consuming() && $this->catchedNotification === null) {
-            $dlxConsumer->channel()->wait();
+        while ($this->dlxQueue->isSendingMessageToConsumer() && $this->catchedNotification === null) {
+            $this->dlxQueue->wait(5);
         }
 
         // then
