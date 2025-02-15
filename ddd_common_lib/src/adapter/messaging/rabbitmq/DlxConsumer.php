@@ -9,8 +9,6 @@ class DlxConsumer extends ACousumer
     protected const WAIT_SECONDS = 5;
     protected const SLEEP_SECONDS = 5;
 
-    protected IRabbitMqLogService $logService;
-
     public function __construct(
         RabbitMqQueue $queue,
         string $exchangeName,
@@ -30,11 +28,10 @@ class DlxConsumer extends ACousumer
         callable $filteredDispatch
     ): callable
     {
-        $channel = $this->channel();
-        return function (AMQPMessage $message) use ($filteredDispatch, $channel) {
+        return function (AMQPMessage $message) use ($filteredDispatch) {
             $rabbitMqMessage = RabbitMqMessage::reconstruct($message);
             $filteredDispatch($rabbitMqMessage->messageBody());
-            $channel->basic_ack($rabbitMqMessage->deliveryTag()); // 処理完了後にACK
+            $this->queue->ack($rabbitMqMessage->deliveryTag()); // 処理完了後にACK
         };
     }
 

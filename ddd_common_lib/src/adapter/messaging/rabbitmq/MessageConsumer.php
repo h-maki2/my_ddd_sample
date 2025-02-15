@@ -39,7 +39,7 @@ class MessageConsumer extends ACousumer
                 if ($retrievedMessage->hasReachedMaxRetryCount()) {
                     $this->queue->nack($reconstructedMessage->deliveryTag());
                 } else {
-                    $this->queue->requeueMessage($retrievedMessage, '', $this->queueName());
+                    $this->queue->requeueMessage($retrievedMessage, '');
                     $this->queue->ack($reconstructedMessage->deliveryTag());
                 }
            }
