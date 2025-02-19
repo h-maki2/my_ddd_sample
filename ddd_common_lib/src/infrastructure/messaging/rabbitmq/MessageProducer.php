@@ -1,9 +1,9 @@
 <?php
 
-namespace dddCommonLib\adapter\messaging\rabbitmq;
+namespace dddCommonLib\infrastructure\messaging\rabbitmq;
 
-use dddCommonLib\adapter\messaging\rabbitmq\exceptions\NotExistsQueueException;
-use dddCommonLib\adapter\messaging\rabbitmq\exceptions\NotSendMessageException;
+use dddCommonLib\infrastructure\messaging\rabbitmq\exceptions\NotExistsQueueException;
+use dddCommonLib\infrastructure\messaging\rabbitmq\exceptions\NotSendMessageException;
 use Exception;
 use RuntimeException;
 

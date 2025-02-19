@@ -1,8 +1,8 @@
 <?php
 
-namespace dddCommonLib\adapter\messaging\rabbitmq;
+namespace dddCommonLib\infrastructure\messaging\rabbitmq;
 
-use dddCommonLib\adapter\messaging\rabbitmq\exceptions\NotExistsQueueException;
+use dddCommonLib\infrastructure\messaging\rabbitmq\exceptions\NotExistsQueueException;
 use InvalidArgumentException;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPStreamConnection;

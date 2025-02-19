@@ -1,6 +1,6 @@
 <?php
 
-namespace dddCommonLib\adapter\messaging\rabbitmq;
+namespace dddCommonLib\infrastructure\messaging\rabbitmq;
 
 enum RabbitMqDeliveryMode: int
 {

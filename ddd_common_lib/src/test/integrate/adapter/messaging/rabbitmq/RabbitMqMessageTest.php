@@ -1,8 +1,8 @@
 <?php
 
-use dddCommonLib\adapter\messaging\rabbitmq\RabbitMqDeliveryMode;
-use dddCommonLib\adapter\messaging\rabbitmq\RabbitMqMessage;
-use dddCommonLib\adapter\messaging\rabbitmq\RabbitMqRetryCount;
+use dddCommonLib\infrastructure\messaging\rabbitmq\RabbitMqDeliveryMode;
+use dddCommonLib\infrastructure\messaging\rabbitmq\RabbitMqMessage;
+use dddCommonLib\infrastructure\messaging\rabbitmq\RabbitMqRetryCount;
 use PHPUnit\Framework\TestCase;
 
 class RabbitMqMessageTest extends TestCase

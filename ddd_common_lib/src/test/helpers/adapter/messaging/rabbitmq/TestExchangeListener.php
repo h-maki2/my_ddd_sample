@@ -2,9 +2,9 @@
 
 namespace dddCommonLib\test\helpers\adapter\messaging\rabbitmq;
 
-use dddCommonLib\adapter\messaging\rabbitmq\ConnectionSettings;
-use dddCommonLib\adapter\messaging\rabbitmq\ExchangeListener;
-use dddCommonLib\adapter\messaging\rabbitmq\RabbitMqQueue;
+use dddCommonLib\infrastructure\messaging\rabbitmq\ConnectionSettings;
+use dddCommonLib\infrastructure\messaging\rabbitmq\ExchangeListener;
+use dddCommonLib\infrastructure\messaging\rabbitmq\RabbitMqQueue;
 use dddCommonLib\domain\model\common\JsonSerializer;
 use dddCommonLib\domain\model\notification\Notification;
 use dddCommonLib\test\helpers\domain\model\event\OtherTestEvent;

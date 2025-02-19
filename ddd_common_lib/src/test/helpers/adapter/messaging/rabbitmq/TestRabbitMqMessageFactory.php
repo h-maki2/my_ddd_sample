@@ -2,8 +2,8 @@
 
 namespace dddCommonLib\test\helpers\adapter\messaging\rabbitmq;
 
-use dddCommonLib\adapter\messaging\rabbitmq\RabbitMqDeliveryMode;
-use dddCommonLib\adapter\messaging\rabbitmq\RabbitMqMessage;
+use dddCommonLib\infrastructure\messaging\rabbitmq\RabbitMqDeliveryMode;
+use dddCommonLib\infrastructure\messaging\rabbitmq\RabbitMqMessage;
 use dddCommonLib\domain\model\domainEvent\DomainEvent;
 use dddCommonLib\domain\model\eventStore\StoredEvent;
 use dddCommonLib\domain\model\notification\Notification;

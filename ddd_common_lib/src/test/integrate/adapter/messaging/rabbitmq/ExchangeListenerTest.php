@@ -1,8 +1,8 @@
 <?php
 
-use dddCommonLib\adapter\messaging\rabbitmq\Exchange;
-use dddCommonLib\adapter\messaging\rabbitmq\MessageProducer;
-use dddCommonLib\adapter\messaging\rabbitmq\RabbitMqQueue;
+use dddCommonLib\infrastructure\messaging\rabbitmq\Exchange;
+use dddCommonLib\infrastructure\messaging\rabbitmq\MessageProducer;
+use dddCommonLib\infrastructure\messaging\rabbitmq\RabbitMqQueue;
 use dddCommonLib\domain\model\domainEvent\DomainEvent;
 use dddCommonLib\test\helpers\adapter\messaging\rabbitmq\TestExchangeListener;
 use dddCommonLib\test\helpers\adapter\messaging\rabbitmq\TestRabbitMqMessageFactory;

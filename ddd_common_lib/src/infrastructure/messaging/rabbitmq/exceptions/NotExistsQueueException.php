@@ -1,6 +1,6 @@
 <?php
 
-namespace dddCommonLib\adapter\messaging\rabbitmq\exceptions;
+namespace dddCommonLib\infrastructure\messaging\rabbitmq\exceptions;
 
 use RuntimeException;
 

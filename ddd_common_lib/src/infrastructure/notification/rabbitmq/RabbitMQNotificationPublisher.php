@@ -1,12 +1,12 @@
 <?php
 
-namespace dddCommonLib\adapter\notification\rabbitmq;
+namespace dddCommonLib\infrastructure\notification\rabbitmq;
 
-use dddCommonLib\adapter\messaging\rabbitmq\ConnectionSettings;
-use dddCommonLib\adapter\messaging\rabbitmq\Exchange;
-use dddCommonLib\adapter\messaging\rabbitmq\MessageProducer;
-use dddCommonLib\adapter\messaging\rabbitmq\RabbitMqDeliveryMode;
-use dddCommonLib\adapter\messaging\rabbitmq\RabbitMqMessage;
+use dddCommonLib\infrastructure\messaging\rabbitmq\ConnectionSettings;
+use dddCommonLib\infrastructure\messaging\rabbitmq\Exchange;
+use dddCommonLib\infrastructure\messaging\rabbitmq\MessageProducer;
+use dddCommonLib\infrastructure\messaging\rabbitmq\RabbitMqDeliveryMode;
+use dddCommonLib\infrastructure\messaging\rabbitmq\RabbitMqMessage;
 use dddCommonLib\domain\model\eventStore\IEventStore;
 use dddCommonLib\domain\model\eventStore\IEventStoreLogService;
 use dddCommonLib\domain\model\eventStore\StoredEvent;

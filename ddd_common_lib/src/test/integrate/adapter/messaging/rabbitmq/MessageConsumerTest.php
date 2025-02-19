@@ -1,12 +1,12 @@
 <?php
 
-use dddCommonLib\adapter\messaging\rabbitmq\ConnectionSettings;
-use dddCommonLib\adapter\messaging\rabbitmq\Exchange;
-use dddCommonLib\adapter\messaging\rabbitmq\MessageConsumer;
-use dddCommonLib\adapter\messaging\rabbitmq\MessageProducer;
-use dddCommonLib\adapter\messaging\rabbitmq\RabbitMqDeliveryMode;
-use dddCommonLib\adapter\messaging\rabbitmq\RabbitMqMessage;
-use dddCommonLib\adapter\messaging\rabbitmq\RabbitMqQueue;
+use dddCommonLib\infrastructure\messaging\rabbitmq\ConnectionSettings;
+use dddCommonLib\infrastructure\messaging\rabbitmq\Exchange;
+use dddCommonLib\infrastructure\messaging\rabbitmq\MessageConsumer;
+use dddCommonLib\infrastructure\messaging\rabbitmq\MessageProducer;
+use dddCommonLib\infrastructure\messaging\rabbitmq\RabbitMqDeliveryMode;
+use dddCommonLib\infrastructure\messaging\rabbitmq\RabbitMqMessage;
+use dddCommonLib\infrastructure\messaging\rabbitmq\RabbitMqQueue;
 use dddCommonLib\domain\model\common\JsonSerializer;
 use dddCommonLib\domain\model\eventStore\StoredEvent;
 use dddCommonLib\domain\model\notification\Notification;

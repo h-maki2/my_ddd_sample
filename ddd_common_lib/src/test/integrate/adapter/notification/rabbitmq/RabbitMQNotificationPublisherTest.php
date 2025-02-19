@@ -1,7 +1,7 @@
 <?php
 
-use dddCommonLib\adapter\messaging\rabbitmq\ConnectionSettings;
-use dddCommonLib\adapter\notification\rabbitmq\RabbitMQNotificationPublisher;
+use dddCommonLib\infrastructure\messaging\rabbitmq\ConnectionSettings;
+use dddCommonLib\infrastructure\notification\rabbitmq\RabbitMQNotificationPublisher;
 use dddCommonLib\domain\model\eventStore\IEventStore;
 use dddCommonLib\domain\model\eventStore\IEventStoreLogService;
 use dddCommonLib\domain\model\eventStore\StoredEvent;

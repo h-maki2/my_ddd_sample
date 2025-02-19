@@ -1,6 +1,6 @@
 <?php
 
-namespace dddCommonLib\adapter\messaging\rabbitmq;
+namespace dddCommonLib\infrastructure\messaging\rabbitmq;
 
 use dddCommonLib\domain\model\common\JsonSerializer;
 use dddCommonLib\domain\model\notification\Notification;
