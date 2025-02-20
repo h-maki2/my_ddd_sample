@@ -10,6 +10,7 @@ class KafkaConsumerTest extends TestCase
     private KafkaProducer $producer;
     private KafkaConsumer $consumer;
     private string $catchedMessage;
+    private $filteredDispatch;
 
     public function setUp(): void
     {
@@ -19,6 +20,11 @@ class KafkaConsumerTest extends TestCase
             'kafka:9092',
             'testTopic'
         );
+
+        $this->filteredDispatch = function (string $message) {
+            $this->catchedMessage = $message;
+            throw new Exception('メッセージが受信されました');
+        };
     }
 
     public function tearDown(): void
@@ -33,14 +39,9 @@ class KafkaConsumerTest extends TestCase
 
         $this->producer->send($sendMessage);
 
-        $filteredDispath = function (string $message) {
-            $this->catchedMessage = $message;
-            throw new Exception('メッセージが受信されました');
-        };
-
         // when
         try {
-            $this->consumer->handle($filteredDispath);
+            $this->consumer->handle($this->filteredDispatch);
         } catch (Exception $ex) {
             // 何もしない
         }
