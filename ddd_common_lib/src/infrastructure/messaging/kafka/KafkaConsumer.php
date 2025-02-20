@@ -12,8 +12,8 @@ class KafkaConsumer
         string $groupId,
         string $hostName,
         string $topicName,
-        KafkaEnableAuthCommit $enableAuthCommit = KafkaEnableAuthCommit::Disable,
-        KafkaAutoOffsetReset $autoOffsetReset = KafkaAutoOffsetReset::LATEST
+        KafkaEnableAuthCommit $enableAuthCommit = KafkaEnableAuthCommit::Enable,
+        KafkaAutoOffsetReset $autoOffsetReset = KafkaAutoOffsetReset::EARLIEST
     )
     {
         $this->consumer = new RdKafka\KafkaConsumer(
@@ -27,7 +27,6 @@ class KafkaConsumer
         while (true) {
             $message = $this->consumer->consume(10000);
             $filteredDispatch($message->payload);
-            $this->consumer->commitAsync($message);
         }
     }
 
