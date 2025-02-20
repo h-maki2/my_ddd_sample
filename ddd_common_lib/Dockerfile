@@ -1,13 +1,11 @@
 FROM php:8.2-apache
 
 RUN apt-get update && apt-get install -y \
-    unzip \
-    zip \
-    curl \
+    librdkafka-dev \
     git \
-    libonig-dev \
-    libxml2-dev \
-    && docker-php-ext-install pdo_mysql mbstring xml sockets
+    unzip \
+    && pecl install rdkafka \
+    && docker-php-ext-enable rdkafka
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
