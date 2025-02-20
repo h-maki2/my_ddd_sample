@@ -2,6 +2,8 @@
 
 namespace dddCommonLib\infrastructure\messaging\kafka;
 
+use RdKafka;
+
 class KafkaConsumer
 {
     private RdKafka\KafkaConsumer $consumer;

@@ -2,6 +2,8 @@
 
 namespace dddCommonLib\infrastructure\messaging\kafka;
 
+use RdKafka;
+
 class KafkaProducer
 {
     private const QUEUE_BUFFERING_MAX_MS = 10;
@@ -10,7 +12,7 @@ class KafkaProducer
     private RdKafka\ProducerTopic $topic;
     private RdKafka\Producer $producer;
 
-    public function __construct(string $hostName, string $topicName, Acks $acks = Acks::ALL)
+    public function __construct(string $hostName, string $topicName, KafkaAcks $acks = KafkaAcks::ALL)
     {
         $this->producer = new RdKafka\Producer(
             $this->rdKafkaConf($hostName, $acks)
@@ -24,7 +26,7 @@ class KafkaProducer
         $this->producer->flush(10000);
     }
 
-    private function rdKafkaConf(string $hostName, Acks $acks): RdKafka\Conf
+    private function rdKafkaConf(string $hostName, KafkaAcks $acks): RdKafka\Conf
     {
         $conf = new RdKafka\Conf();
         $conf->set('metadata.broker.list', $hostName);

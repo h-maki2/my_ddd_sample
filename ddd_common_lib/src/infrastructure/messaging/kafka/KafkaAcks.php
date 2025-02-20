@@ -2,7 +2,7 @@
 
 namespace dddCommonLib\infrastructure\messaging\kafka;
 
-enum Acks: string
+enum KafkaAcks: string
 {
     case NONE = '0';
     case LEADER = '1';
