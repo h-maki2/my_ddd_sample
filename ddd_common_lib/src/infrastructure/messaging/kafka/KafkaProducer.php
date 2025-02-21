@@ -2,6 +2,8 @@
 
 namespace dddCommonLib\infrastructure\messaging\kafka;
 
+use dddCommonLib\domain\model\common\JsonSerializer;
+use dddCommonLib\domain\model\notification\Notification;
 use RdKafka;
 
 class KafkaProducer
@@ -20,9 +22,10 @@ class KafkaProducer
         $this->topic = $this->producer->newTopic($topicName);
     }
 
-    public function send(string $message): void
+    public function send(Notification $notification): void
     {
-        $this->topic->produce(RD_KAFKA_PARTITION_UA, 0, $message);
+        $serializedNotification = JsonSerializer::serialize($notification);
+        $this->topic->produce(RD_KAFKA_PARTITION_UA, 0, $serializedNotification);
         $this->producer->flush(10000);
     }
 

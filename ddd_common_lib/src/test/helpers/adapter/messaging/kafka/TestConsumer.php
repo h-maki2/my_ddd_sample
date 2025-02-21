@@ -7,17 +7,37 @@ use dddCommonLib\infrastructure\messaging\kafka\KafkaConsumer;
 use dddCommonLib\test\helpers\domain\model\event\OtherTestEvent;
 use dddCommonLib\test\helpers\domain\model\event\TestEvent;
 use Exception;
+use PHPUnit\Event\TestRunner\ExecutionAborted;
 
 class TestConsumer extends KafkaConsumer
 {
-    private array $catchedMessageList = [];
+    public array $catchedMessageList = [];
 
     protected function filteredDispatch(Notification $notification): callable
     {
         return function ($notification) {
             $this->catchedMessageList[] = $notification;
-            throw new Exception('メッセージを受信しました。');
+            if ($this->canComplateDispatch()) {
+                throw new Exception('処理を終了します。');
+            }
         };
+    }
+
+    private function canComplateDispatch(): bool
+    {
+        $catchedTestEvent = false;
+        $catchedOtherTestEvent = false;
+        foreach ($this->catchedMessageList as $catchedMessage) {
+            if ($catchedMessage->notificationType === TestEvent::class) {
+                $catchedTestEvent = true;
+            }
+
+            if ($catchedMessage->notificationType === OtherTestEvent::class) {
+                $catchedOtherTestEvent = true;
+            }
+        }
+
+        return $catchedTestEvent && $catchedOtherTestEvent;
     }
 
     protected function listensTo(): array
