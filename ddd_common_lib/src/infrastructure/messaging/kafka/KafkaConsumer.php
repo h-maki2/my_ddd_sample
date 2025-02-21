@@ -2,11 +2,15 @@
 
 namespace dddCommonLib\infrastructure\messaging\kafka;
 
+use dddCommonLib\domain\model\common\JsonSerializer;
+use dddCommonLib\domain\model\notification\Notification;
 use RdKafka;
 
-class KafkaConsumer
+abstract class KafkaConsumer
 {
     private RdKafka\KafkaConsumer $consumer;
+
+    private const WAIT_TIME_MS = 10000;
 
     public function __construct(
         string $groupId,
@@ -22,13 +26,21 @@ class KafkaConsumer
         $this->consumer->subscribe([$topicName]);
     }
 
-    public function handle(callable $filteredDispatch): void
+    public function handle(): void
     {
         while (true) {
-            $message = $this->consumer->consume(10000);
-            $filteredDispatch($message->payload);
+            $message = $this->consumer->consume(self::WAIT_TIME_MS);
+            $notification = JsonSerializer::deserialize($message->payload, Notification::class);
+            if (!$this->filteredMessageType($notification)) {
+                continue;
+            }
+            $this->filteredDispatch($notification);
         }
     }
+
+    abstract protected function filteredDispatch(Notification $notification): callable;
+
+    abstract protected function listensTo(): array;
 
     private function rdkafkaConf(
         string $groupId, 
@@ -43,5 +55,14 @@ class KafkaConsumer
         $conf->set('enable.auto.commit', $enableAuthCommit->value);
         $conf->set('auto.offset.reset', $autoOffsetReset->value);
         return $conf;
+    }
+
+    private function filteredMessageType(Notification $notification): bool
+    {
+        if ($this->listensTo() === []) {
+            return false;
+        }
+
+        return !in_array($notification->notificationType, $this->listensTo());
     }
 }

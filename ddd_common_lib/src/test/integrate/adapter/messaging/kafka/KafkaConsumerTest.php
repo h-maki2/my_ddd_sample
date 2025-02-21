@@ -3,33 +3,24 @@
 use dddCommonLib\infrastructure\messaging\kafka\KafkaConsumer;
 use dddCommonLib\infrastructure\messaging\kafka\KafkaProducer;
 use dddCommonLib\test\helpers\adapter\messaging\kafka\KafkaCatchedTestMessageList;
+use dddCommonLib\test\helpers\adapter\messaging\kafka\TestConsumer;
 use PHPUnit\Framework\TestCase;
 
 class KafkaConsumerTest extends TestCase
 {
     private KafkaProducer $producer;
-    private KafkaConsumer $consumer;
+    private TestConsumer $consumer;
     private string $catchedMessage;
     private $filteredDispatch;
 
     public function setUp(): void
     {
         $this->producer = new KafkaProducer('kafka:9092', 'testTopic');
-        $this->consumer = new KafkaConsumer(
+        $this->consumer = new TestConsumer(
             'testGroupId',
             'kafka:9092',
             'testTopic'
         );
-
-        $this->filteredDispatch = function (string $message) {
-            $this->catchedMessage = $message;
-            throw new Exception('メッセージが受信されました');
-        };
-    }
-
-    public function tearDown(): void
-    {
-        
     }
 
     public function test_プロデューサから送信したメッセージを受信できることを確認する()
