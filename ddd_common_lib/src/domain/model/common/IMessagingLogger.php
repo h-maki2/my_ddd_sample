@@ -4,5 +4,5 @@ namespace dddCommonLib\domain\model\common;
 
 interface IMessagingLogger
 {
-    public function log(string $logMessage): void;
+    public function error(string $logMessage): void;
 }

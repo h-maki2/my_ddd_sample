@@ -25,7 +25,8 @@ class KafkaConsumerTest extends TestCase
             'testGroupId',
             'kafka:9092',
             'testTopic',
-            $messagingLoggerMock
+            $messagingLoggerMock,
+            testable: true
         );
     }
 

@@ -14,7 +14,12 @@ abstract class KafkaConsumer
 
     private IMessagingLogger $logger;
 
+    private bool $testable;
+
     private const WAIT_TIME_MS = 10000;
+
+    private const MAX_RETYR_COUNT = 3;
+    private const RETRY_DELAY_S = 5;
 
     public function __construct(
         string $groupId,
@@ -22,7 +27,8 @@ abstract class KafkaConsumer
         string $topicName,
         IMessagingLogger $logger,
         KafkaEnableAuthCommit $enableAuthCommit = KafkaEnableAuthCommit::Enable,
-        KafkaAutoOffsetReset $autoOffsetReset = KafkaAutoOffsetReset::EARLIEST
+        KafkaAutoOffsetReset $autoOffsetReset = KafkaAutoOffsetReset::EARLIEST,
+        bool $testable = false
     )
     {
         $this->logger = $logger;
@@ -31,6 +37,8 @@ abstract class KafkaConsumer
             $this->rdkafkaConf($groupId, $hostName, $enableAuthCommit, $autoOffsetReset)
         );
         $this->consumer->subscribe([$topicName]);
+
+        $this->testable = $testable;
     }
 
     public function handle(): void
@@ -44,9 +52,12 @@ abstract class KafkaConsumer
 
             $notification = JsonSerializer::deserialize($message->payload, Notification::class);
             if ($this->filteredMessageType($notification)) {
+                $this->consumer->commit($message);
                 continue;
             }
-            $this->filteredDispatch($notification);
+
+            $this->proccessNotification($notification);
+            $this->consumer->commit($message);
         }
     }
 
@@ -78,6 +89,30 @@ abstract class KafkaConsumer
         return !in_array($notification->notificationType, $this->listensTo());
     }
 
+    private function proccessNotification(Notification $notification): void
+    {
+        $currentReturyCount = 0;
+        while ($currentReturyCount < self::MAX_RETYR_COUNT) {
+            try {
+                $this->filteredDispatch($notification);
+                break;
+            } catch (Exception $ex) {
+                if ($this->testable) {
+                    throw new $ex;
+                }
+
+                $currentReturyCount++;
+
+                if ($currentReturyCount >= self::MAX_RETYR_COUNT) {
+                    $this->logger->error($ex->getMessage() . ' notificationId: ' . $notification->notificationId);
+                    break;
+                }
+
+                sleep(self::RETRY_DELAY_S);
+            }
+        }
+    }
+
     private function errorHandling(int $messageError): void
     {
         switch ($messageError) {
@@ -88,8 +123,8 @@ abstract class KafkaConsumer
                 // タイムアウト（正常）
                 break;
             default:
-                $this->logger->log("Kafka Consumer Error: " . rd_kafka_err2str($messageError));
-                sleep(5);
+                $this->logger->error("Kafka Consumer Error: " . rd_kafka_err2str($messageError));
+                sleep(self::RETRY_DELAY_S);
                 break;
         }
     }
