@@ -11,7 +11,7 @@ abstract class KafkaConsumer
 {
     private RdKafka\KafkaConsumer $consumer;
 
-    private const WAIT_TIME_MS = 3000;
+    private const WAIT_TIME_MS = 10000;
 
     public function __construct(
         string $groupId,
