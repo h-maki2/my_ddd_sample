@@ -1,5 +1,6 @@
 <?php
 
+use dddCommonLib\domain\model\common\IMessagingLogger;
 use dddCommonLib\infrastructure\messaging\kafka\KafkaConsumer;
 use dddCommonLib\infrastructure\messaging\kafka\KafkaProducer;
 use dddCommonLib\test\helpers\adapter\messaging\kafka\KafkaCatchedTestMessageList;
@@ -17,11 +18,14 @@ class KafkaConsumerTest extends TestCase
     
     public function setUp(): void
     {
+        $messagingLoggerMock = $this->createMock(IMessagingLogger::class);
+
         $this->producer = new KafkaProducer('kafka:9092', 'testTopic');
         $this->consumer = new TestConsumer(
             'testGroupId',
             'kafka:9092',
-            'testTopic'
+            'testTopic',
+            $messagingLoggerMock
         );
     }
 
