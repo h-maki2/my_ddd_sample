@@ -11,7 +11,7 @@ use dddCommonLib\test\helpers\domain\model\event\TestEvent;
 use dddCommonLib\test\helpers\domain\model\notification\TestNotificationFactory;
 use PHPUnit\Framework\TestCase;
 
-class KafkaConsumerTest extends TestCase
+class KafkaMessageConsumerTest extends TestCase
 {
     private KafkaProducer $producer;
     private TestConsumer $consumer;
