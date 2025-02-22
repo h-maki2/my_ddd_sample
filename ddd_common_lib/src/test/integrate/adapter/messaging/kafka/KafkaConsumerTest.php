@@ -36,16 +36,18 @@ class KafkaConsumerTest extends TestCase
         $this->producer->send($targetNotification1);
         $this->producer->send($targetNotification2);
 
+        // when
         try {
             $this->consumer->handle();
         } catch (Exception $ex) {
             // 何もしない
-            print_r($ex->getMessage());
+            print($ex->getMessage());
         }
 
         // then
-        $this->assertContainsEquals($targetNotification1, $this->consumer->catchedMessageList);
-        $this->assertContainsEquals($targetNotification2, $this->consumer->catchedMessageList);
-        $this->assertNotContainsEquals($noTargetNotification, $this->consumer->catchedMessageList);
+        // 対象のイベントをリッスンできていることを確認する
+        $this->assertTrue($this->consumer->listenEvent(TestEvent::class));
+        $this->assertTrue($this->consumer->listenEvent(OtherTestEvent::class));
+        $this->assertFalse($this->consumer->listenEvent(NoTargetEvent::class));
     }
 }

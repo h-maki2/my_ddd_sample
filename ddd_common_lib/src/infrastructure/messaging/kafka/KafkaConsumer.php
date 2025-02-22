@@ -4,13 +4,14 @@ namespace dddCommonLib\infrastructure\messaging\kafka;
 
 use dddCommonLib\domain\model\common\JsonSerializer;
 use dddCommonLib\domain\model\notification\Notification;
+use Exception;
 use RdKafka;
 
 abstract class KafkaConsumer
 {
     private RdKafka\KafkaConsumer $consumer;
 
-    private const WAIT_TIME_MS = 10000;
+    private const WAIT_TIME_MS = 3000;
 
     public function __construct(
         string $groupId,
@@ -30,15 +31,19 @@ abstract class KafkaConsumer
     {
         while (true) {
             $message = $this->consumer->consume(self::WAIT_TIME_MS);
+            if ($message->err) {
+                continue;
+            }
+
             $notification = JsonSerializer::deserialize($message->payload, Notification::class);
-            if (!$this->filteredMessageType($notification)) {
+            if ($this->filteredMessageType($notification)) {
                 continue;
             }
             $this->filteredDispatch($notification);
         }
     }
 
-    abstract protected function filteredDispatch(Notification $notification): callable;
+    abstract protected function filteredDispatch(Notification $notification): void;
 
     abstract protected function listensTo(): array;
 

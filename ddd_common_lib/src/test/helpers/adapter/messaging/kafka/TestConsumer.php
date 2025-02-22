@@ -13,14 +13,23 @@ class TestConsumer extends KafkaConsumer
 {
     public array $catchedMessageList = [];
 
-    protected function filteredDispatch(Notification $notification): callable
+    protected function filteredDispatch(Notification $notification): void
     {
-        return function ($notification) {
-            $this->catchedMessageList[] = $notification;
-            if ($this->canComplateDispatch()) {
-                throw new Exception('処理を終了します。');
+        $this->catchedMessageList[] = $notification;
+        if ($this->canComplateDispatch()) {
+            throw new Exception('処理を終了します。');
+        }
+    }
+
+    public function listenEvent(string $eventType): bool
+    {
+        foreach ($this->catchedMessageList as $catchedMessage) {
+            if ($catchedMessage->notificationType === $eventType) {
+                return true;
             }
-        };
+        }
+
+        return false;
     }
 
     private function canComplateDispatch(): bool
