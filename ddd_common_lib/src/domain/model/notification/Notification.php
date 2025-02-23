@@ -42,6 +42,23 @@ class Notification
         );
     }
 
+    public static function reconstruct(
+        string $eventBody,
+        string $notificationId,
+        string $notificationType,
+        string $occurredOn
+    ): self
+    {
+        $domainEvent = JsonSerializer::deserialize($eventBody, DomainEvent::class);
+        return new self(
+            $eventBody,
+            $notificationId,
+            $notificationType,
+            $occurredOn,
+            $domainEvent->eventVersion()
+        );
+    }
+
     public function serialize(): string
     {
         return JsonSerializer::serialize($this);

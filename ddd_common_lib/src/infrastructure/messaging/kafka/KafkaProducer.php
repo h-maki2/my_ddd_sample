@@ -36,7 +36,7 @@ class KafkaProducer
             $this->topic->produce(RD_KAFKA_PARTITION_UA, 0, $serializedNotification);
             $this->producer->poll(0);
         } catch (Exception $e) {
-            throw new RuntimeException("メッセージの送信中に例外発生: " . $e->getMessage());
+            throw new RuntimeException("メッセージの送信中に例外発生: " . $e->getMessage() . ' notificationId: ' . $notification->notificationId);
         }
 
         $currentRetryCount = 0;
@@ -48,6 +48,10 @@ class KafkaProducer
             }
     
             $currentRetryCount++;
+
+            if ($currentRetryCount >= self::MAX_RETRY_COUNT) {
+                throw new RuntimeException("メッセージの送信中に例外発生: notificationId: " . $notification->notificationId);
+            }
         }
     }
 
