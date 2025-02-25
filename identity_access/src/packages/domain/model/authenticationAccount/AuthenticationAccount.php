@@ -40,8 +40,6 @@ class AuthenticationAccount
         $this->definitiveRegistrationCompletedStatus = $definitiveRegistrationCompletedStatus;
         $this->loginRestriction = $loginRestriction;
         $this->unsubscribeStatus = $unsubscribeStatus;
-
-        DomainEventPublisher::instance()->publish(new AuthenticationAccountCreated($userId));
     }
 
     public static function create(
@@ -55,6 +53,8 @@ class AuthenticationAccount
         if ($alreadyExistsEmail) {
             throw new DomainException('すでに存在するメールアドレスです。');
         }
+
+        DomainEventPublisher::instance()->publish(new AuthenticationAccountCreated($userId));
         
         return new self(
             $userId,
