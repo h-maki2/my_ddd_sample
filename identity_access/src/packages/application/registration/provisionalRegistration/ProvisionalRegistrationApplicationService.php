@@ -27,26 +27,20 @@ class ProvisionalRegistrationApplicationService implements ProvisionalRegistrati
 {
     private IAuthenticationAccountRepository $authenticationAccountRepository;
     private IDefinitiveRegistrationConfirmationRepository $definitiveRegistrationConfirmationRepository;
-    private ProvisionalRegistrationUpdate $provisionalRegistrationUpdate;
     private IPasswordManager $passwordManager;
+    private TransactionManage $transactionManage;
 
     public function __construct(
         IDefinitiveRegistrationConfirmationRepository $definitiveRegistrationConfirmationRepository,
         IAuthenticationAccountRepository $authenticationAccountRepository,
         TransactionManage $transactionManage,
-        IEmailSender $emailSender,
-        IPasswordManager $passwordManager
+        IPasswordManager $passwordManager,
     )
     {
         $this->authenticationAccountRepository = $authenticationAccountRepository;
         $this->definitiveRegistrationConfirmationRepository = $definitiveRegistrationConfirmationRepository;
-        $this->provisionalRegistrationUpdate = new ProvisionalRegistrationUpdate(
-            $authenticationAccountRepository,
-            $definitiveRegistrationConfirmationRepository,
-            $transactionManage,
-            $emailSender
-        );
         $this->passwordManager = $passwordManager;
+        $this->transactionManage = $transactionManage;
     }
 
     /**
@@ -74,11 +68,8 @@ class ProvisionalRegistrationApplicationService implements ProvisionalRegistrati
 
         $userEmail = new UserEmail($inputedEmail);
         $userPassword = UserPassword::create($inputedPassword, $this->passwordManager);
-        try {
-            $this->provisionalRegistrationUpdate->handle($userEmail, $userPassword, $oneTimeToken);
-        } catch (Exception $e) {
-            throw new TransactionException($e->getMessage());
-        }
+
+
 
         return ProvisionalRegistrationResult::createWhenSuccess();
     }

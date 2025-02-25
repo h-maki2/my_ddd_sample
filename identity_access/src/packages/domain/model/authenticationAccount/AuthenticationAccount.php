@@ -3,6 +3,7 @@
 namespace packages\domain\model\authenticationAccount;
 
 use DateTimeImmutable;
+use dddCommonLib\domain\model\domainEvent\DomainEventPublisher;
 use DomainException;
 use InvalidArgumentException;
 use Laravel\Passport\Exceptions\InvalidAuthTokenException;
@@ -39,6 +40,8 @@ class AuthenticationAccount
         $this->definitiveRegistrationCompletedStatus = $definitiveRegistrationCompletedStatus;
         $this->loginRestriction = $loginRestriction;
         $this->unsubscribeStatus = $unsubscribeStatus;
+
+        DomainEventPublisher::instance()->publish(new AuthenticationAccountCreated($userId));
     }
 
     public static function create(
