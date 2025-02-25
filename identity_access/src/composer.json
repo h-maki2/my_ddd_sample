@@ -1,4 +1,10 @@
 {
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../../ddd_common_lib"
+        }
+    ],
     "name": "laravel/laravel",
     "type": "project",
     "description": "The skeleton application for the Laravel framework.",
@@ -10,7 +16,8 @@
         "laravel/passport": "^12.3",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
-        "ramsey/uuid": "^4.7"
+        "ramsey/uuid": "^4.7",
+        "myvendor/ddd_common_lib": "1.0.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.24",

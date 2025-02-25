@@ -13,7 +13,13 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     libzip-dev \
-    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
+    librdkafka-dev \
+    libzip-dev \
+    supervisor \
+    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip \
+    && pecl install rdkafka \
+    && docker-php-ext-enable rdkafka
+
 
 # Composer のインストール
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
