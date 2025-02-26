@@ -124,4 +124,9 @@ return [
     ],
 
     'app_domain' => env('APP_DOMAIN', 'localhost'),
+
+    'kafkaHostName' => env('KAFKA_HOST_NAME'),
+    'topickName' => env('TOPIC_NAME'),
+    'consumerGroupId' => env('CONSUMER_GROUP_ID'),
+    'cdcSubscribedDbTable' => env('CDC_SUBSCRIBED_DB_TABLE'),
 ];

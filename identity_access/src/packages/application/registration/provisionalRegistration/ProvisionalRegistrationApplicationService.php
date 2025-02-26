@@ -68,9 +68,6 @@ class ProvisionalRegistrationApplicationService implements ProvisionalRegistrati
         $validationHandler->addValidator(new UserEmailValidation($inputedEmail, $this->authenticationAccountRepository));
         $validationHandler->addValidator(new UserPasswordValidation($inputedPassword));
         $validationHandler->addValidator(new UserPasswordConfirmationValidation($inputedPassword, $inputedPasswordConfirmation));
-
-        $oneTimeToken = OneTimeToken::create();
-        $validationHandler->addValidator(new OneTimeTokenValidation($this->definitiveRegistrationConfirmationRepository, $oneTimeToken));
         
         if (!$validationHandler->validate()) {
             return ProvisionalRegistrationResult::createWhenValidationError(

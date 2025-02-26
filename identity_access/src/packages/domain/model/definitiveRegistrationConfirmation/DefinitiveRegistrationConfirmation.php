@@ -26,10 +26,10 @@ class DefinitiveRegistrationConfirmation
 
     public static function create(
         UserId $userId, 
-        OneTimeToken $oneTimeToken,
         OneTimeTokenExistsService $oneTimeTokenExistsService
     ): self
     {
+        $oneTimeToken = OneTimeToken::create();
         if ($oneTimeTokenExistsService->isExists($oneTimeToken->tokenValue())) {
             throw new InvalidArgumentException('OneTimeToken is already exists.');
         }
