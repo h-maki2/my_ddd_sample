@@ -1,6 +1,6 @@
 <?php
 
-namespace packages\test\helpers\authenticationAccount\password;
+namespace packages\test\helpers\domains\authenticationAccount\password;
 
 use packages\domain\model\authenticationAccount\password\IPasswordManager;
 

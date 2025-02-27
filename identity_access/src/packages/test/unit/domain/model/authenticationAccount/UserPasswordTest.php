@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 use packages\domain\model\authenticationAccount\password\UserPassword;
-use packages\test\helpers\authenticationAccount\password\Md5PasswordManager;
+use packages\test\helpers\domains\authenticationAccount\password\Md5PasswordManager;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 

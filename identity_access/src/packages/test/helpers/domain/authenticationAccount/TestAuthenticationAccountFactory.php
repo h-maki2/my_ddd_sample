@@ -1,6 +1,6 @@
 <?php
 
-namespace packages\test\helpers\authenticationAccount;
+namespace packages\test\helpers\domains\authenticationAccount;
 
 use packages\adapter\persistence\inMemory\InMemoryAuthenticationAccountRepository;
 use packages\domain\model\authenticationAccount\LoginRestriction;
@@ -11,7 +11,7 @@ use packages\domain\model\authenticationAccount\AuthenticationAccount;
 use packages\domain\model\authenticationAccount\UnsubscribeStatus;
 use packages\domain\model\authenticationAccount\DefinitiveRegistrationCompletedStatus;
 use packages\domain\model\authenticationAccount\password\IPasswordManager;
-use packages\test\helpers\authenticationAccount\password\Md5PasswordManager;
+use packages\test\helpers\domains\authenticationAccount\password\Md5PasswordManager;
 
 class TestAuthenticationAccountFactory
 {

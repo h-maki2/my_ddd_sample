@@ -3,9 +3,9 @@
 use packages\adapter\persistence\inMemory\InMemoryAuthenticationAccountRepository;
 use packages\domain\model\authenticationAccount\UserEmail;
 use packages\domain\model\authenticationAccount\validation\UserEmailValidation;
-use packages\test\helpers\authenticationAccount\AuthenticationAccountTestDataCreator;
-use packages\test\helpers\authenticationAccount\password\Md5PasswordManager;
-use packages\test\helpers\authenticationAccount\TestAuthenticationAccountFactory;
+use packages\test\helpers\domains\authenticationAccount\AuthenticationAccountTestDataCreator;
+use packages\test\helpers\domains\authenticationAccount\password\Md5PasswordManager;
+use packages\test\helpers\domains\authenticationAccount\TestAuthenticationAccountFactory;
 use PHPUnit\Framework\TestCase;
 
 class UserEmailValidationTest extends TestCase

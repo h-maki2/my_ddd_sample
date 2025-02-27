@@ -1,6 +1,6 @@
 <?php
 
-namespace packages\test\helpers\oauth\authToken;
+namespace packages\test\helpers\domains\oauth\authToken;
 
 use Illuminate\Support\Facades\DB;
 use packages\domain\model\oauth\authToken\AccessToken;

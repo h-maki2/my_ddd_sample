@@ -7,10 +7,10 @@ use packages\adapter\persistence\inMemory\InMemoryDefinitiveRegistrationConfirma
 use packages\domain\model\email\IEmailSender;
 use packages\domain\model\email\SendEmailDto;
 use packages\domain\service\registration\oneTimeTokenAndPasswordRegeneration\OneTimeTokenAndPasswordRegeneration;
-use packages\test\helpers\authenticationAccount\AuthenticationAccountTestDataCreator;
-use packages\test\helpers\authenticationAccount\password\Md5PasswordManager;
-use packages\test\helpers\authenticationAccount\TestAuthenticationAccountFactory;
-use packages\test\helpers\definitiveRegistrationConfirmation\DefinitiveRegistrationConfirmationTestDataCreator;
+use packages\test\helpers\domains\authenticationAccount\AuthenticationAccountTestDataCreator;
+use packages\test\helpers\domains\authenticationAccount\password\Md5PasswordManager;
+use packages\test\helpers\domains\authenticationAccount\TestAuthenticationAccountFactory;
+use packages\test\helpers\domains\definitiveRegistrationConfirmation\DefinitiveRegistrationConfirmationTestDataCreator;
 use PHPUnit\Framework\TestCase;
 
 class OneTimeTokenAndPasswordRegenerationTest extends TestCase

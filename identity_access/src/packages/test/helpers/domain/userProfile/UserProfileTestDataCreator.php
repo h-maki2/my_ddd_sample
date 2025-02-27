@@ -1,6 +1,6 @@
 <?php
 
-namespace packages\test\helpers\userProfile;
+namespace packages\test\helpers\domains\userProfile;
 
 use packages\domain\model\authenticationAccount\IAuthenticationAccountRepository;
 use packages\domain\model\authenticationAccount\UserId;

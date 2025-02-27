@@ -16,10 +16,10 @@ use packages\domain\model\authenticationAccount\DefinitiveRegistrationCompletedS
 use packages\domain\model\definitiveRegistrationConfirmation\OneTimePassword;
 use packages\domain\model\definitiveRegistrationConfirmation\OneTimeToken;
 use packages\domain\service\authenticationAccount\AuthenticationAccountService;
-use packages\test\helpers\authenticationAccount\TestAuthenticationAccountFactory;
-use packages\test\helpers\authenticationAccount\AuthenticationAccountTestDataCreator;
-use packages\test\helpers\authenticationAccount\password\Md5PasswordManager;
-use packages\test\helpers\definitiveRegistrationConfirmation\TestDefinitiveRegistrationConfirmationFactory;
+use packages\test\helpers\domains\authenticationAccount\TestAuthenticationAccountFactory;
+use packages\test\helpers\domains\authenticationAccount\AuthenticationAccountTestDataCreator;
+use packages\test\helpers\domains\authenticationAccount\password\Md5PasswordManager;
+use packages\test\helpers\domains\definitiveRegistrationConfirmation\TestDefinitiveRegistrationConfirmationFactory;
 use PHPUnit\Framework\TestCase;
 
 class AuthenticationAccountTest extends TestCase

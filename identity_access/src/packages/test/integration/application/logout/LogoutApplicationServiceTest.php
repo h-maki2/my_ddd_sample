@@ -14,11 +14,11 @@ use packages\adapter\service\laravel\LaravelAuthenticationService;
 use packages\adapter\transactionManage\EloquentTransactionManage;
 use packages\application\authentication\logout\LogoutApplicationService;
 use packages\domain\model\authenticationAccount\password\Argon2HashPasswordManager;
-use packages\test\helpers\authenticationAccount\AuthenticationAccountTestDataCreator;
-use packages\test\helpers\authenticationAccount\TestAuthenticationAccountFactory;
-use packages\test\helpers\oauth\authToken\AccessTokenTestDataCreator;
-use packages\test\helpers\oauth\authToken\AuthTokenTestDataCreator;
-use packages\test\helpers\oauth\authToken\TestAuthTokenService;
+use packages\test\helpers\domains\authenticationAccount\AuthenticationAccountTestDataCreator;
+use packages\test\helpers\domains\authenticationAccount\TestAuthenticationAccountFactory;
+use packages\test\helpers\domains\oauth\authToken\AccessTokenTestDataCreator;
+use packages\test\helpers\domains\oauth\authToken\AuthTokenTestDataCreator;
+use packages\test\helpers\domains\oauth\authToken\TestAuthTokenService;
 use Tests\TestCase;
 
 class LogoutApplicationServiceTest extends TestCase

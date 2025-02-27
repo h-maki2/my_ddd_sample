@@ -11,9 +11,9 @@ use packages\domain\model\authenticationAccount\UserEmail;
 use packages\domain\model\authenticationAccount\password\UserPassword;
 use packages\domain\model\authenticationAccount\DefinitiveRegistrationCompletedStatus;
 use packages\domain\model\authenticationAccount\password\Argon2HashPasswordManager;
-use packages\test\helpers\authenticationAccount\AuthenticationAccountTestDataCreator;
-use packages\test\helpers\authenticationAccount\password\Md5PasswordManager;
-use packages\test\helpers\authenticationAccount\TestAuthenticationAccountFactory;
+use packages\test\helpers\domains\authenticationAccount\AuthenticationAccountTestDataCreator;
+use packages\test\helpers\domains\authenticationAccount\password\Md5PasswordManager;
+use packages\test\helpers\domains\authenticationAccount\TestAuthenticationAccountFactory;
 use Tests\TestCase;
 
 class EloquentAuthenticationAccountRepositoryTest extends TestCase

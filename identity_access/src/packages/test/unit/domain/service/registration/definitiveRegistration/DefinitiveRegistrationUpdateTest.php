@@ -8,12 +8,12 @@ use packages\domain\model\definitiveRegistrationConfirmation\OneTimeTokenValue;
 use packages\domain\model\authenticationAccount\UnsubscribeStatus;
 use packages\domain\model\authenticationAccount\DefinitiveRegistrationCompletedStatus;
 use packages\domain\service\registration\definitiveRegistration\DefinitiveRegistrationUpdate;
-use packages\test\helpers\definitiveRegistrationConfirmation\DefinitiveRegistrationConfirmationTestDataCreator;
-use packages\test\helpers\authenticationAccount\AuthenticationAccountTestDataCreator;
-use packages\test\helpers\authenticationAccount\authenticationAccountTestDataFactory;
-use packages\test\helpers\authenticationAccount\password\Md5PasswordManager;
-use packages\test\helpers\authenticationAccount\TestAuthenticationAccountFactory;
-use packages\test\helpers\transactionManage\TestTransactionManage;
+use packages\test\helpers\domains\definitiveRegistrationConfirmation\DefinitiveRegistrationConfirmationTestDataCreator;
+use packages\test\helpers\domains\authenticationAccount\AuthenticationAccountTestDataCreator;
+use packages\test\helpers\domains\authenticationAccount\authenticationAccountTestDataFactory;
+use packages\test\helpers\domains\authenticationAccount\password\Md5PasswordManager;
+use packages\test\helpers\domains\authenticationAccount\TestAuthenticationAccountFactory;
+use packages\test\helpers\adapter\transactionManage\TestTransactionManage;
 use PHPUnit\Framework\TestCase;
 
 class DefinitiveRegistrationUpdateTest extends TestCase

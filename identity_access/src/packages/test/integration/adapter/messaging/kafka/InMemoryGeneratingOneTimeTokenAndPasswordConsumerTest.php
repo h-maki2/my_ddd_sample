@@ -4,7 +4,7 @@ use packages\adapter\persistence\inMemory\InMemoryDefinitiveRegistrationConfirma
 use packages\application\registration\provisionalRegistration\GeneratingOneTimeTokenAndPasswordApplicationService;
 use packages\domain\model\email\IEmailSender;
 use packages\domain\model\email\SendEmailDto;
-use packages\test\helpers\transactionManage\TestTransactionManage;
+use packages\test\helpers\adapter\transactionManage\TestTransactionManage;
 use Tests\TestCase;
 
 class InMemoryGeneratingOneTimeTokenAndPasswordConsumerTest extends TestCase
@@ -29,5 +29,10 @@ class InMemoryGeneratingOneTimeTokenAndPasswordConsumerTest extends TestCase
         $this->emailSender = $emailSender;
 
         $this->definitiveRegistrationConfirmationRepository = new InMemoryDefinitiveRegistrationConfirmationRepository();
+        $this->appService = new GeneratingOneTimeTokenAndPasswordApplicationService(
+            $this->emailSender,
+            $this->definitiveRegistrationConfirmationRepository,
+            new TestTransactionManage()
+        );
     }
 }

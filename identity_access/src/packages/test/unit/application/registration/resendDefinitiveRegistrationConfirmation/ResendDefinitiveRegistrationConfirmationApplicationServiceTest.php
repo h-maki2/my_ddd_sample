@@ -11,10 +11,10 @@ use packages\domain\model\authenticationAccount\UserEmail;
 use packages\domain\model\authenticationAccount\DefinitiveRegistrationCompletedStatus;
 use packages\domain\model\email\IEmailSender;
 use packages\domain\model\email\SendEmailDto;
-use packages\test\helpers\definitiveRegistrationConfirmation\DefinitiveRegistrationConfirmationTestDataCreator;
-use packages\test\helpers\authenticationAccount\AuthenticationAccountTestDataCreator;
-use packages\test\helpers\authenticationAccount\password\Md5PasswordManager;
-use packages\test\helpers\authenticationAccount\TestAuthenticationAccountFactory;
+use packages\test\helpers\domains\definitiveRegistrationConfirmation\DefinitiveRegistrationConfirmationTestDataCreator;
+use packages\test\helpers\domains\authenticationAccount\AuthenticationAccountTestDataCreator;
+use packages\test\helpers\domains\authenticationAccount\password\Md5PasswordManager;
+use packages\test\helpers\domains\authenticationAccount\TestAuthenticationAccountFactory;
 use PHPUnit\Framework\TestCase;
 
 class ResendDefinitiveRegistrationConfirmationApplicationServiceTest extends TestCase

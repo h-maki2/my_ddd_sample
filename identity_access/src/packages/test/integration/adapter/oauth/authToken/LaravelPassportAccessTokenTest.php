@@ -3,9 +3,9 @@
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use packages\adapter\persistence\eloquent\EloquentAuthenticationAccountRepository;
 use packages\domain\model\authenticationAccount\password\Argon2HashPasswordManager;
-use packages\test\helpers\authenticationAccount\AuthenticationAccountTestDataCreator;
-use packages\test\helpers\authenticationAccount\TestAuthenticationAccountFactory;
-use packages\test\helpers\oauth\authToken\AccessTokenTestDataCreator;
+use packages\test\helpers\domains\authenticationAccount\AuthenticationAccountTestDataCreator;
+use packages\test\helpers\domains\authenticationAccount\TestAuthenticationAccountFactory;
+use packages\test\helpers\domains\oauth\authToken\AccessTokenTestDataCreator;
 use Tests\TestCase;
 
 class LaravelPassportAccessTokenTest extends TestCase

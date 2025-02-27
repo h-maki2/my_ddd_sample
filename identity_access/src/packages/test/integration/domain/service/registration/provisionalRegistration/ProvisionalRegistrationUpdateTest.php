@@ -18,11 +18,11 @@ use packages\domain\model\authenticationAccount\password\Argon2HashPasswordManag
 use packages\domain\model\email\IEmailSender;
 use packages\domain\service\registration\provisionalRegistration\ProvisionalRegistration;
 use packages\domain\service\registration\provisionalRegistration\ProvisionalRegistrationUpdate;
-use packages\test\helpers\definitiveRegistrationConfirmation\DefinitiveRegistrationConfirmationTestDataCreator;
-use packages\test\helpers\authenticationAccount\AuthenticationAccountTestDataCreator;
-use packages\test\helpers\authenticationAccount\password\Md5PasswordManager;
-use packages\test\helpers\authenticationAccount\TestAuthenticationAccountFactory;
-use packages\test\helpers\transactionManage\TestTransactionManage;
+use packages\test\helpers\domains\definitiveRegistrationConfirmation\DefinitiveRegistrationConfirmationTestDataCreator;
+use packages\test\helpers\domains\authenticationAccount\AuthenticationAccountTestDataCreator;
+use packages\test\helpers\domains\authenticationAccount\password\Md5PasswordManager;
+use packages\test\helpers\domains\authenticationAccount\TestAuthenticationAccountFactory;
+use packages\test\helpers\adapter\transactionManage\TestTransactionManage;
 use Tests\TestCase;
 
 class ProvisionalRegistrationUpdateTest extends TestCase

@@ -1,6 +1,6 @@
 <?php
 
-namespace packages\test\helpers\definitiveRegistrationConfirmation;
+namespace packages\test\helpers\domains\definitiveRegistrationConfirmation;
 
 use packages\domain\model\definitiveRegistrationConfirmation\OneTimeToken;
 use packages\domain\model\definitiveRegistrationConfirmation\OneTimeTokenExpiration;

@@ -6,8 +6,8 @@ use packages\domain\model\email\SendEmailDto;
 use packages\application\common\validation\ValidationErrorMessageData;
 use packages\application\registration\provisionalRegistration\ProvisionalRegistrationApplicationService;
 use packages\domain\model\email\IEmailSender;
-use packages\test\helpers\authenticationAccount\password\Md5PasswordManager;
-use packages\test\helpers\transactionManage\TestTransactionManage;
+use packages\test\helpers\domains\authenticationAccount\password\Md5PasswordManager;
+use packages\test\helpers\adapter\transactionManage\TestTransactionManage;
 use PHPUnit\Framework\TestCase;
 
 class ProvisionalRegistrationApplicationServiceTest extends TestCase

@@ -1,12 +1,12 @@
 <?php
 
-namespace packages\test\helpers\definitiveRegistrationConfirmation;
+namespace packages\test\helpers\domains\definitiveRegistrationConfirmation;
 
 use packages\domain\model\definitiveRegistrationConfirmation\DefinitiveRegistrationConfirmation;
 use packages\domain\model\definitiveRegistrationConfirmation\OneTimePassword;
 use packages\domain\model\definitiveRegistrationConfirmation\OneTimeToken;
 use packages\domain\model\authenticationAccount\UserId;
-use packages\test\helpers\authenticationAccount\TestUserIdFactory;
+use packages\test\helpers\domains\authenticationAccount\TestUserIdFactory;
 
 class TestDefinitiveRegistrationConfirmationFactory
 {

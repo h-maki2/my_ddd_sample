@@ -1,6 +1,6 @@
 <?php
 
-namespace packages\test\helpers\authenticationAccount;
+namespace packages\test\helpers\domains\authenticationAccount;
 
 use App\Models\User;
 use packages\domain\model\authenticationAccount\UserId;

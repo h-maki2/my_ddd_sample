@@ -1,6 +1,6 @@
 <?php
 
-namespace packages\test\helpers\oauth\client;
+namespace packages\test\helpers\domains\oauth\client;
 
 use packages\domain\model\oauth\client\ClientData;
 use packages\domain\model\oauth\client\ClientId;

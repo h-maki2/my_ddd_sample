@@ -1,6 +1,6 @@
 <?php
 
-namespace packages\test\helpers\transactionManage;
+namespace packages\test\helpers\adapter\transactionManage;
 
 use packages\domain\model\common\transactionManage\TransactionManage;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace packages\test\helpers\authenticationAccount;
+namespace packages\test\helpers\domains\authenticationAccount;
 
 use Faker\Factory as FakerFactory;
 use packages\domain\model\authenticationAccount\UserEmail;

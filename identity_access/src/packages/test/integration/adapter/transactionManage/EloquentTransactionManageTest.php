@@ -5,7 +5,7 @@ use packages\adapter\persistence\eloquent\EloquentAuthenticationAccountRepositor
 use packages\adapter\transactionManage\EloquentTransactionManage;
 use packages\domain\model\authenticationAccount\password\Argon2HashPasswordManager;
 use packages\domain\model\authenticationAccount\UnsubscribeStatus;
-use packages\test\helpers\authenticationAccount\TestAuthenticationAccountFactory;
+use packages\test\helpers\domains\authenticationAccount\TestAuthenticationAccountFactory;
 use Tests\TestCase;
 
 class EloquentTransactionManageTest extends TestCase
