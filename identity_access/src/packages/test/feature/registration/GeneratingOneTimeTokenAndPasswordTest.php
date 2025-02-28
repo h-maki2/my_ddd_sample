@@ -20,7 +20,8 @@ class GeneratingOneTimeTokenAndPasswordTest extends TestCase
     {
         parent::setUp();
 
-        DB::table('definitive_registration_confirmations')->truncate();
+        // テーブルに保存されているデータを削除する
+        DB::table('authentication_informations')->truncate();
 
         $this->definitiveRegistrationConfirmationRepository = new EloquentDefinitiveRegistrationConfirmationRepository();
         $this->authenticationAccountRepository = new EloquentAuthenticationAccountRepository();
@@ -29,14 +30,14 @@ class GeneratingOneTimeTokenAndPasswordTest extends TestCase
             config('app.kafkaHostName'),
             config('app.topickName')
         );
-
-        // イベントを受信するリスナを起動させておく
-        exec('php artisan app:generating-oneTimeToken-and-password-consumer > /dev/null 2>&1 &');
     }
 
     public function test_authenticationAccountCreatedイベントがpublishされた場合、ワンタイムパスワードとワンタイムトークンが生成されることを確認()
     {
         // given
+        // イベントを受信するリスナを起動させておく
+        $pid = exec('php artisan app:generating-oneTimeToken-and-password-consumer > output.txt 2>&1 &');
+
         // authenticationAccountCreatedイベントを作成する
         $userId = $this->authenticationAccountRepository->nextUserId();
         $authAccountCreatedFactory = new TestAuthenticationAccountCreatedFactory(
@@ -51,7 +52,10 @@ class GeneratingOneTimeTokenAndPasswordTest extends TestCase
         // when
         // イベントをpublishする
         $this->kafkaProducer->send($notification);
-        sleep(5);
+
+        sleep(10);
+        // リスナを停止させる
+        exec("kill -9 $pid");
 
         // then
         // ワンタイムパスワードとワンタイムトークンが生成されていることを確認する

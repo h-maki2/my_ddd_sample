@@ -4,6 +4,8 @@ namespace packages\application\registration\provisionalRegistration;
 
 use dddCommonLib\domain\model\notification\Notification;
 use packages\domain\model\authenticationAccount\AuthenticationAccountCreated;
+use packages\domain\model\authenticationAccount\UserEmail;
+use packages\domain\model\authenticationAccount\UserId;
 use packages\domain\model\common\transactionManage\TransactionManage;
 use packages\domain\model\definitiveRegistrationConfirmation\DefinitiveRegistrationConfirmation;
 use packages\domain\model\definitiveRegistrationConfirmation\IDefinitiveRegistrationConfirmationRepository;
@@ -33,7 +35,7 @@ class GeneratingOneTimeTokenAndPasswordApplicationService
         $authenticationAccountCreated = $this->authenticationAccountCreatedFrom($notification);
 
         $definitiveRegistrationConfirmation = DefinitiveRegistrationConfirmation::create(
-            $authenticationAccountCreated->userId,
+            new UserId($authenticationAccountCreated->userId),
             new OneTimeTokenExistsService($this->definitiveRegistrationConfirmationRepository)
         );
 
@@ -42,7 +44,7 @@ class GeneratingOneTimeTokenAndPasswordApplicationService
 
             $this->emailSender->send(
                 DefinitiveRegistrationConfirmationEmailDtoFactory::create(
-                    $authenticationAccountCreated->email,
+                    new UserEmail($authenticationAccountCreated->email),
                     $definitiveRegistrationConfirmation->oneTimeToken(),
                     $definitiveRegistrationConfirmation->oneTimePassword()
                 )

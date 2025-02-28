@@ -6,17 +6,18 @@ use dddCommonLib\domain\model\domainEvent\DomainEvent;
 
 class AuthenticationAccountCreated extends DomainEvent
 {
-    readonly UserId $userId;
-    readonly UserEmail $email;
+    readonly string $userId;
+    readonly string $email;
 
     public function __construct(UserId $userId, UserEmail $email)
     {
-        $this->userId = $userId;
-        $this->email = $email;
+        parent::__construct(1);
+        $this->userId = $userId->value;
+        $this->email = $email->value;
     }
 
     public function eventType(): string
     {
-        return DomainEvent::class;
+        return self::class;
     }
 }
