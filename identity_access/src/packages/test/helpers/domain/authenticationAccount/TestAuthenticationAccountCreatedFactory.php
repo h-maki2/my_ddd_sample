@@ -1,12 +1,12 @@
 <?php
 
-namespace packages\test\helpers\domains\authenticationAccount;
+namespace packages\test\helpers\domain\authenticationAccount;
 
 use packages\domain\model\authenticationAccount\AuthenticationAccountCreated;
 use packages\domain\model\authenticationAccount\IAuthenticationAccountRepository;
 use packages\domain\model\authenticationAccount\UserEmail;
 use packages\domain\model\authenticationAccount\UserId;
-use packages\test\helpers\domains\authenticationAccount\password\Md5PasswordManager;
+use packages\test\helpers\domain\authenticationAccount\password\Md5PasswordManager;
 
 class TestAuthenticationAccountCreatedFactory
 {

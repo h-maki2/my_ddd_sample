@@ -6,9 +6,9 @@ use packages\domain\model\definitiveRegistrationConfirmation\OneTimePassword;
 use packages\domain\model\definitiveRegistrationConfirmation\OneTimeToken;
 use packages\domain\model\definitiveRegistrationConfirmation\OneTimeTokenExpiration;
 use packages\domain\service\registration\definitiveRegistration\OneTimeTokenExistsService;
-use packages\test\helpers\domains\definitiveRegistrationConfirmation\TestDefinitiveRegistrationConfirmationFactory;
-use packages\test\helpers\domains\definitiveRegistrationConfirmation\TestOneTimeTokenFactory;
-use packages\test\helpers\domains\authenticationAccount\TestUserIdFactory;
+use packages\test\helpers\domain\definitiveRegistrationConfirmation\TestDefinitiveRegistrationConfirmationFactory;
+use packages\test\helpers\domain\definitiveRegistrationConfirmation\TestOneTimeTokenFactory;
+use packages\test\helpers\domain\authenticationAccount\TestUserIdFactory;
 use PHPUnit\Framework\TestCase;
 
 class DefinitiveRegistrationConfirmationTest extends TestCase

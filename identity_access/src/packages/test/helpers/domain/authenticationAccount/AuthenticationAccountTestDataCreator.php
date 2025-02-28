@@ -1,6 +1,6 @@
 <?php
 
-namespace packages\test\helpers\domains\authenticationAccount;
+namespace packages\test\helpers\domain\authenticationAccount;
 
 use packages\domain\model\authenticationAccount\LoginRestriction;
 use packages\domain\model\authenticationAccount\IAuthenticationAccountRepository;

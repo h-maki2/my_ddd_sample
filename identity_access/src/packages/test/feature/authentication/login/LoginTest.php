@@ -14,11 +14,11 @@ use packages\domain\model\oauth\client\ClientId;
 use packages\domain\model\oauth\client\RedirectUrl;
 use packages\domain\model\oauth\scope\Scope;
 use packages\domain\model\oauth\scope\ScopeList;
-use packages\test\helpers\domains\authenticationAccount\AuthenticationAccountTestDataCreator;
-use packages\test\helpers\domains\authenticationAccount\password\Md5PasswordManager;
-use packages\test\helpers\domains\authenticationAccount\TestAccessTokenCreator;
-use packages\test\helpers\domains\authenticationAccount\TestAuthenticationAccountFactory;
-use packages\test\helpers\domains\oauth\client\ClientTestDataCreator;
+use packages\test\helpers\domain\authenticationAccount\AuthenticationAccountTestDataCreator;
+use packages\test\helpers\domain\authenticationAccount\password\Md5PasswordManager;
+use packages\test\helpers\domain\authenticationAccount\TestAccessTokenCreator;
+use packages\test\helpers\domain\authenticationAccount\TestAuthenticationAccountFactory;
+use packages\test\helpers\domain\oauth\client\ClientTestDataCreator;
 use Tests\TestCase;
 
 class LoginTest extends TestCase

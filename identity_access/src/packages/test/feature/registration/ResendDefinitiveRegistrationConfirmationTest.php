@@ -6,9 +6,9 @@ use packages\adapter\persistence\eloquent\EloquentAuthenticationAccountRepositor
 use packages\domain\model\authenticationAccount\UserEmail;
 use packages\domain\model\authenticationAccount\DefinitiveRegistrationCompletedStatus;
 use packages\domain\model\authenticationAccount\password\Argon2HashPasswordManager;
-use packages\test\helpers\domains\definitiveRegistrationConfirmation\DefinitiveRegistrationConfirmationTestDataCreator;
-use packages\test\helpers\domains\authenticationAccount\AuthenticationAccountTestDataCreator;
-use packages\test\helpers\domains\authenticationAccount\TestAuthenticationAccountFactory;
+use packages\test\helpers\domain\definitiveRegistrationConfirmation\DefinitiveRegistrationConfirmationTestDataCreator;
+use packages\test\helpers\domain\authenticationAccount\AuthenticationAccountTestDataCreator;
+use packages\test\helpers\domain\authenticationAccount\TestAuthenticationAccountFactory;
 use Tests\TestCase;
 
 class ResendDefinitiveRegistrationConfirmationTest extends TestCase

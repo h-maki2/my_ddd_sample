@@ -1,6 +1,6 @@
 <?php
 
-namespace packages\test\helpers\domains\authenticationAccount;
+namespace packages\test\helpers\domain\authenticationAccount;
 
 use packages\domain\model\authenticationAccount\UserId;
 use packages\domain\model\common\identifier\IdentifierFromUUIDver7;

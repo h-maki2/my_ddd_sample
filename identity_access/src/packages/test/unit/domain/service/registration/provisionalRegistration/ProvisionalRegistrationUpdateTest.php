@@ -9,7 +9,7 @@ use packages\domain\model\authenticationAccount\password\UserPassword;
 use packages\domain\model\authenticationAccount\DefinitiveRegistrationCompletedStatus;
 use packages\domain\model\email\IEmailSender;
 use packages\domain\service\registration\provisionalRegistration\ProvisionalRegistrationUpdate;
-use packages\test\helpers\domains\authenticationAccount\password\Md5PasswordManager;
+use packages\test\helpers\domain\authenticationAccount\password\Md5PasswordManager;
 use packages\test\helpers\adapter\transactionManage\TestTransactionManage;
 use PHPUnit\Framework\TestCase;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace packages\test\helpers\domains\userProfile;
+namespace packages\test\helpers\domain\userProfile;
 
 use packages\domain\model\authenticationAccount\UserId;
 use packages\domain\model\userProfile\SelfIntroductionText;

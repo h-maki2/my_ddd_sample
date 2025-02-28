@@ -15,7 +15,7 @@ use packages\domain\model\authenticationAccount\AuthenticationAccount;
 use packages\domain\model\authenticationAccount\DefinitiveRegistrationCompletedStatus;
 use packages\domain\model\authenticationAccount\LoginRestrictionStatus;
 use packages\domain\model\authenticationAccount\UnsubscribeStatus;
-use packages\test\helpers\domains\authenticationAccount\password\Md5PasswordManager;
+use packages\test\helpers\domain\authenticationAccount\password\Md5PasswordManager;
 use Ramsey\Uuid\Uuid;
 use UnexpectedValueException;
 

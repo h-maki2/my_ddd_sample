@@ -125,8 +125,8 @@ return [
 
     'app_domain' => env('APP_DOMAIN', 'localhost'),
 
-    'kafkaHostName' => env('KAFKA_HOST_NAME'),
-    'topickName' => env('TOPIC_NAME'),
-    'consumerGroupId' => env('CONSUMER_GROUP_ID'),
-    'cdcSubscribedDbTable' => env('CDC_SUBSCRIBED_DB_TABLE'),
+    'kafkaHostName' => env('KAFKA_HOST_NAME', 'kafka:9092'),
+    'topickName' => env('TOPIC_NAME', 'identity_access'),
+    'consumerGroupId' => env('CONSUMER_GROUP_ID', 'identity_access_group'),
+    'cdcSubscribedDbTable' => env('CDC_SUBSCRIBED_DB_TABLE', 'tbl_stored_event'),
 ];

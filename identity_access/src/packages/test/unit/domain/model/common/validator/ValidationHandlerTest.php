@@ -5,9 +5,9 @@ use packages\application\common\validation\ValidationErrorMessageData;
 use packages\domain\model\authenticationAccount\validation\UserEmailValidation;
 use packages\domain\model\authenticationAccount\validation\UserPasswordValidation;
 use packages\domain\model\common\validator\ValidationHandler;
-use packages\test\helpers\domains\authenticationAccount\AuthenticationAccountTestDataCreator;
-use packages\test\helpers\domains\authenticationAccount\password\Md5PasswordManager;
-use packages\test\helpers\domains\authenticationAccount\TestAuthenticationAccountFactory;
+use packages\test\helpers\domain\authenticationAccount\AuthenticationAccountTestDataCreator;
+use packages\test\helpers\domain\authenticationAccount\password\Md5PasswordManager;
+use packages\test\helpers\domain\authenticationAccount\TestAuthenticationAccountFactory;
 use PHPUnit\Framework\TestCase;
 
 class ValidationHandlerTest extends TestCase

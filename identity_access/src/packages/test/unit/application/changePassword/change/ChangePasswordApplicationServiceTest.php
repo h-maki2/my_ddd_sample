@@ -9,12 +9,12 @@ use packages\domain\model\oauth\client\ClientId;
 use packages\domain\model\oauth\client\RedirectUrlList;
 use packages\domain\service\oauth\ClientService;
 use packages\domain\service\oauth\LoggedInUserIdFetcher;
-use packages\test\helpers\domains\authenticationAccount\AuthenticationAccountTestDataCreator;
-use packages\test\helpers\domains\authenticationAccount\password\Md5PasswordManager;
-use packages\test\helpers\domains\authenticationAccount\TestAuthenticationAccountFactory;
-use packages\test\helpers\domains\oauth\client\ClientTestDataCreator;
-use packages\test\helpers\domains\oauth\client\InMemoryClientFetcher;
-use packages\test\helpers\domains\oauth\client\TestClientDataFactory;
+use packages\test\helpers\domain\authenticationAccount\AuthenticationAccountTestDataCreator;
+use packages\test\helpers\domain\authenticationAccount\password\Md5PasswordManager;
+use packages\test\helpers\domain\authenticationAccount\TestAuthenticationAccountFactory;
+use packages\test\helpers\domain\oauth\client\ClientTestDataCreator;
+use packages\test\helpers\domain\oauth\client\InMemoryClientFetcher;
+use packages\test\helpers\domain\oauth\client\TestClientDataFactory;
 use PHPUnit\Framework\TestCase;
 
 class ChangePasswordApplicationServiceTest extends TestCase

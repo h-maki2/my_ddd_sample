@@ -1,6 +1,6 @@
 <?php
 
-namespace packages\test\helpers\domains\definitiveRegistrationConfirmation;
+namespace packages\test\helpers\domain\definitiveRegistrationConfirmation;
 
 use packages\domain\model\definitiveRegistrationConfirmation\DefinitiveRegistrationConfirmation;
 use packages\domain\model\definitiveRegistrationConfirmation\IDefinitiveRegistrationConfirmationRepository;

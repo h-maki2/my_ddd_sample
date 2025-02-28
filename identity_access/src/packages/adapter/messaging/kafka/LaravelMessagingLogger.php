@@ -1,6 +1,6 @@
 <?php
 
-namespace packages\messaging\kafka;
+namespace packages\adapter\messaging\kafka;
 
 use dddCommonLib\domain\model\common\IMessagingLogger;
 use Illuminate\Support\Facades\Log;

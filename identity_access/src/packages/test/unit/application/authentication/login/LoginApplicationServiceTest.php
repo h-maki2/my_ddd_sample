@@ -20,11 +20,11 @@ use packages\domain\model\oauth\client\RedirectUrlList;
 use packages\domain\model\oauth\scope\Scope;
 use packages\domain\model\oauth\scope\ScopeList;
 use packages\domain\service\authenticationAccount\AuthenticationService;
-use packages\test\helpers\domains\authenticationAccount\AuthenticationAccountTestDataCreator;
-use packages\test\helpers\domains\authenticationAccount\password\Md5PasswordManager;
-use packages\test\helpers\domains\authenticationAccount\TestAuthenticationAccountFactory;
-use packages\test\helpers\domains\oauth\client\ClientDataForTest;
-use packages\test\helpers\domains\oauth\client\TestClientDataFactory;
+use packages\test\helpers\domain\authenticationAccount\AuthenticationAccountTestDataCreator;
+use packages\test\helpers\domain\authenticationAccount\password\Md5PasswordManager;
+use packages\test\helpers\domain\authenticationAccount\TestAuthenticationAccountFactory;
+use packages\test\helpers\domain\oauth\client\ClientDataForTest;
+use packages\test\helpers\domain\oauth\client\TestClientDataFactory;
 use PHPUnit\Framework\TestCase;
 
 class LoginApplicationServiceTest extends TestCase
