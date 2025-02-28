@@ -4,9 +4,9 @@ namespace dddCommonLib\infrastructure\messaging\kafka;
 
 abstract class AKafkaConsumer
 {
-    protected RdKafka\MessageListener $consumer;
+    protected RdKafka\BrokerListener $consumer;
 
-    protected function __construct(RdKafka\MessageListener $consumer)
+    protected function __construct(RdKafka\BrokerListener $consumer)
     {
         $this->consumer = $consumer;
     }

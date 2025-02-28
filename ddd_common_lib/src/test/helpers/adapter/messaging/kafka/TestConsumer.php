@@ -3,13 +3,13 @@
 namespace dddCommonLib\test\helpers\adapter\messaging\kafka;
 
 use dddCommonLib\domain\model\notification\Notification;
-use dddCommonLib\infrastructure\messaging\kafka\NotificationMessageListener;
+use dddCommonLib\infrastructure\messaging\kafka\NotificationBrokerListener;
 use dddCommonLib\test\helpers\domain\model\event\OtherTestEvent;
 use dddCommonLib\test\helpers\domain\model\event\TestEvent;
 use Exception;
 use PHPUnit\Event\TestRunner\ExecutionAborted;
 
-class TestConsumer extends NotificationMessageListener
+class TestConsumer extends NotificationBrokerListener
 {
     public array $catchedMessageList = [];
 

@@ -8,9 +8,9 @@ use dddCommonLib\domain\model\notification\Notification;
 use Exception;
 use RdKafka;
 
-abstract class NotificationMessageListener extends MessageListener
+abstract class NotificationBrokerListener extends BrokerListener
 {
-    private RdKafka\MessageListener $consumer;
+    private RdKafka\BrokerListener $consumer;
 
     private bool $testable;
 
@@ -30,7 +30,7 @@ abstract class NotificationMessageListener extends MessageListener
     {
         parent::__construct($logger);
 
-        $this->consumer = new RdKafka\MessageListener(
+        $this->consumer = new RdKafka\BrokerListener(
             $this->rdkafkaConf($groupId, $hostName, $enableAuthCommit, $autoOffsetReset)
         );
         $this->consumer->subscribe([$topicName]);

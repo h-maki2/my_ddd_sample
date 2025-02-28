@@ -8,27 +8,38 @@ use dddCommonLib\domain\model\notification\Notification;
 use Exception;
 use RdKafka;
 
-abstract class NotificationMessageListener extends MessageListener
+abstract class NotificationBrokerListener extends BrokerListener
 {
-    private AKafkaConsumer $consumer;
+    private RdKafka\BrokerListener $consumer;
+
+    private bool $testable;
+
+    private const WAIT_TIME_MS = 10000;
 
     private const MAX_RETYR_COUNT = 3;
     private const RETRY_DELAY_S = 5;
 
     public function __construct(
-        AKafkaConsumer $consumer,
+        string $groupId,
+        string $hostName,
+        string $topicName,
         IMessagingLogger $logger,
+        KafkaEnableAuthCommit $enableAuthCommit = KafkaEnableAuthCommit::Enable,
+        KafkaAutoOffsetReset $autoOffsetReset = KafkaAutoOffsetReset::EARLIEST
     )
     {
         parent::__construct($logger);
 
-        $this->consumer = $consumer;
+        $this->consumer = new RdKafka\BrokerListener(
+            $this->rdkafkaConf($groupId, $hostName, $enableAuthCommit, $autoOffsetReset)
+        );
+        $this->consumer->subscribe([$topicName]);
     }
 
     public function handle(): void
     {
         while (true) {
-            $message = $this->consumer->consume();
+            $message = $this->consumer->consume($this->waitTimeMs());
             if ($message->err) {
                 $this->errorHandling($message->err);
                 continue;
@@ -48,6 +59,21 @@ abstract class NotificationMessageListener extends MessageListener
     abstract protected function filteredDispatch(Notification $notification): void;
 
     abstract protected function listensTo(): array;
+
+    private function rdkafkaConf(
+        string $groupId, 
+        string $hostName,
+        KafkaEnableAuthCommit $enableAuthCommit,
+        KafkaAutoOffsetReset $autoOffsetReset
+    ): RdKafka\Conf
+    {
+        $conf = new RdKafka\Conf();
+        $conf->set('group.id', $groupId);
+        $conf->set('metadata.broker.list', $hostName);
+        $conf->set('enable.auto.commit', $enableAuthCommit->value);
+        $conf->set('auto.offset.reset', $autoOffsetReset->value);
+        return $conf;
+    }
 
     private function filteredMessageType(Notification $notification): bool
     {

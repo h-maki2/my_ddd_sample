@@ -15,7 +15,7 @@ class MessageKafkaConsumer extends AKafkaConsumer
     )
     {
         parent::__construct(
-            new RdKafka\MessageListener(
+            new RdKafka\BrokerListener(
                 $this->rdkafkaConf($groupId, $hostName, $enableAuthCommit, $autoOffsetReset)
             )
         );

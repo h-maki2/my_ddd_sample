@@ -2,7 +2,7 @@
 
 namespace dddCommonLib\infrastructure\messaging\kafka;
 
-class CdckafkaConsumer extends AKafkaConsumer
+class CdcKafkaConsumer extends AKafkaConsumer
 {
     private const WAIT_TIME_MS = 10000;
 
@@ -17,7 +17,7 @@ class CdckafkaConsumer extends AKafkaConsumer
         $conf->set('enable.auto.commit', $enableAuthCommit->value);
 
         parent::__construct(
-            new RdKafka\MessageListener($conf)
+            new RdKafka\BrokerListener($conf)
         );
         $this->consumer->subscribe($subscribedDbTable);
     }
@@ -25,6 +25,11 @@ class CdckafkaConsumer extends AKafkaConsumer
     public function consume(): RdKafka\Message
     {
         return $this->consumer->consume($this->waitTimeMs());
+    }
+
+    public function commit(RdKafka\Message $message): void
+    {
+        $this->consumer->commit($message);
     }
 
     protected function waitTimeMs(): int
