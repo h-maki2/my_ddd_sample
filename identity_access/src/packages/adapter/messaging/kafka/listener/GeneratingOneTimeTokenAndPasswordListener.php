@@ -2,7 +2,9 @@
 
 namespace packages\adapter\messaging\kafka\listener;
 
+use dddCommonLib\domain\model\common\IMessagingLogger;
 use dddCommonLib\domain\model\notification\Notification;
+use dddCommonLib\infrastructure\messaging\kafka\AKafkaConsumer;
 use dddCommonLib\infrastructure\messaging\kafka\NotificationBrokerListener;
 use packages\application\registration\provisionalRegistration\GeneratingOneTimeTokenAndPasswordApplicationService;
 use packages\domain\model\authenticationAccount\AuthenticationAccountCreated;
@@ -13,16 +15,12 @@ class GeneratingOneTimeTokenAndPasswordListener extends NotificationBrokerListen
     private GeneratingOneTimeTokenAndPasswordApplicationService $appService;
 
     public function __construct(
+        AKafkaConsumer $consumer,
+        IMessagingLogger $logger,
         GeneratingOneTimeTokenAndPasswordApplicationService $appService
     )
     {
-        parent::__construct(
-            config('app.consumerGroupId'),
-            config('app.kafkaHostName'),
-            config('app.topickName'),
-            new LaravelMessagingLogger(),
-        );
-
+        parent::__construct($consumer, $logger);
         $this->appService = $appService;
     }
 
