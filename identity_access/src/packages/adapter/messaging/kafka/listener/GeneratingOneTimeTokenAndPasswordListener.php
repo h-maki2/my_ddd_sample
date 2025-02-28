@@ -1,14 +1,14 @@
 <?php
 
-namespace packages\messaging\kafka\consumer\generatingOneTimeTokenAndPassword;
+namespace packages\adapter\messaging\kafka\listener;
 
 use dddCommonLib\domain\model\notification\Notification;
-use dddCommonLib\infrastructure\messaging\kafka\NotificationMessageListener;
+use dddCommonLib\infrastructure\messaging\kafka\NotificationBrokerListener;
 use packages\application\registration\provisionalRegistration\GeneratingOneTimeTokenAndPasswordApplicationService;
 use packages\domain\model\authenticationAccount\AuthenticationAccountCreated;
 use packages\messaging\kafka\LaravelMessagingLogger;
 
-class GeneratingOneTimeTokenAndPasswordConsumer extends NotificationMessageListener
+class GeneratingOneTimeTokenAndPasswordListener extends NotificationBrokerListener
 {
     private GeneratingOneTimeTokenAndPasswordApplicationService $appService;
 
