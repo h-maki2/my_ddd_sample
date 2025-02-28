@@ -6,6 +6,7 @@ use RdKafka;
 
 class MessageKafkaConsumer extends AKafkaConsumer
 {
+
     public function __construct(
         string $groupId,
         string $hostName,

@@ -9,7 +9,7 @@ use dddCommonLib\test\helpers\domain\model\event\TestEvent;
 
 class TestNotificationBrokerListener extends NotificationBrokerListener
 {
-    private array $listenNotificationList = [];
+    public array $listenNotificationList = [];
 
     protected function filteredDispatch(Notification $notification): void
     {
@@ -27,7 +27,7 @@ class TestNotificationBrokerListener extends NotificationBrokerListener
         }
 
         if ($listenTestEvent && $listenOtherTestEvent) {
-            echo "全てのイベントがリッスンされました";
+            throw new BrokerListenFinishedException();
         }
     }
 

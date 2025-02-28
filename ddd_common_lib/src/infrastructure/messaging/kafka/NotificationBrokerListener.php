@@ -14,14 +14,19 @@ abstract class NotificationBrokerListener extends BrokerListener
     private const MAX_RETYR_COUNT = 3;
     private const RETRY_DELAY_S = 5;
 
+    private bool $testable;
+
     public function __construct(
         AKafkaConsumer $consumer,
         IMessagingLogger $logger,
+        bool $testable = false
     )
     {
         parent::__construct($logger);
 
         $this->consumer = $consumer;
+
+        $this->testable = $testable;
     }
 
     public function handle(): void
@@ -65,6 +70,11 @@ abstract class NotificationBrokerListener extends BrokerListener
                 $this->filteredDispatch($notification);
                 break;
             } catch (Exception $ex) {
+                if ($this->testable) {
+                    // テスト時は例外をそのままスロー
+                    throw $ex;
+                }
+
                 $currentReturyCount++;
 
                 if ($currentReturyCount >= self::MAX_RETYR_COUNT) {

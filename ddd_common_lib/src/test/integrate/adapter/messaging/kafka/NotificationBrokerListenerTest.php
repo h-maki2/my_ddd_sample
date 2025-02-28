@@ -5,6 +5,7 @@ use dddCommonLib\infrastructure\messaging\kafka\AKafkaConsumer;
 use dddCommonLib\infrastructure\messaging\kafka\BrokerListener;
 use dddCommonLib\infrastructure\messaging\kafka\KafkaProducer;
 use dddCommonLib\infrastructure\messaging\kafka\MessageKafkaConsumer;
+use dddCommonLib\test\helpers\adapter\messaging\kafka\BrokerListenFinishedException;
 use dddCommonLib\test\helpers\adapter\messaging\kafka\KafkaCatchedTestMessageList;
 use dddCommonLib\test\helpers\adapter\messaging\kafka\TestConsumer;
 use dddCommonLib\test\helpers\adapter\messaging\kafka\TestNotificationBrokerListener;
@@ -12,6 +13,7 @@ use dddCommonLib\test\helpers\domain\model\event\NoTargetEvent;
 use dddCommonLib\test\helpers\domain\model\event\OtherTestEvent;
 use dddCommonLib\test\helpers\domain\model\event\TestEvent;
 use dddCommonLib\test\helpers\domain\model\notification\TestNotificationFactory;
+use PhpParser\Node\Stmt\Block;
 use PHPUnit\Framework\TestCase;
 
 class NotificationBrokerListenerTest extends TestCase
@@ -37,7 +39,7 @@ class NotificationBrokerListenerTest extends TestCase
         );
 
         // テスト用のリスナーを作成する
-        $testBlokerListener = new TestNotificationBrokerListener($consumer, $this->messagingLogger);
+        $testBlokerListener = new TestNotificationBrokerListener($consumer, $this->messagingLogger, testable: true);
 
         $targetNotification1 = TestNotificationFactory::createFromDomainEvent(new TestEvent());
         $targetNotification2 = TestNotificationFactory::createFromDomainEvent(new OtherTestEvent());
@@ -48,18 +50,15 @@ class NotificationBrokerListenerTest extends TestCase
         $this->producer->send($targetNotification2);
 
         // when
-        $result = $this->captureConsoleOutput(function () use ($testBlokerListener) {
+        try {
             $testBlokerListener->handle();
-        });
+        } catch (BrokerListenFinishedException $ex) {
+            // 何もしない
+        }
 
         // then
-        $this->assertStringContainsString('全てのイベントがリッスンされました', $result);
-    }
-
-    private function captureConsoleOutput(callable $function)
-    {
-        ob_start();
-        $function();
-        return ob_get_clean();
+        $this->assertContainsEquals($targetNotification1, $testBlokerListener->listenNotificationList);
+        $this->assertContainsEquals($targetNotification2, $testBlokerListener->listenNotificationList);
+        $this->assertNotContainsEquals($noTargetNotification, $testBlokerListener->listenNotificationList);
     }
 }
