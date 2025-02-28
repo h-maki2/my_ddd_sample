@@ -2,6 +2,8 @@
 
 namespace dddCommonLib\infrastructure\messaging\kafka;
 
+use RdKafka;
+
 class CdcKafkaConsumer extends AKafkaConsumer
 {
     public function __construct(
@@ -15,7 +17,7 @@ class CdcKafkaConsumer extends AKafkaConsumer
         $conf->set('enable.auto.commit', $enableAuthCommit->value);
 
         parent::__construct(
-            new RdKafka\BrokerListener($conf)
+            new RdKafka\KafkaConsumer($conf)
         );
         $this->consumer->subscribe($subscribedDbTable);
     }

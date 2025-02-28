@@ -1,10 +1,13 @@
 <?php
 
 use dddCommonLib\domain\model\common\IMessagingLogger;
+use dddCommonLib\infrastructure\messaging\kafka\AKafkaConsumer;
 use dddCommonLib\infrastructure\messaging\kafka\BrokerListener;
 use dddCommonLib\infrastructure\messaging\kafka\KafkaProducer;
+use dddCommonLib\infrastructure\messaging\kafka\MessageKafkaConsumer;
 use dddCommonLib\test\helpers\adapter\messaging\kafka\KafkaCatchedTestMessageList;
 use dddCommonLib\test\helpers\adapter\messaging\kafka\TestConsumer;
+use dddCommonLib\test\helpers\adapter\messaging\kafka\TestNotificationBrokerListener;
 use dddCommonLib\test\helpers\domain\model\event\NoTargetEvent;
 use dddCommonLib\test\helpers\domain\model\event\OtherTestEvent;
 use dddCommonLib\test\helpers\domain\model\event\TestEvent;
@@ -14,25 +17,28 @@ use PHPUnit\Framework\TestCase;
 class NotificationBrokerListenerTest extends TestCase
 {
     private KafkaProducer $producer;
-    private TestConsumer $consumer;
+    private IMessagingLogger $messagingLogger;
     
     public function setUp(): void
     {
-        $messagingLoggerMock = $this->createMock(IMessagingLogger::class);
+        $this->messagingLogger = $this->createMock(IMessagingLogger::class);
 
         $this->producer = new KafkaProducer('kafka:9092', 'testTopic');
-        $this->consumer = new TestConsumer(
-            'testGroupId',
-            'kafka:9092',
-            'testTopic',
-            $messagingLoggerMock,
-            testable: true
-        );
     }
 
     public function test_プロデューサから送信したメッセージを受信できることを確認する()
     {
         // given
+        // コンシューマを作成する
+        $consumer = new MessageKafkaConsumer(
+            'testGroupId',
+            'kafka:9092',
+            ['testTopic'],
+        );
+
+        // テスト用のリスナーを作成する
+        $testBlokerListener = new TestNotificationBrokerListener($consumer, $this->messagingLogger);
+
         $targetNotification1 = TestNotificationFactory::createFromDomainEvent(new TestEvent());
         $targetNotification2 = TestNotificationFactory::createFromDomainEvent(new OtherTestEvent());
         $noTargetNotification = TestNotificationFactory::createFromDomainEvent(new NoTargetEvent());
@@ -42,17 +48,18 @@ class NotificationBrokerListenerTest extends TestCase
         $this->producer->send($targetNotification2);
 
         // when
-        try {
-            $this->consumer->handle();
-        } catch (Exception $ex) {
-            // 何もしない
-            print($ex->getMessage());
-        }
+        $result = $this->captureConsoleOutput(function () use ($testBlokerListener) {
+            $testBlokerListener->handle();
+        });
 
         // then
-        // 対象のイベントをリッスンできていることを確認する
-        $this->assertTrue($this->consumer->listenEvent(TestEvent::class));
-        $this->assertTrue($this->consumer->listenEvent(OtherTestEvent::class));
-        $this->assertFalse($this->consumer->listenEvent(NoTargetEvent::class));
+        $this->assertStringContainsString('全てのイベントがリッスンされました', $result);
+    }
+
+    private function captureConsoleOutput(callable $function)
+    {
+        ob_start();
+        $function();
+        return ob_get_clean();
     }
 }

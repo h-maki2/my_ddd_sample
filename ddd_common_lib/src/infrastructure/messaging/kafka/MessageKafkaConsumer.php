@@ -2,6 +2,8 @@
 
 namespace dddCommonLib\infrastructure\messaging\kafka;
 
+use RdKafka;
+
 class MessageKafkaConsumer extends AKafkaConsumer
 {
     public function __construct(
@@ -13,7 +15,7 @@ class MessageKafkaConsumer extends AKafkaConsumer
     )
     {
         parent::__construct(
-            new RdKafka\BrokerListener(
+            new RdKafka\KafkaConsumer(
                 $this->rdkafkaConf($groupId, $hostName, $enableAuthCommit, $autoOffsetReset)
             )
         );
