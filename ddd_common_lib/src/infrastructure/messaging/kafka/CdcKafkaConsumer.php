@@ -4,8 +4,6 @@ namespace dddCommonLib\infrastructure\messaging\kafka;
 
 class CdcKafkaConsumer extends AKafkaConsumer
 {
-    private const WAIT_TIME_MS = 10000;
-
     public function __construct(
         string $hostName, 
         array $subscribedDbTable,
@@ -30,10 +28,5 @@ class CdcKafkaConsumer extends AKafkaConsumer
     public function commit(RdKafka\Message $message): void
     {
         $this->consumer->commit($message);
-    }
-
-    protected function waitTimeMs(): int
-    {
-        return self::WAIT_TIME_MS;
     }
 }

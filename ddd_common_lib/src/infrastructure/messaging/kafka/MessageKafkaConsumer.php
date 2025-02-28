@@ -4,8 +4,6 @@ namespace dddCommonLib\infrastructure\messaging\kafka;
 
 class MessageKafkaConsumer extends AKafkaConsumer
 {
-    private const WAIT_TIME_MS = 10000;
-
     public function __construct(
         string $groupId,
         string $hostName,
@@ -45,10 +43,5 @@ class MessageKafkaConsumer extends AKafkaConsumer
         $conf->set('enable.auto.commit', $enableAuthCommit->value);
         $conf->set('auto.offset.reset', $autoOffsetReset->value);
         return $conf;
-    }
-
-    protected function waitTimeMs(): int
-    {
-        return self::WAIT_TIME_MS;
     }
 }

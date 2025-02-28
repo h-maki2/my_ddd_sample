@@ -6,40 +6,28 @@ use dddCommonLib\domain\model\common\IMessagingLogger;
 use dddCommonLib\domain\model\common\JsonSerializer;
 use dddCommonLib\domain\model\notification\Notification;
 use Exception;
-use RdKafka;
 
 abstract class NotificationBrokerListener extends BrokerListener
 {
-    private RdKafka\BrokerListener $consumer;
-
-    private bool $testable;
-
-    private const WAIT_TIME_MS = 10000;
+    private AKafkaConsumer $consumer;
 
     private const MAX_RETYR_COUNT = 3;
     private const RETRY_DELAY_S = 5;
 
     public function __construct(
-        string $groupId,
-        string $hostName,
-        string $topicName,
+        AKafkaConsumer $consumer,
         IMessagingLogger $logger,
-        KafkaEnableAuthCommit $enableAuthCommit = KafkaEnableAuthCommit::Enable,
-        KafkaAutoOffsetReset $autoOffsetReset = KafkaAutoOffsetReset::EARLIEST
     )
     {
         parent::__construct($logger);
 
-        $this->consumer = new RdKafka\BrokerListener(
-            $this->rdkafkaConf($groupId, $hostName, $enableAuthCommit, $autoOffsetReset)
-        );
-        $this->consumer->subscribe([$topicName]);
+        $this->consumer = $consumer;
     }
 
     public function handle(): void
     {
         while (true) {
-            $message = $this->consumer->consume($this->waitTimeMs());
+            $message = $this->consumer->consume();
             if ($message->err) {
                 $this->errorHandling($message->err);
                 continue;
@@ -59,21 +47,6 @@ abstract class NotificationBrokerListener extends BrokerListener
     abstract protected function filteredDispatch(Notification $notification): void;
 
     abstract protected function listensTo(): array;
-
-    private function rdkafkaConf(
-        string $groupId, 
-        string $hostName,
-        KafkaEnableAuthCommit $enableAuthCommit,
-        KafkaAutoOffsetReset $autoOffsetReset
-    ): RdKafka\Conf
-    {
-        $conf = new RdKafka\Conf();
-        $conf->set('group.id', $groupId);
-        $conf->set('metadata.broker.list', $hostName);
-        $conf->set('enable.auto.commit', $enableAuthCommit->value);
-        $conf->set('auto.offset.reset', $autoOffsetReset->value);
-        return $conf;
-    }
 
     private function filteredMessageType(Notification $notification): bool
     {
@@ -99,18 +72,8 @@ abstract class NotificationBrokerListener extends BrokerListener
                     break;
                 }
 
-                sleep($this->retryDelayS());
+                sleep(self::RETRY_DELAY_S);
             }
         }
-    }
-
-    protected function waitTimeMs(): int
-    {
-        return self::WAIT_TIME_MS;
-    }
-
-    protected function retryDelayS(): int
-    {
-        return self::RETRY_DELAY_S;
     }
 }

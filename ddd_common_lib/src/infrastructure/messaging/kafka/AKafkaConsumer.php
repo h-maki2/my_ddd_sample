@@ -6,6 +6,8 @@ abstract class AKafkaConsumer
 {
     protected RdKafka\BrokerListener $consumer;
 
+    protected const WAIT_TIME_MS = 10000;
+
     protected function __construct(RdKafka\BrokerListener $consumer)
     {
         $this->consumer = $consumer;
@@ -15,5 +17,8 @@ abstract class AKafkaConsumer
 
     abstract public function commit(RdKafka\Message $message): void;
 
-    abstract protected function waitTimeMs(): int;
+    protected function waitTimeMs(): int
+    {
+        return self::WAIT_TIME_MS;
+    }
 }

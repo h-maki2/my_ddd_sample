@@ -8,36 +8,24 @@ use Exception;
 
 class CdcBrokerListener extends BrokerListener
 {
-    private RdKafka\BrokerListener $consumer;
-
+    private AKafkaConsumer $consumer;
     private KafkaProducer $producer;
 
-    private const WAIT_TIME_MS = 50000;
-
-    private const RETRY_DELAY_S = 5;
-
     public function __construct(
-        string $hostName, 
-        string $subscribedDbTable, 
-        IMessagingLogger $logger,
-        KafkaProducer $producer
+        AKafkaConsumer $consumer,
+        KafkaProducer $producer,
+        IMessagingLogger $logger
     )
     {
         parent::__construct($logger);
-
-        $conf = new RdKafka\Conf();
-        $conf->set('metadata.broker.list', $hostName);
-
-        $this->consumer = new RdKafka\BrokerListener($conf);
-        $this->consumer->subscribe([$subscribedDbTable]);
-
+        $this->consumer = $consumer;
         $this->producer = $producer;
     }
 
     public function handle(): void
     {
         while (true) {
-            $message = $this->consumer->consume(self::WAIT_TIME_MS);
+            $message = $this->consumer->consume();
             if ($message->err) {
                 $this->errorHandling($message->err);
                 continue;
@@ -52,16 +40,6 @@ class CdcBrokerListener extends BrokerListener
                 $this->logger->error($ex->getMessage());
             }
         }
-    }
-
-    protected function waitTimeMs(): int
-    {
-        return self::WAIT_TIME_MS;
-    }
-
-    protected function retryDelayS(): int
-    {
-        return self::RETRY_DELAY_S;
     }
 
     private function toNotification(array $cdcData): Notification
