@@ -1,6 +1,6 @@
 <?php
 
-use dddCommonLib\infrastructure\messaging\kafka\KafkaCdcConsumer;
+use dddCommonLib\infrastructure\messaging\kafka\CdcMessageListener;
 use dddCommonLib\infrastructure\messaging\kafka\KafkaProducer;
 use packages\messaging\kafka\LaravelMessagingLogger;
 
@@ -9,7 +9,7 @@ $producer = new KafkaProducer(
     config('app.topickName')
 );
 
-$cdcConsumer = new KafkaCdcConsumer(
+$cdcConsumer = new CdcMessageListener(
     config('app.kafkaHostName'),
     config('app.cdcSubscribedDbTable'),
     new LaravelMessagingLogger(),

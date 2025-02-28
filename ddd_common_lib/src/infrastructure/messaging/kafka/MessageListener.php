@@ -4,7 +4,7 @@ namespace dddCommonLib\infrastructure\messaging\kafka;
 
 use dddCommonLib\domain\model\common\IMessagingLogger;
 
-abstract class KafkaConsumer
+abstract class MessageListener
 {
     protected IMessagingLogger $logger;
 

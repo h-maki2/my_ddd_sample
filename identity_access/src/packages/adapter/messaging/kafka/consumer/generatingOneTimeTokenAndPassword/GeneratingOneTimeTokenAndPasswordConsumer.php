@@ -3,18 +3,17 @@
 namespace packages\messaging\kafka\consumer\generatingOneTimeTokenAndPassword;
 
 use dddCommonLib\domain\model\notification\Notification;
-use dddCommonLib\infrastructure\messaging\kafka\KafkaMessageConsumer;
+use dddCommonLib\infrastructure\messaging\kafka\NotificationMessageListener;
 use packages\application\registration\provisionalRegistration\GeneratingOneTimeTokenAndPasswordApplicationService;
 use packages\domain\model\authenticationAccount\AuthenticationAccountCreated;
 use packages\messaging\kafka\LaravelMessagingLogger;
 
-class GeneratingOneTimeTokenAndPasswordConsumer extends KafkaMessageConsumer
+class GeneratingOneTimeTokenAndPasswordConsumer extends NotificationMessageListener
 {
     private GeneratingOneTimeTokenAndPasswordApplicationService $appService;
 
     public function __construct(
-        GeneratingOneTimeTokenAndPasswordApplicationService $appService,
-        bool $testable = false
+        GeneratingOneTimeTokenAndPasswordApplicationService $appService
     )
     {
         parent::__construct(
@@ -22,7 +21,6 @@ class GeneratingOneTimeTokenAndPasswordConsumer extends KafkaMessageConsumer
             config('app.kafkaHostName'),
             config('app.topickName'),
             new LaravelMessagingLogger(),
-            testable: $testable
         );
 
         $this->appService = $appService;

@@ -6,9 +6,9 @@ use dddCommonLib\domain\model\common\IMessagingLogger;
 use dddCommonLib\domain\model\notification\Notification;
 use Exception;
 
-class KafkaCdcConsumer extends KafkaConsumer
+class CdcMessageListener extends MessageListener
 {
-    private RdKafka\KafkaConsumer $consumer;
+    private RdKafka\MessageListener $consumer;
 
     private KafkaProducer $producer;
 
@@ -28,7 +28,7 @@ class KafkaCdcConsumer extends KafkaConsumer
         $conf = new RdKafka\Conf();
         $conf->set('metadata.broker.list', $hostName);
 
-        $this->consumer = new RdKafka\KafkaConsumer($conf);
+        $this->consumer = new RdKafka\MessageListener($conf);
         $this->consumer->subscribe([$subscribedDbTable]);
 
         $this->producer = $producer;

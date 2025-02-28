@@ -1,7 +1,7 @@
 <?php
 
 use dddCommonLib\domain\model\common\IMessagingLogger;
-use dddCommonLib\infrastructure\messaging\kafka\KafkaConsumer;
+use dddCommonLib\infrastructure\messaging\kafka\MessageListener;
 use dddCommonLib\infrastructure\messaging\kafka\KafkaProducer;
 use dddCommonLib\test\helpers\adapter\messaging\kafka\KafkaCatchedTestMessageList;
 use dddCommonLib\test\helpers\adapter\messaging\kafka\TestConsumer;
@@ -11,7 +11,7 @@ use dddCommonLib\test\helpers\domain\model\event\TestEvent;
 use dddCommonLib\test\helpers\domain\model\notification\TestNotificationFactory;
 use PHPUnit\Framework\TestCase;
 
-class KafkaMessageConsumerTest extends TestCase
+class NotificationMessageListenerTest extends TestCase
 {
     private KafkaProducer $producer;
     private TestConsumer $consumer;
