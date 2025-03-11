@@ -39,4 +39,9 @@ class JsonSerializer
 
         return $instance;
     }
+
+    public static function deserializeToArray(string $jsonString): array
+    {
+        return json_decode($jsonString, true, 512, JSON_THROW_ON_ERROR);
+    }
 }
