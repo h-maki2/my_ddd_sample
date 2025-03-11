@@ -10,7 +10,7 @@ interface IDefinitiveRegistrationConfirmationRepository
 
     public function findById(UserId $userId): ?DefinitiveRegistrationConfirmation;
 
-    public function save(DefinitiveRegistrationConfirmation $authAccount): void;
+    public function save(DefinitiveRegistrationConfirmation $definitiveRegistrationConfirmation ): void;
 
     public function delete(UserId $id): void;
 }

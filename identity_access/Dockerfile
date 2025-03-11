@@ -24,6 +24,15 @@ RUN apt-get update && apt-get install -y \
 # Composer のインストール
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Node.js と npm のインストール
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
+    && npm install -g npm@latest
+
+RUN npm install -g serverless && npm install --save-dev serverless-localstack
+
+COPY ./awsCredentialsMock /root/.aws/credentials
+
 RUN a2enmod proxy
 RUN a2enmod proxy_http
 

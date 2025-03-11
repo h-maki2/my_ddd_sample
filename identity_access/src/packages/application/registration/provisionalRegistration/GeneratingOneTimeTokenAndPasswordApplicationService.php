@@ -30,30 +30,30 @@ class GeneratingOneTimeTokenAndPasswordApplicationService
         $this->transactionManage = $transactionManage;
     }
 
-    public function handle(Notification $notification): void
+    public function handle(string $userId, string $email): void
     {
-        $authenticationAccountCreated = $this->authenticationAccountCreatedFrom($notification);
+        $userId = new UserId($userId);
+
+        $definitiveRegistrationConfirmation = $this->definitiveRegistrationConfirmationRepository->findById($userId);
+        if ($definitiveRegistrationConfirmation !== null) {
+            return;
+        }
 
         $definitiveRegistrationConfirmation = DefinitiveRegistrationConfirmation::create(
-            new UserId($authenticationAccountCreated->userId),
+            $userId,
             new OneTimeTokenExistsService($this->definitiveRegistrationConfirmationRepository)
         );
 
-        $this->transactionManage->performTransaction(function () use ($definitiveRegistrationConfirmation, $authenticationAccountCreated) {
+        $this->transactionManage->performTransaction(function () use ($definitiveRegistrationConfirmation, $email) {
             $this->definitiveRegistrationConfirmationRepository->save($definitiveRegistrationConfirmation);
 
             $this->emailSender->send(
                 DefinitiveRegistrationConfirmationEmailDtoFactory::create(
-                    new UserEmail($authenticationAccountCreated->email),
+                    new UserEmail($email),
                     $definitiveRegistrationConfirmation->oneTimeToken(),
                     $definitiveRegistrationConfirmation->oneTimePassword()
                 )
             );
         });
-    }
-
-    private function authenticationAccountCreatedFrom(Notification $notification): AuthenticationAccountCreated
-    {
-        return $notification->toDomainEvent();
     }
 }

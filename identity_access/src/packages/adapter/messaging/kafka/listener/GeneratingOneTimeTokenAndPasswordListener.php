@@ -4,6 +4,7 @@ namespace packages\adapter\messaging\kafka\listener;
 
 use dddCommonLib\domain\model\common\IMessagingLogger;
 use dddCommonLib\domain\model\notification\Notification;
+use dddCommonLib\domain\model\notification\NotificationReader;
 use dddCommonLib\infrastructure\messaging\kafka\AKafkaConsumer;
 use dddCommonLib\infrastructure\messaging\kafka\NotificationBrokerListener;
 use packages\application\registration\provisionalRegistration\GeneratingOneTimeTokenAndPasswordApplicationService;
@@ -26,11 +27,15 @@ class GeneratingOneTimeTokenAndPasswordListener extends NotificationBrokerListen
 
     protected function filteredDispatch(Notification $notification): void
     {
-        $this->appService->handle($notification);
+        $notificationReader = new NotificationReader($notification);
+        $this->appService->handle(
+            $notificationReader->eventStringValue('userId'),
+            $notificationReader->eventStringValue('email')
+        );
     }
 
     protected function listensTo(): array
     {
-        return [AuthenticationAccountCreated::class];
+        return ['packages\domain\model\authenticationAccount\AuthenticationAccountCreated'];
     }
 }
