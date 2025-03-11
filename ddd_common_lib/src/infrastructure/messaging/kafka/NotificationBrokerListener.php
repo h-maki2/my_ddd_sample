@@ -64,8 +64,8 @@ abstract class NotificationBrokerListener extends BrokerListener
 
     private function proccessNotification(Notification $notification): void
     {
-        $currentReturyCount = 0;
-        while ($currentReturyCount < self::MAX_RETYR_COUNT) {
+        $currentRetryCount = 0;
+        while ($currentRetryCount < self::MAX_RETYR_COUNT) {
             try {
                 $this->filteredDispatch($notification);
                 break;
@@ -75,9 +75,9 @@ abstract class NotificationBrokerListener extends BrokerListener
                     throw $ex;
                 }
 
-                $currentReturyCount++;
+                $currentRetryCount++;
 
-                if ($currentReturyCount >= self::MAX_RETYR_COUNT) {
+                if ($currentRetryCount >= self::MAX_RETYR_COUNT) {
                     $this->logger->error($ex->getMessage() . ' notificationId: ' . $notification->notificationId);
                     break;
                 }
