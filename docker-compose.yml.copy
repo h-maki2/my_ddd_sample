@@ -70,6 +70,24 @@ services:
     ports:
       - "3308:3306"
 
+  debezium:
+    image: debezium/connect:2.5
+    container_name: debezium
+    depends_on:
+      - kafka
+      - identity_access_mysql
+      - taskmanage_mysql
+    environment:
+      BOOTSTRAP_SERVERS: kafka:9092
+      GROUP_ID: "1"
+      CONFIG_STORAGE_TOPIC: debezium_configs
+      OFFSET_STORAGE_TOPIC: debezium_offsets
+      STATUS_STORAGE_TOPIC: debezium_status
+    ports:
+      - "8083:8083"
+    networks:
+      - app-network
+
   identity_access:
     build:
       context: ./identity_access
@@ -79,6 +97,9 @@ services:
       - .:/var/www/html
     ports:
       - "8080:80"
+    environment:
+      - AWS_ACCESS_KEY_ID=mock
+      - AWS_SECRET_ACCESS_KEY=mock
     networks:
       - app-network
 
@@ -91,6 +112,9 @@ services:
       - .:/var/www/html
     ports:
       - "8081:80"
+    environment:
+      - AWS_ACCESS_KEY_ID=mock
+      - AWS_SECRET_ACCESS_KEY=mock
     networks:
       - app-network
 
@@ -100,6 +124,24 @@ services:
       dockerfile: Dockerfile
     container_name: ddd_common_lib
     volumes:
+      - .:/var/www/html
+    networks:
+      - app-network
+  
+  localstack:
+    image: localstack/localstack:latest
+    container_name: localstack
+    environment:
+      - SERVICES=lambda,sns,sqs,rds,secretsmanager,kinesis
+      - DEFAULT_REGION=ap-northeast-1
+      - DEBUG=1
+      - LAMBDA_EXECUTOR=docker
+      - LAMBDA_RUNTIME=provided.al2
+    ports:
+      - "4566:4566"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./localstack_setup.sh:/etc/localstack/localstack_setup.sh"
       - .:/var/www/html
     networks:
       - app-network
