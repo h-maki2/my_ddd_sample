@@ -29,7 +29,7 @@ class BladeDefinitiveRegistrationView
 
     public function faildResponse()
     {
-        return redirect('/definitiveRegister')
+        return redirect('/definitive_register')
                 ->withErrors($this->presenter->responseData())
                 ->withInput();
     }

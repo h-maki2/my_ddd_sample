@@ -13,7 +13,7 @@ use packages\domain\model\email\SendEmailDto;
  */
 class DefinitiveRegistrationConfirmationEmailDtoFactory
 {
-    private const DefinitiveRegisterUrl = 'http://localhost:8080/definitiveRegister';
+    private const DefinitiveRegisterUrl = 'http://localhost:8080/definitive_register';
         
     public static function create(
         UserEmail $toAddress,

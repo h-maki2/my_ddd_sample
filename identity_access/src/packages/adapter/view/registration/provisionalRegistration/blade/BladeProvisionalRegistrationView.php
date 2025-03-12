@@ -30,7 +30,7 @@ class BladeProvisionalRegistrationView
 
     private function faildResponse()
     {
-        return redirect('/provisionalRegister')
+        return redirect('/provisional_register')
                 ->withErrors($this->viewModel->validationErrorList)
                 ->withInput();
     }

@@ -49,7 +49,7 @@ class DefinitiveRegistrationTest extends TestCase
 
         // when
         // 本登録済み更新を行う
-        $response = $this->post('/definitiveRegister', [
+        $response = $this->post('/definitive_register', [
             'oneTimeToken' => $definitiveRegistrationConfirmation->oneTimeToken()->tokenValue()->value,
             'oneTimePassword' => $definitiveRegistrationConfirmation->oneTimePassword()->value
         ]);
@@ -84,7 +84,7 @@ class DefinitiveRegistrationTest extends TestCase
         // 本登録済み更新を行う
         $invalidOneTimeTokenValue = str_repeat('b', 26);
         $invalidOneTimePassword = '654321';
-        $response = $this->post('/definitiveRegister', [
+        $response = $this->post('/definitive_register', [
             'oneTimeToken' => $invalidOneTimeTokenValue,
             'oneTimePassword' => $invalidOneTimePassword
         ]);

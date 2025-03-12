@@ -4,11 +4,14 @@ namespace App\Providers;
 
 use App\Models\AuthenticationInformation;
 use App\Services\ApiVersionResolver;
+use dddCommonLib\domain\model\common\IMessagingLogger;
+use dddCommonLib\domain\model\eventStore\IEventStore;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Passport\Passport;
 use packages\adapter\email\LaravelEmailSender;
+use packages\adapter\messaging\kafka\LaravelMessagingLogger;
 use packages\adapter\oauth\authToken\LaravelPassportAccessTokenDeactivationService;
 use packages\adapter\oauth\authToken\LaravelPassportRefreshokenDeactivationService;
 use packages\adapter\oauth\authToken\LaravelPassportRefreshTokenDeactivationService;
@@ -62,6 +65,8 @@ class AppServiceProvider extends ServiceProvider
        $this->app->bind(IAuthenticationAccountRepository::class, EloquentAuthenticationAccountRepository::class);
        $this->app->bind(IUserProfileRepository::class, EloquentUserProfileRepository::class);
 
+       $this->app->bind(IEventStore::class, );
+
        // Laravel Passport
        $this->app->bind(IClientFetcher::class, LaravelPassportClientFetcher::class);
        $this->app->bind(IAccessTokenDeactivationService::class, LaravelPassportAccessTokenDeactivationService::class);
@@ -85,6 +90,8 @@ class AppServiceProvider extends ServiceProvider
        $this->app->bind(AuthenticationService::class, LaravelAuthenticationService::class);
 
        $this->app->bind(IPasswordManager::class, Argon2HashPasswordManager::class);
+
+       $this->app->bind(IMessagingLogger::class, LaravelMessagingLogger::class);
     }
 
     /**
