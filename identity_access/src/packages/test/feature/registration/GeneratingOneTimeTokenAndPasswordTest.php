@@ -28,7 +28,7 @@ class GeneratingOneTimeTokenAndPasswordTest extends TestCase
 
         $this->kafkaProducer = new KafkaProducer(
             config('app.kafkaHostName'),
-            config('app.topickName')
+            config('app.topicName')
         );
     }
 

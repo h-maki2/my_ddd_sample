@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use dddCommonLib\domain\model\common\IMessagingLogger;
 use dddCommonLib\infrastructure\messaging\kafka\MessageKafkaConsumer;
 use Illuminate\Console\Command;
 use packages\adapter\messaging\kafka\LaravelMessagingLogger;
@@ -32,17 +33,20 @@ class GeneratingOneTimeTokenAndPasswordListenExecuter extends Command
     private TransactionManage $transactionManage;
     private IDefinitiveRegistrationConfirmationRepository $definitiveRegistrationConfirmationRepository;
     private IEmailSender $emailSender;
+    private IMessagingLogger $messagingLogger;
 
     public function __construct(
         TransactionManage $transactionManage,
         IDefinitiveRegistrationConfirmationRepository $definitiveRegistrationConfirmationRepository,
-        IEmailSender $emailSender
+        IEmailSender $emailSender,
+        IMessagingLogger $messagingLogger
     )
     {
         parent::__construct();
         $this->transactionManage = $transactionManage;
         $this->definitiveRegistrationConfirmationRepository = $definitiveRegistrationConfirmationRepository;
         $this->emailSender = $emailSender;
+        $this->messagingLogger = $messagingLogger;
     }
 
 
@@ -60,12 +64,12 @@ class GeneratingOneTimeTokenAndPasswordListenExecuter extends Command
         $consumer = new MessageKafkaConsumer(
             config('app.consumerGroupId'),
             config('app.kafkaHostName'),
-            [config('app.topickName')],
+            [config('app.topicName')],
         );
 
         $listener = new GeneratingOneTimeTokenAndPasswordListener(
             $consumer,
-            new LaravelMessagingLogger(),
+            $this->messagingLogger,
             $appService
         );
         $listener->handle();
