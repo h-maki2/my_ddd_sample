@@ -4,6 +4,8 @@ namespace dddCommonLib\domain\model\eventStore;
 
 interface IEventStore
 {
+    public function storedEventFromId(string $aStoredEventId): ?StoredEvent;
+
     /**
      * @return StoredEvent[]
      */
