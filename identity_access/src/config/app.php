@@ -128,5 +128,6 @@ return [
     'kafkaHostName' => env('KAFKA_HOST_NAME', 'kafka:9092'),
     'topickName' => env('TOPIC_NAME', 'identity_access'),
     'consumerGroupId' => env('CONSUMER_GROUP_ID', 'identity_access_group'),
-    'cdcSubscribedDbTable' => env('CDC_SUBSCRIBED_DB_TABLE', 'tbl_stored_event'),
+    'cdcTopicName' => env('CDC_TOPIC_NAME', 'tbl_stored_event'),
+    'cdcTargetTable' => env('CDC_TARGET_TABLE', 'identity_access'),
 ];
