@@ -39,7 +39,7 @@ services:
       - app-network
   
   kafka-connect:
-    image: debezium/connect:latest
+    image: debezium/connect:3.0.0.Final
     container_name: kafka-connect
     restart: always
     depends_on:
