@@ -5,13 +5,24 @@ namespace packages\adapter\persistence\eloquent;
 use dddCommonLib\domain\model\eventStore\IEventStore;
 use dddCommonLib\domain\model\eventStore\StoredEvent;
 use App\Models\StoredEvent as StoredEventModel;
+use Illuminate\Database\Eloquent\Collection;
 
 class EloquentEventStore implements IEventStore
 {
+    public function storedEventFromId(int $aStoredEventId): ?StoredEvent
+    {
+        $result = StoredEventModel::find($aStoredEventId);
+        if ($result === null) {
+            return null;
+        }
+
+        return $this->toStoredEvent($result);
+    }
+
     /**
      * @return StoredEvent[]
      */
-    public function allStoredEventsSince(string $aStoredEventId): array
+    public function allStoredEventsSince(int $aStoredEventId): array
     {
         $results = StoredEventModel::where('event_id', '>', $aStoredEventId)->get();
         return $this->toStoredEventList($results);
@@ -29,7 +40,7 @@ class EloquentEventStore implements IEventStore
     /**
      * @return StoredEvent[]
      */
-    private function toStoredEventList(array $results): array
+    private function toStoredEventList(Collection $results): array
     {
         $storedEvents = [];
         foreach ($results as $result) {
