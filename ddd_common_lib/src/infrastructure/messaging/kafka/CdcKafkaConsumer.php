@@ -8,7 +8,7 @@ class CdcKafkaConsumer extends AKafkaConsumer
 {
     public function __construct(
         string $hostName, 
-        array $subscribedDbTable,
+        array $topicNameList,
         KafkaEnableAuthCommit $enableAuthCommit = KafkaEnableAuthCommit::Enable,
     )
     {
@@ -19,7 +19,7 @@ class CdcKafkaConsumer extends AKafkaConsumer
         parent::__construct(
             new RdKafka\KafkaConsumer($conf)
         );
-        $this->consumer->subscribe($subscribedDbTable);
+        $this->consumer->subscribe($topicNameList);
     }
 
     public function consume(): RdKafka\Message
