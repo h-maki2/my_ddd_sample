@@ -130,4 +130,5 @@ return [
     'consumerGroupId' => env('CONSUMER_GROUP_ID', 'identity_access_group'),
     'cdcTopicName' => env('CDC_TOPIC_NAME', 'tbl_stored_event'),
     'cdcTargetTable' => env('CDC_TARGET_TABLE', 'identity_access'),
+    'cdcConsumerGroupId' => env('CDC_CONSUMER_GROUP_ID', 'identity_access_cdc_group'),
 ];

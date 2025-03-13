@@ -19,6 +19,7 @@ use packages\adapter\oauth\client\LaravelPassportClientFetcher;
 use packages\adapter\oauth\scope\LaravelPassportScopeAuthorizationChecker;
 use packages\adapter\persistence\eloquent\EloquentDefinitiveRegistrationConfirmationRepository;
 use packages\adapter\persistence\eloquent\EloquentAuthenticationAccountRepository;
+use packages\adapter\persistence\eloquent\EloquentEventStore;
 use packages\adapter\persistence\eloquent\EloquentUserProfileRepository;
 use packages\adapter\service\laravel\LaravelApiAuthenticationService;
 use packages\adapter\service\laravel\LaravelAuthenticationService;
@@ -65,7 +66,7 @@ class AppServiceProvider extends ServiceProvider
        $this->app->bind(IAuthenticationAccountRepository::class, EloquentAuthenticationAccountRepository::class);
        $this->app->bind(IUserProfileRepository::class, EloquentUserProfileRepository::class);
 
-       $this->app->bind(IEventStore::class, );
+       $this->app->bind(IEventStore::class, EloquentEventStore::class);
 
        // Laravel Passport
        $this->app->bind(IClientFetcher::class, LaravelPassportClientFetcher::class);

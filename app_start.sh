@@ -57,10 +57,12 @@ curl -X POST http://localhost:8083/connectors -H "Content-Type: application/json
     "database.server.id": "1",
     "database.server.name": "mysql_server",
     "database.include.list": "laravel_db",
-    "table.include.list": "laravel_db.tbl_stored_event", 
+    "table.include.list": "laravel_db.tbl_stored_event",
     "database.history.kafka.bootstrap.servers": "kafka:9092",
     "database.history.kafka.topic": "dbhistory.identity_access",
     "include.schema.changes": "true",
+    "schema.history.internal.kafka.bootstrap.servers": "kafka:9092",
+    "schema.history.internal.kafka.topic": "schema-changes.identity_access",
     "topic.prefix": "mysql_identity_access"
   }
 }'

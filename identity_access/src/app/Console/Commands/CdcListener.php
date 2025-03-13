@@ -46,7 +46,8 @@ class CdcListener extends Command
 
         $consumer = new CdcKafkaConsumer(
             config('app.kafkaHostName'),
-            [config('app.cdcTopicName')]
+            [config('app.cdcTopicName')],
+            config('app.cdcConsumerGroupId')
         );
 
         $cdcBrokerListener = new CdcBrokerListener(

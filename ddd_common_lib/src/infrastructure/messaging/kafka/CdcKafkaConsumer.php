@@ -9,11 +9,13 @@ class CdcKafkaConsumer extends AKafkaConsumer
     public function __construct(
         string $hostName, 
         array $topicNameList,
+        string $groupId,
         KafkaEnableAuthCommit $enableAuthCommit = KafkaEnableAuthCommit::Enable,
     )
     {
         $conf = new RdKafka\Conf();
         $conf->set('metadata.broker.list', $hostName);
+        $conf->set('group.id', $groupId);
         $conf->set('enable.auto.commit', $enableAuthCommit->value);
 
         parent::__construct(
