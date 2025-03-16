@@ -142,6 +142,18 @@ services:
       - .:/var/www/html
     networks:
       - app-network
+  
+  notification:
+    build:
+      context: ./notification
+      dockerfile: Dockerfile
+    container_name: notification
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "8082:80"
+    networks:
+      - app-network
 
 networks:
   app-network:
