@@ -32,10 +32,18 @@ class CdcBrokerListener extends BrokerListener
             }
 
             $cdcData = json_decode($message->payload, true);
-            $notification = $this->toNotification($cdcData);
+            print_r($cdcData);
+
+            if (!isset($cdcData['payload'])) {
+                $this->consumer->commit($message);
+                continue;
+            }
+
+            $notification = $this->toNotification($cdcData['payload']);
 
             try {
-                $this->producer->send($notification);   
+                $this->producer->send($notification);
+                $this->consumer->commit($message);
             } catch (Exception $ex) {
                 $this->logger->error($ex->getMessage());
             }
@@ -45,7 +53,7 @@ class CdcBrokerListener extends BrokerListener
     private function toNotification(array $cdcData): Notification
     {
         return Notification::reconstruct(
-            $cdcData['after']['event_type'],
+            $cdcData['after']['type_name'],
             $cdcData['after']['occurred_on'],
             $cdcData['after']['event_body'],
             $cdcData['after']['id'],

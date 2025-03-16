@@ -11,7 +11,7 @@ class MessageKafkaConsumer extends AKafkaConsumer
         string $groupId,
         string $hostName,
         array $topicNameList,
-        KafkaEnableAuthCommit $enableAuthCommit = KafkaEnableAuthCommit::Enable,
+        KafkaEnableAuthCommit $enableAuthCommit = KafkaEnableAuthCommit::Disable,
         KafkaAutoOffsetReset $autoOffsetReset = KafkaAutoOffsetReset::EARLIEST
     )
     {

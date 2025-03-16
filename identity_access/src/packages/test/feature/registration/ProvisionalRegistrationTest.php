@@ -29,7 +29,7 @@ class ProvisionalRegistrationTest extends TestCase
         $this->pidOfConsumer = exec('php artisan app:generating-oneTimeToken-and-password-consumer > output_consumer.txt 2>&1 &');
         $this->pidOfCdc = exec('php artisan app:cdc-listener > output_cdc.txt 2>&1 &');
 
-        sleep(1);
+        sleep(10);
     }
 
     protected function tearDown(): void

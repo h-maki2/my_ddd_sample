@@ -10,7 +10,7 @@ class CdcKafkaConsumer extends AKafkaConsumer
         string $hostName, 
         array $topicNameList,
         string $groupId,
-        KafkaEnableAuthCommit $enableAuthCommit = KafkaEnableAuthCommit::Enable,
+        KafkaEnableAuthCommit $enableAuthCommit = KafkaEnableAuthCommit::Disable,
     )
     {
         $conf = new RdKafka\Conf();
