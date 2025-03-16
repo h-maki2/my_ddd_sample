@@ -8,6 +8,8 @@ use ReflectionClass;
 
 class JsonSerializer
 {
+    private const JSON_DECODE_DEPTH = 60000;
+
     public static function serialize(object $serializeObject): string
     {
         $targetList = [];
@@ -26,7 +28,7 @@ class JsonSerializer
 
     public static function deserialize(string $eventBody, string $eventType): object
     {
-        $eventDataArray = json_decode($eventBody, true, 60000, JSON_THROW_ON_ERROR);
+        $eventDataArray = json_decode($eventBody, true, self::JSON_DECODE_DEPTH, JSON_THROW_ON_ERROR);
         $reflection = new ReflectionClass($eventType);
         $instance = $reflection->newInstanceWithoutConstructor();
 
@@ -42,6 +44,6 @@ class JsonSerializer
 
     public static function deserializeToArray(string $jsonString): array
     {
-        return json_decode($jsonString, true, 512, JSON_THROW_ON_ERROR);
+        return json_decode($jsonString, true, self::JSON_DECODE_DEPTH, JSON_THROW_ON_ERROR);
     }
 }

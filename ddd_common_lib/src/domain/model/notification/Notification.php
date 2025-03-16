@@ -49,13 +49,13 @@ class Notification
         string $occurredOn
     ): self
     {
-        $domainEvent = JsonSerializer::deserialize($eventBody, DomainEvent::class);
+        $domainEvent = JsonSerializer::deserializeToArray($eventBody);
         return new self(
             $eventBody,
             $notificationId,
             $notificationType,
             $occurredOn,
-            $domainEvent->eventVersion()
+            $domainEvent['eventVersion']
         );
     }
 

@@ -40,6 +40,10 @@ class CdcBrokerListener extends BrokerListener
             }
 
             $notification = $this->toNotification($cdcData['payload']);
+            if ($notification === null) {
+                $this->consumer->commit($message);
+                continue;
+            }
 
             try {
                 $this->producer->send($notification);
@@ -50,13 +54,17 @@ class CdcBrokerListener extends BrokerListener
         }
     }
 
-    private function toNotification(array $cdcData): Notification
+    private function toNotification(array $cdcData): ?Notification
     {
+        if ($cdcData['after'] === null) {
+            return null;
+        }
+
         return Notification::reconstruct(
-            $cdcData['after']['type_name'],
-            $cdcData['after']['occurred_on'],
             $cdcData['after']['event_body'],
             $cdcData['after']['event_id'],
+            $cdcData['after']['type_name'],
+            $cdcData['after']['occurred_on']
         );
     }
 }
