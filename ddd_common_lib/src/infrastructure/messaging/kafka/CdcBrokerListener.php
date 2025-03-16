@@ -56,7 +56,7 @@ class CdcBrokerListener extends BrokerListener
             $cdcData['after']['type_name'],
             $cdcData['after']['occurred_on'],
             $cdcData['after']['event_body'],
-            $cdcData['after']['id'],
+            $cdcData['after']['event_id'],
         );
     }
 }
