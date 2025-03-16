@@ -26,7 +26,7 @@ class JsonSerializer
 
     public static function deserialize(string $eventBody, string $eventType): object
     {
-        $eventDataArray = json_decode($eventBody, true, 512, JSON_THROW_ON_ERROR);
+        $eventDataArray = json_decode($eventBody, true, 60000, JSON_THROW_ON_ERROR);
         $reflection = new ReflectionClass($eventType);
         $instance = $reflection->newInstanceWithoutConstructor();
 
