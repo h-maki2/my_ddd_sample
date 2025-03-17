@@ -41,7 +41,7 @@ class CdcListener extends Command
     {
         $producer = new KafkaProducer(
             config('app.kafkaHostName'),
-            config('app.topicName')
+            config('app.sourceTopicName')
         );
 
         $consumer = new CdcKafkaConsumer(

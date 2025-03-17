@@ -58,24 +58,24 @@ services:
     networks:
       - app-network
   
-  # kafka-streams:
-  #   image: confluentinc/cp-kafka:latest
-  #   container_name: kafka-streams
-  #   depends_on:
-  #     - kafka
-  #   environment:
-  #     BOOTSTRAP_SERVERS: "kafka:9092"
-  #     APPLICATION_ID: "kafka-broadcast-app"
-  #     DEFAULT_KEY_SERDE: "org.apache.kafka.common.serialization.Serdes$StringSerde"
-  #     DEFAULT_VALUE_SERDE: "org.apache.kafka.common.serialization.Serdes$StringSerde"
-  #   command: >
-  #     bash -c "kafka-streams-application \
-  #       --application-id ${APPLICATION_ID} \
-  #       --bootstrap-servers ${BOOTSTRAP_SERVERS} \
-  #       --default-key-serde ${DEFAULT_KEY_SERDE} \
-  #       --default-value-serde ${DEFAULT_VALUE_SERDE} \
-  #       --source-topic source-topic \
-  #       --sink-topics topic1,topic2"
+  kafka-streams:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka-streams
+    depends_on:
+      - kafka
+    environment:
+      BOOTSTRAP_SERVERS: "kafka:9092"
+      IDENTITY_ACCESS_APPLICATION_ID: "identity-access-application"
+      DEFAULT_KEY_SERDE: "org.apache.kafka.common.serialization.Serdes$StringSerde"
+      DEFAULT_VALUE_SERDE: "org.apache.kafka.common.serialization.Serdes$StringSerde"
+    command: >
+      bash -c "kafka-streams-application \
+        --application-id ${IDENTITY_ACCESS_APPLICATION_ID} \
+        --bootstrap-servers ${BOOTSTRAP_SERVERS} \
+        --default-key-serde ${DEFAULT_KEY_SERDE} \
+        --default-value-serde ${DEFAULT_VALUE_SERDE} \
+        --source-topic identity_access_source_topic \
+        --sink-topics identity_access_topic,notification_topic"
 
   identity_access_mysql:
     image: mysql:8.0
