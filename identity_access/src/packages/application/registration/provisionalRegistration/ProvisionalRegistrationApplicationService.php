@@ -4,6 +4,7 @@ namespace packages\application\registration\provisionalRegistration;
 
 use dddCommonLib\domain\model\domainEvent\DomainEventPublisher;
 use dddCommonLib\domain\model\eventStore\IEventStore;
+use dddCommonLib\infrastructure\eventStore\StoredEventSubscriber;
 use Exception;
 use packages\application\common\exception\TransactionException;
 use packages\domain\model\authenticationAccount\AuthenticationAccount;

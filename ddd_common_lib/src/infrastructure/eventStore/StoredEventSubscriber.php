@@ -1,6 +1,6 @@
 <?php
 
-namespace packages\application\registration\provisionalRegistration;
+namespace dddCommonLib\infrastructure\eventStore;
 
 use dddCommonLib\domain\model\domainEvent\DomainEvent;
 use dddCommonLib\domain\model\domainEvent\DomainEventSubscriber;

@@ -125,4 +125,5 @@ return [
 
     'kafkaHostName' => env('KAFKA_HOST_NAME', 'kafka:9092'),
     'notification_topic_name' => env('NOTIFICATION_TOPIC_NAME'),
+    'consumerGroupId' => env('CONSUMER_GROUP_ID'),
 ];

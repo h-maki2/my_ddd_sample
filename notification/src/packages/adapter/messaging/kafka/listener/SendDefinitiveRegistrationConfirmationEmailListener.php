@@ -29,6 +29,7 @@ class SendDefinitiveRegistrationConfirmationEmailListener extends NotificationBr
     protected function filteredDispatch(Notification $notification): void
     {
         $notificationReader = new NotificationReader($notification);
+        print_r($notificationReader->eventStringValue('email'));
         $this->appService->handle(
             $notificationReader->eventStringValue('email'),
             $notificationReader->eventStringValue('oneTimeToken'),

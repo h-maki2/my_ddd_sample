@@ -5,6 +5,7 @@ namespace packages\application\registration\provisionalRegistration;
 use dddCommonLib\domain\model\domainEvent\DomainEventPublisher;
 use dddCommonLib\domain\model\eventStore\IEventStore;
 use dddCommonLib\domain\model\notification\Notification;
+use dddCommonLib\infrastructure\eventStore\StoredEventSubscriber;
 use packages\domain\model\authenticationAccount\AuthenticationAccountCreated;
 use packages\domain\model\authenticationAccount\IAuthenticationAccountRepository;
 use packages\domain\model\authenticationAccount\UnsubscribeStatus;

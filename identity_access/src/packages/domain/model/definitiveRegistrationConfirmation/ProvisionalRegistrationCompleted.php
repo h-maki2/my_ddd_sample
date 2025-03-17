@@ -27,6 +27,6 @@ class ProvisionalRegistrationCompleted extends DomainEvent
 
     public function eventType(): string
     {
-        return DomainEvent::class;
+        return self::class;
     }
 }

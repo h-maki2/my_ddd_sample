@@ -7,7 +7,6 @@ use dddCommonLib\domain\model\domainEvent\DomainEvent;
 class AuthenticationAccountCreated extends DomainEvent
 {
     readonly string $userId;
-    readonly string $email;
 
     public function __construct(UserId $userId)
     {
