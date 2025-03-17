@@ -136,7 +136,7 @@ class AuthenticationAccount
         $this->definitiveRegistrationCompletedStatus = DefinitiveRegistrationCompletedStatus::Completed;
 
         DomainEventPublisher::instance()->publish(
-            new DefinitiveRegistrationCompleted($this->id())
+            new DefinitiveRegistrationCompleted($this->id(), $this->email())
         );
     }
 

@@ -34,7 +34,6 @@ class GeneratingOneTimeTokenAndPasswordListenExecuter extends Command
 
     private TransactionManage $transactionManage;
     private IDefinitiveRegistrationConfirmationRepository $definitiveRegistrationConfirmationRepository;
-    private IEmailSender $emailSender;
     private IMessagingLogger $messagingLogger;
     private IAuthenticationAccountRepository $authenticationAccountRepository;
     private IEventStore $eventStore;
@@ -42,7 +41,6 @@ class GeneratingOneTimeTokenAndPasswordListenExecuter extends Command
     public function __construct(
         TransactionManage $transactionManage,
         IDefinitiveRegistrationConfirmationRepository $definitiveRegistrationConfirmationRepository,
-        IEmailSender $emailSender,
         IMessagingLogger $messagingLogger,
         IAuthenticationAccountRepository $authenticationAccountRepository,
         IEventStore $eventStore
@@ -51,7 +49,6 @@ class GeneratingOneTimeTokenAndPasswordListenExecuter extends Command
         parent::__construct();
         $this->transactionManage = $transactionManage;
         $this->definitiveRegistrationConfirmationRepository = $definitiveRegistrationConfirmationRepository;
-        $this->emailSender = $emailSender;
         $this->messagingLogger = $messagingLogger;
         $this->authenticationAccountRepository = $authenticationAccountRepository;
         $this->eventStore = $eventStore;
@@ -64,7 +61,6 @@ class GeneratingOneTimeTokenAndPasswordListenExecuter extends Command
     public function handle()
     {
         $appService = new GeneratingOneTimeTokenAndPasswordApplicationService(
-            $this->emailSender,
             $this->definitiveRegistrationConfirmationRepository,
             $this->transactionManage,
             $this->eventStore,

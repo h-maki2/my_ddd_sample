@@ -20,21 +20,18 @@ use packages\domain\service\registration\definitiveRegistration\OneTimeTokenExis
 
 class GeneratingOneTimeTokenAndPasswordApplicationService
 {
-    private IEmailSender $emailSender;
     private IDefinitiveRegistrationConfirmationRepository $definitiveRegistrationConfirmationRepository;
     private TransactionManage $transactionManage;
     private IEventStore $eventStore;
     private IAuthenticationAccountRepository $authenticationAccountRepository;
 
     public function __construct(
-        IEmailSender $emailSender,
         IDefinitiveRegistrationConfirmationRepository $definitiveRegistrationConfirmationRepository,
         TransactionManage $transactionManage,
         IEventStore $eventStore,
         IAuthenticationAccountRepository $authenticationAccountRepository
     )
     {
-        $this->emailSender = $emailSender;
         $this->definitiveRegistrationConfirmationRepository = $definitiveRegistrationConfirmationRepository;
         $this->transactionManage = $transactionManage;
         $this->eventStore = $eventStore;

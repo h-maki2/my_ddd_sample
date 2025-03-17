@@ -12,11 +12,16 @@ use packages\domain\model\authenticationAccount\UserId;
 class DefinitiveRegistrationCompleted extends DomainEvent
 {
     readonly string $userId;
+    readonly string $email;
 
-    public function __construct(UserId $userId)
+    public function __construct(
+        UserId $userId,
+        UserEmail $email
+    )
     {
         parent::__construct(1);
         $this->userId = $userId->value;
+        $this->email = $email->value;
     }
 
     public function eventType(): string
