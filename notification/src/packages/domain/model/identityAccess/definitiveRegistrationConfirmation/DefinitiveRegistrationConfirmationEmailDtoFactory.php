@@ -1,6 +1,6 @@
 <?php
 
-namespace packages\domain\model\email;
+namespace packages\domain\model\identityAccess\definitiveRegistrationConfirmation;
 
 use packages\domain\model\definitiveRegistrationConfirmation\OneTimePassword;
 use packages\domain\model\definitiveRegistrationConfirmation\OneTimeToken;

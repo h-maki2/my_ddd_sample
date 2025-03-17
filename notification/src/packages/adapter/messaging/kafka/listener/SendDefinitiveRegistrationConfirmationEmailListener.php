@@ -31,10 +31,10 @@ class SendDefinitiveRegistrationConfirmationEmailListener extends NotificationBr
         $notificationReader = new NotificationReader($notification);
         print_r($notificationReader->eventStringValue('email'));
         $this->appService->handle(
-            $notificationReader->eventStringValue('email'),
             $notificationReader->eventStringValue('oneTimeToken'),
             $notificationReader->eventStringValue('oneTimePassword'),
-            $notificationReader->eventStringValue('expirationHours')
+            $notificationReader->eventStringValue('expirationHours'),
+            $notificationReader->eventStringValue('email'),
         );
     }
 

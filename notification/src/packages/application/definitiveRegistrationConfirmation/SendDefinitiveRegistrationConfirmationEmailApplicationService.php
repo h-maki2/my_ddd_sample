@@ -2,8 +2,8 @@
 
 namespace packages\application\definitiveRegistrationConfirmation;
 
-use packages\domain\model\email\DefinitiveRegistrationConfirmationEmailDtoFactory;
 use packages\domain\model\email\IEmailSender;
+use packages\domain\model\identityAccess\definitiveRegistrationConfirmation\DefinitiveRegistrationConfirmationEmailDtoFactory;
 
 /**
  * 本登録確認メール送信アプリケーションサービス
