@@ -8,6 +8,7 @@ use DomainException;
 use InvalidArgumentException;
 use Laravel\Passport\Exceptions\InvalidAuthTokenException;
 use packages\domain\model\authenticationAccount\password\UserPassword;
+use packages\domain\model\definitiveRegistrationConfirmation\DefinitiveRegistrationCompleted;
 use packages\domain\model\definitiveRegistrationConfirmation\DefinitiveRegistrationConfirmation;
 use packages\domain\model\definitiveRegistrationConfirmation\OneTimePassword;
 use packages\domain\service\authenticationAccount\AuthenticationAccountService;
@@ -133,6 +134,10 @@ class AuthenticationAccount
         }
 
         $this->definitiveRegistrationCompletedStatus = DefinitiveRegistrationCompletedStatus::Completed;
+
+        DomainEventPublisher::instance()->publish(
+            new DefinitiveRegistrationCompleted($this->id())
+        );
     }
 
     public function updateUnsubscribed(DateTimeImmutable $currentDateTime): void
