@@ -22,6 +22,11 @@ class DeleteOnetTimeTokenAndPasswordApplicationService
     public function handle(string $userIdString): void
     {
         $userId = new UserId($userIdString);
+        $definitiveRegistrationConfirmation = $this->definitiveRegistrationConfirmationRepository->findById($userId);
+        if ($definitiveRegistrationConfirmation === null) {
+            return;
+        }
+    
         $this->definitiveRegistrationConfirmationRepository->delete($userId);
     }
 }

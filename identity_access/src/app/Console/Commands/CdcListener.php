@@ -24,21 +24,13 @@ class CdcListener extends Command
      */
     protected $description = 'CDCを実行する';
 
-    private IMessagingLogger $messagingLogger;
-
-    public function __construct(
-        IMessagingLogger $messagingLogger
-    )
-    {
-        parent::__construct();
-        $this->messagingLogger = $messagingLogger;
-    }
-
     /**
      * Execute the console command.
      */
     public function handle()
     {
+        $messagingLogger = app(IMessagingLogger::class);
+
         $consumer = new CdcKafkaConsumer(
             config('app.kafkaHostName'),
             [config('app.cdcTopicName')],
@@ -48,7 +40,7 @@ class CdcListener extends Command
         $cdcBrokerListener = new CdcBrokerListener(
             $consumer,
             $this->targetProducerList(),
-            $this->messagingLogger
+            $messagingLogger
         );
         $cdcBrokerListener->handle();
     }

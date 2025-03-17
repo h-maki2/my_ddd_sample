@@ -25,37 +25,27 @@ class SendDefinitiveRegistrationConfirmationEmailListenerExecuter extends Comman
      */
     protected $description = '仮登録完了メールを送信するリスナーを実行する';
 
-    private IEmailSender $emailSender;
-    private IMessagingLogger $logger;
-
-    public function __construct(
-        IEmailSender $emailSender,
-        IMessagingLogger $logger
-    )
-    {
-        parent::__construct();
-        $this->emailSender = $emailSender;
-        $this->logger = $logger;
-    }
-
     /**
      * Execute the console command.
      */
     public function handle()
     {
+        $emailSender = app(IEmailSender::class);
+        $logger = app(IMessagingLogger::class);
+
         $consumer = new MessageKafkaConsumer(
-            config('app.consumerGroupId'),
+            'scscnsnnsnnenne',
             config('app.kafkaHostName'),
             [config('app.notification_topic_name')]
         );
 
         $appService = new SendDefinitiveRegistrationConfirmationEmailApplicationService(
-            $this->emailSender
+            $emailSender
         );
 
         $listener = new SendDefinitiveRegistrationConfirmationEmailListener(
             $consumer,
-            $this->logger,
+            $logger,
             $appService
         );
         $listener->handle();

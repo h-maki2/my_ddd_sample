@@ -25,37 +25,27 @@ class DeleteOnetTimeTokenAndPasswordListenerExecuter extends Command
      */
     protected $description = 'ワンタイムトークンとワンタイムパスワードを削除するリスナーを実行する';
 
-    private IDefinitiveRegistrationConfirmationRepository $definitiveRegistrationConfirmationRepository;
-    private IMessagingLogger $messagingLogger;
-
-    public function __construct(
-        IDefinitiveRegistrationConfirmationRepository $definitiveRegistrationConfirmationRepository,
-        IMessagingLogger $messagingLogger
-    )
-    {
-        parent::__construct();
-        $this->definitiveRegistrationConfirmationRepository = $definitiveRegistrationConfirmationRepository;
-        $this->messagingLogger = $messagingLogger;
-    }
-
     /**
      * Execute the console command.
      */
     public function handle(): void
     {
+        $definitiveRegistrationConfirmationRepository = app(IDefinitiveRegistrationConfirmationRepository::class);
+        $messagingLogger = app(IMessagingLogger::class);
+
         $appService = new DeleteOnetTimeTokenAndPasswordApplicationService(
-            $this->definitiveRegistrationConfirmationRepository
+            $definitiveRegistrationConfirmationRepository
         );
 
         $consumer = new MessageKafkaConsumer(
-            config('app.consumerGroupId'),
+            'delete_one_time_consumer_group',
             config('app.kafkaHostName'),
             [config('app.identity_access_topic_name')],
         );
 
         $listener = new DeleteOnetTimeTokenAndPasswordListener(
             $consumer,
-            $this->messagingLogger,
+            $messagingLogger,
             $appService
         );
         $listener->handle();

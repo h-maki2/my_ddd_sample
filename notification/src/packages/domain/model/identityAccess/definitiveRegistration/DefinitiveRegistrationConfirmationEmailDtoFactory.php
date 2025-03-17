@@ -32,7 +32,7 @@ class DefinitiveRegistrationConfirmationEmailDtoFactory
             $toEmailAddress,
             'システムテスト',
             '本登録確認メール',
-            'email.definitiveRegistrationConfirmation.definitiveRegistrationConfirmationMail',
+            'email.definitiveRegistration.definitiveRegistrationConfirmationMail',
             $templateValiables
         );
     }
