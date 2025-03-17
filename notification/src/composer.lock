@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "626b9e7ddd47fb7eff9aaa53cce0c9ad",
+    "content-hash": "d50001675049cdf57cdd0ff064cc949c",
     "packages": [
         {
             "name": "brick/math",
@@ -2108,6 +2108,28 @@
                 }
             ],
             "time": "2024-12-05T17:15:07+00:00"
+        },
+        {
+            "name": "myvendor/ddd_common_lib",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "../../ddd_common_lib",
+                "reference": "d4bac0ccf42b4d9634020fa5b9f52281d4f50170"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^11.0.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "dddCommonLib\\": "src/"
+                }
+            },
+            "description": "common library for ddd",
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "nesbot/carbon",
