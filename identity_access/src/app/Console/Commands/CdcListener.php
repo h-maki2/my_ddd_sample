@@ -39,11 +39,6 @@ class CdcListener extends Command
      */
     public function handle()
     {
-        $producer = new KafkaProducer(
-            config('app.kafkaHostName'),
-            config('app.sourceTopicName')
-        );
-
         $consumer = new CdcKafkaConsumer(
             config('app.kafkaHostName'),
             [config('app.cdcTopicName')],
@@ -52,9 +47,26 @@ class CdcListener extends Command
 
         $cdcBrokerListener = new CdcBrokerListener(
             $consumer,
-            $producer,
+            $this->targetProducerList(),
             $this->messagingLogger
         );
         $cdcBrokerListener->handle();
+    }
+
+    /**
+     * @return KafkaProducer[]
+     */
+    private function targetProducerList(): array
+    {
+        return [
+            new KafkaProducer(
+                config('app.kafkaHostName'),
+                config('app.identity_access_topic_name')
+            ),
+            new KafkaProducer(
+                config('app.kafkaHostName'),
+                config('app.notification_topic_name')
+            ),
+        ];
     }
 }

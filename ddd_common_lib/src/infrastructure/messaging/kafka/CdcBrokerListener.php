@@ -9,17 +9,20 @@ use Exception;
 class CdcBrokerListener extends BrokerListener
 {
     private AKafkaConsumer $consumer;
-    private KafkaProducer $producer;
+    private array $targetProducerList;
 
+    /**
+     * @param KafkaProducer[] $targetProducerList
+     */
     public function __construct(
         AKafkaConsumer $consumer,
-        KafkaProducer $producer,
+        array $targetProducerList,
         IMessagingLogger $logger
     )
     {
         parent::__construct($logger);
         $this->consumer = $consumer;
-        $this->producer = $producer;
+        $this->targetProducerList = $targetProducerList;
     }
 
     public function handle(): void
@@ -46,7 +49,9 @@ class CdcBrokerListener extends BrokerListener
             }
 
             try {
-                $this->producer->send($notification);
+                foreach ($this->targetProducerList as $producer) {
+                    $producer->send($notification);
+                }
                 $this->consumer->commit($message);
             } catch (Exception $ex) {
                 $this->logger->error($ex->getMessage());
