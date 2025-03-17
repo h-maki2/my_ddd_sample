@@ -1,30 +1,29 @@
 <?php
 
-namespace App\Console\Commands\definitiveRegistration;
+namespace App\Console\Commands\identityAccess\definitiveRegistration;
 
 use dddCommonLib\domain\model\common\IMessagingLogger;
 use dddCommonLib\infrastructure\messaging\kafka\MessageKafkaConsumer;
 use Illuminate\Console\Command;
-use packages\adapter\messaging\kafka\listener\definitiveRegistration\GeneratingOneTimeTokenAndPasswordListener;
-use packages\adapter\messaging\kafka\listener\definitiveRegistration\SendDefinitiveRegistrationConfirmationEmailListener;
-use packages\application\definitiveRegistration\SendDefinitiveRegistrationConfirmationEmailApplicationService;
+use packages\adapter\messaging\kafka\listener\identityAccess\definitiveRegistration\SendDefinitiveRegistrationCompleteEmailListener;
+use packages\application\identityAccess\definitiveRegistration\SendDefinitiveRegistrationCompleteEmailApplicationService;
 use packages\domain\model\email\IEmailSender;
 
-class SendDefinitiveRegistrationConfirmationEmailListenerExecuter extends Command
+class SendDefinitiveRegistrationCompleteEmailListenerExecuter extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'app:send-definitive-registration-confirmation-email-listener';
+    protected $signature = 'app:send-definitive-registration-complete-email-listener-executer';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = '仮登録完了メールを送信するリスナーを実行する';
+    protected $description = '本登録完了メールを送信するリスナーを実行する';
 
     private IEmailSender $emailSender;
     private IMessagingLogger $logger;
@@ -42,7 +41,7 @@ class SendDefinitiveRegistrationConfirmationEmailListenerExecuter extends Comman
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $consumer = new MessageKafkaConsumer(
             config('app.consumerGroupId'),
@@ -50,11 +49,11 @@ class SendDefinitiveRegistrationConfirmationEmailListenerExecuter extends Comman
             [config('app.notification_topic_name')]
         );
 
-        $appService = new SendDefinitiveRegistrationConfirmationEmailApplicationService(
+        $appService = new SendDefinitiveRegistrationCompleteEmailApplicationService(
             $this->emailSender
         );
 
-        $listener = new SendDefinitiveRegistrationConfirmationEmailListener(
+        $listener = new SendDefinitiveRegistrationCompleteEmailListener(
             $consumer,
             $this->logger,
             $appService

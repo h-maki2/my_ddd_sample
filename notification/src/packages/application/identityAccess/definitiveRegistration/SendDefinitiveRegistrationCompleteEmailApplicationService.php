@@ -1,6 +1,6 @@
 <?php
 
-namespace packages\application\definitiveRegistration;
+namespace packages\application\identityAccess\definitiveRegistration;
 
 use packages\domain\model\email\IEmailSender;
 use packages\domain\model\identityAccess\definitiveRegistration\DefinitiveRegistrationCompleteEmailDtoFactory;
