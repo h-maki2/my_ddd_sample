@@ -16,19 +16,20 @@ class DefinitiveRegistrationConfirmationEmailDtoFactory
     private const DefinitiveRegisterUrl = 'http://localhost:8080/definitive_register';
         
     public static function create(
-        UserEmail $toAddress,
-        OneTimeToken $oneTimeToken,
-        OneTimePassword $oneTimePassword
+        string $toAddress,
+        string $oneTimeTokenValue,
+        string $oneTimePassword,
+        string $expirationHours
     ): SendEmailDto
     {
         $templateValiables = [
-            'definitiveRegisterUrl' => self::DefinitiveRegisterUrl . '?token=' . $oneTimeToken->tokenValue()->value,
-            'oneTimePassword' => $oneTimePassword->value,
-            'expirationHours' => OneTimeTokenExpiration::expirationHours() . '時間後'
+            'definitiveRegisterUrl' => self::DefinitiveRegisterUrl . '?token=' . $oneTimeTokenValue,
+            'oneTimePassword' => $oneTimePassword,
+            'expirationHours' => $expirationHours . '時間後'
         ];
         return new SendEmailDto(
             'test@example.com',
-            $toAddress->value,
+            $toAddress,
             'システムテスト',
             '本登録確認メール',
             'email.definitiveRegistrationConfirmation.definitiveRegistrationConfirmationMail',
