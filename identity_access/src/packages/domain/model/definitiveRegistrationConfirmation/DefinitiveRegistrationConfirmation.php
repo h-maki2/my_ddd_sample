@@ -3,7 +3,9 @@
 namespace packages\domain\model\definitiveRegistrationConfirmation;
 
 use DateTimeImmutable;
+use dddCommonLib\domain\model\domainEvent\DomainEventPublisher;
 use InvalidArgumentException;
+use packages\domain\model\authenticationAccount\UserEmail;
 use packages\domain\model\authenticationAccount\UserId;
 use packages\domain\service\registration\definitiveRegistration\OneTimeTokenExistsService;
 
@@ -26,18 +28,24 @@ class DefinitiveRegistrationConfirmation
 
     public static function create(
         UserId $userId, 
-        OneTimeTokenExistsService $oneTimeTokenExistsService
+        OneTimeTokenExistsService $oneTimeTokenExistsService,
+        UserEmail $email
     ): self
     {
         $oneTimeToken = OneTimeToken::create();
         if ($oneTimeTokenExistsService->isExists($oneTimeToken->tokenValue())) {
             throw new InvalidArgumentException('OneTimeToken is already exists.');
         }
+        $oneTimePassword = OneTimePassword::create();
+
+        DomainEventPublisher::instance()->publish(
+            new ProvisionalRegistrationCompleted($oneTimeToken, $oneTimePassword, $email)
+        );
 
         return new self(
             $userId,
             $oneTimeToken,
-            OneTimePassword::create()
+            $oneTimePassword
         );
     }
 

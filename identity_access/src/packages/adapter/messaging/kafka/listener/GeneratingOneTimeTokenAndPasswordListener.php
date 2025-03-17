@@ -29,8 +29,7 @@ class GeneratingOneTimeTokenAndPasswordListener extends NotificationBrokerListen
     {
         $notificationReader = new NotificationReader($notification);
         $this->appService->handle(
-            $notificationReader->eventStringValue('userId'),
-            $notificationReader->eventStringValue('email')
+            $notificationReader->eventStringValue('userId')
         );
     }
 

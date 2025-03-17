@@ -3,11 +3,13 @@
 namespace App\Console\Commands;
 
 use dddCommonLib\domain\model\common\IMessagingLogger;
+use dddCommonLib\domain\model\eventStore\IEventStore;
 use dddCommonLib\infrastructure\messaging\kafka\MessageKafkaConsumer;
 use Illuminate\Console\Command;
 use packages\adapter\messaging\kafka\LaravelMessagingLogger;
 use packages\adapter\messaging\kafka\listener\GeneratingOneTimeTokenAndPasswordListener;
 use packages\application\registration\provisionalRegistration\GeneratingOneTimeTokenAndPasswordApplicationService;
+use packages\domain\model\authenticationAccount\IAuthenticationAccountRepository;
 use packages\domain\model\common\transactionManage\TransactionManage;
 use packages\domain\model\definitiveRegistrationConfirmation\IDefinitiveRegistrationConfirmationRepository;
 use packages\domain\model\email\IEmailSender;
@@ -34,12 +36,16 @@ class GeneratingOneTimeTokenAndPasswordListenExecuter extends Command
     private IDefinitiveRegistrationConfirmationRepository $definitiveRegistrationConfirmationRepository;
     private IEmailSender $emailSender;
     private IMessagingLogger $messagingLogger;
+    private IAuthenticationAccountRepository $authenticationAccountRepository;
+    private IEventStore $eventStore;
 
     public function __construct(
         TransactionManage $transactionManage,
         IDefinitiveRegistrationConfirmationRepository $definitiveRegistrationConfirmationRepository,
         IEmailSender $emailSender,
-        IMessagingLogger $messagingLogger
+        IMessagingLogger $messagingLogger,
+        IAuthenticationAccountRepository $authenticationAccountRepository,
+        IEventStore $eventStore
     )
     {
         parent::__construct();
@@ -47,6 +53,8 @@ class GeneratingOneTimeTokenAndPasswordListenExecuter extends Command
         $this->definitiveRegistrationConfirmationRepository = $definitiveRegistrationConfirmationRepository;
         $this->emailSender = $emailSender;
         $this->messagingLogger = $messagingLogger;
+        $this->authenticationAccountRepository = $authenticationAccountRepository;
+        $this->eventStore = $eventStore;
     }
 
 
@@ -58,7 +66,9 @@ class GeneratingOneTimeTokenAndPasswordListenExecuter extends Command
         $appService = new GeneratingOneTimeTokenAndPasswordApplicationService(
             $this->emailSender,
             $this->definitiveRegistrationConfirmationRepository,
-            $this->transactionManage
+            $this->transactionManage,
+            $this->eventStore,
+            $this->authenticationAccountRepository
         );
 
         $consumer = new MessageKafkaConsumer(

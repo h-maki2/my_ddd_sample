@@ -54,7 +54,7 @@ class AuthenticationAccount
             throw new DomainException('すでに存在するメールアドレスです。');
         }
 
-        DomainEventPublisher::instance()->publish(new AuthenticationAccountCreated($userId, $userEmail));
+        DomainEventPublisher::instance()->publish(new AuthenticationAccountCreated($userId));
         
         return new self(
             $userId,

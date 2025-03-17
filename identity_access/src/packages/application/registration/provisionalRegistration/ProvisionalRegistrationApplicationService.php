@@ -62,7 +62,7 @@ class ProvisionalRegistrationApplicationService implements ProvisionalRegistrati
     ): ProvisionalRegistrationResult
     {
         DomainEventPublisher::instance()->reset();
-        DomainEventPublisher::instance()->subscribe(new ProvisionalRegistrationSubscriber($this->eventStore));
+        DomainEventPublisher::instance()->subscribe(new StoredEventSubscriber($this->eventStore));
 
         $validationHandler = new ValidationHandler();
         $validationHandler->addValidator(new UserEmailValidation($inputedEmail, $this->authenticationAccountRepository));
