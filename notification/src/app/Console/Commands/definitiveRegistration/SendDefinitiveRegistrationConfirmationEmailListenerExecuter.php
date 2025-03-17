@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\definitiveRegistration;
 
 use dddCommonLib\domain\model\common\IMessagingLogger;
 use dddCommonLib\infrastructure\messaging\kafka\MessageKafkaConsumer;
 use Illuminate\Console\Command;
-use packages\adapter\messaging\kafka\listener\GeneratingOneTimeTokenAndPasswordListener;
-use packages\adapter\messaging\kafka\listener\SendDefinitiveRegistrationConfirmationEmailListener;
-use packages\application\definitiveRegistrationConfirmation\SendDefinitiveRegistrationConfirmationEmailApplicationService;
+use packages\adapter\messaging\kafka\listener\definitiveRegistration\GeneratingOneTimeTokenAndPasswordListener;
+use packages\adapter\messaging\kafka\listener\definitiveRegistration\SendDefinitiveRegistrationConfirmationEmailListener;
+use packages\application\definitiveRegistration\SendDefinitiveRegistrationConfirmationEmailApplicationService;
 use packages\domain\model\email\IEmailSender;
 
 class SendDefinitiveRegistrationConfirmationEmailListenerExecuter extends Command

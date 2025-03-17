@@ -1,6 +1,6 @@
 <?php
 
-namespace packages\domain\model\identityAccess\definitiveRegistrationConfirmation;
+namespace packages\domain\model\identityAccess\definitiveRegistration;
 
 use packages\domain\model\definitiveRegistrationConfirmation\OneTimePassword;
 use packages\domain\model\definitiveRegistrationConfirmation\OneTimeToken;
@@ -16,7 +16,7 @@ class DefinitiveRegistrationConfirmationEmailDtoFactory
     private const DefinitiveRegisterUrl = 'http://localhost:8080/definitive_register';
         
     public static function create(
-        string $toAddress,
+        string $toEmailAddress,
         string $oneTimeTokenValue,
         string $oneTimePassword,
         string $expirationHours
@@ -29,7 +29,7 @@ class DefinitiveRegistrationConfirmationEmailDtoFactory
         ];
         return new SendEmailDto(
             'test@example.com',
-            $toAddress,
+            $toEmailAddress,
             'システムテスト',
             '本登録確認メール',
             'email.definitiveRegistrationConfirmation.definitiveRegistrationConfirmationMail',

@@ -1,13 +1,13 @@
 <?php
 
-namespace packages\adapter\messaging\kafka\listener;
+namespace packages\adapter\messaging\kafka\listener\definitiveRegistration;
 
 use dddCommonLib\domain\model\common\IMessagingLogger;
 use dddCommonLib\domain\model\notification\Notification;
 use dddCommonLib\domain\model\notification\NotificationReader;
 use dddCommonLib\infrastructure\messaging\kafka\AKafkaConsumer;
 use dddCommonLib\infrastructure\messaging\kafka\NotificationBrokerListener;
-use packages\application\definitiveRegistrationConfirmation\SendDefinitiveRegistrationConfirmationEmailApplicationService;
+use packages\application\definitiveRegistration\SendDefinitiveRegistrationConfirmationEmailApplicationService;
 use packages\application\registration\provisionalRegistration\GeneratingOneTimeTokenAndPasswordApplicationService;
 use packages\domain\model\authenticationAccount\AuthenticationAccountCreated;
 use packages\messaging\kafka\LaravelMessagingLogger;

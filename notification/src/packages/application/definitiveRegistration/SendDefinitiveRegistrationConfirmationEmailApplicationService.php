@@ -1,9 +1,9 @@
 <?php
 
-namespace packages\application\definitiveRegistrationConfirmation;
+namespace packages\application\definitiveRegistration;
 
 use packages\domain\model\email\IEmailSender;
-use packages\domain\model\identityAccess\definitiveRegistrationConfirmation\DefinitiveRegistrationConfirmationEmailDtoFactory;
+use packages\domain\model\identityAccess\definitiveRegistration\DefinitiveRegistrationConfirmationEmailDtoFactory;
 
 /**
  * 本登録確認メール送信アプリケーションサービス
