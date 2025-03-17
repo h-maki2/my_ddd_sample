@@ -74,7 +74,7 @@ class GeneratingOneTimeTokenAndPasswordListenExecuter extends Command
         $consumer = new MessageKafkaConsumer(
             config('app.consumerGroupId'),
             config('app.kafkaHostName'),
-            [config('app.topicName')],
+            [config('app.identity_access_topic_name')],
         );
 
         $listener = new GeneratingOneTimeTokenAndPasswordListener(

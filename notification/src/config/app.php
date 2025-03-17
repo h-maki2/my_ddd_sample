@@ -123,4 +123,6 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'kafkaHostName' => env('KAFKA_HOST_NAME', 'kafka:9092'),
+    'notification_topic_name' => env('NOTIFICATION_TOPIC_NAME'),
 ];
