@@ -59,8 +59,6 @@ class ChangePasswordApplicationService implements ChangePasswordApplicationInput
         $authAccount->changePassword($password, new DateTimeImmutable());
         $this->authenticationAccountRepository->save($authAccount);
 
-        // 後でメール送信する処理を追加する
-
         return ChangePasswordResult::createWhenSuccess();
     }
 }
