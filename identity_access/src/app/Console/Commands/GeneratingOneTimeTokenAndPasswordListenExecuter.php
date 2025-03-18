@@ -32,33 +32,48 @@ class GeneratingOneTimeTokenAndPasswordListenExecuter extends Command
      */
     protected $description = '本登録用のワンタイムトークンとパスワードを作成するコンシューマを実行する';
 
+    private IDefinitiveRegistrationConfirmationRepository $definitiveRegistrationConfirmationRepository;
+    private IMessagingLogger $messagingLogger;
+    private IAuthenticationAccountRepository $authenticationAccountRepository;
+    private IEventStore $eventStore;
+    private TransactionManage $transactionManage;
+
+    public function __construct(
+        IDefinitiveRegistrationConfirmationRepository $definitiveRegistrationConfirmationRepository,
+        IMessagingLogger $messagingLogger,
+        IAuthenticationAccountRepository $authenticationAccountRepository,
+        IEventStore $eventStore,
+        TransactionManage $transactionManage
+    ) {
+        parent::__construct();
+        $this->definitiveRegistrationConfirmationRepository = $definitiveRegistrationConfirmationRepository;
+        $this->messagingLogger = $messagingLogger;
+        $this->authenticationAccountRepository = $authenticationAccountRepository;
+        $this->eventStore = $eventStore;
+        $this->transactionManage = $transactionManage;
+    }
+
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        $transactionManage = app(TransactionManage::class);
-        $definitiveRegistrationConfirmationRepository = app(IDefinitiveRegistrationConfirmationRepository::class);;
-        $messagingLogger = app(IMessagingLogger::class);
-        $authenticationAccountRepository = app(IAuthenticationAccountRepository::class);
-        $eventStore = app(IEventStore::class);
-
         $appService = new GeneratingOneTimeTokenAndPasswordApplicationService(
-            $definitiveRegistrationConfirmationRepository,
-            $transactionManage,
-            $eventStore,
-            $authenticationAccountRepository
+            $this->definitiveRegistrationConfirmationRepository,
+            $this->transactionManage,
+            $this->eventStore,
+            $this->authenticationAccountRepository
         );
 
         $consumer = new MessageKafkaConsumer(
-            'generate_one_time_consumer_group',
+            config('app.generate_one_time_consumer_group_id'),
             config('app.kafkaHostName'),
             [config('app.identity_access_topic_name')],
         );
 
         $listener = new GeneratingOneTimeTokenAndPasswordListener(
             $consumer,
-            $messagingLogger,
+            $this->messagingLogger,
             $appService
         );
         $listener->handle();

@@ -133,4 +133,6 @@ return [
     'cdcConsumerGroupId' => env('CDC_CONSUMER_GROUP_ID', 'identity_access_cdc_group'),
     'identity_access_topic_name' => env('IDENTITY_ACESS_TOPIC_NAME'),
     'notification_topic_name' => env('NOTIFICATION_TOPIC_NAME'),
+    'delete_one_time_cousumer_group_id' => env('DELETE_ONE_TIME_CONSUMER_GROUP_ID', 'delete_one_time_consumer_group'),
+    'generate_one_time_consumer_group_id' => env('GENERATE_ONE_TIME_CONSUMER_GROUP_ID', 'generate_one_time_consumer_group'),
 ];
