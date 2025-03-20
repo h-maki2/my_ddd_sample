@@ -1,16 +1,34 @@
-@startuml taskManagement
+@startuml task_management
 
-entity task {
-    task_id: CHAR(26)
+entity project {
+    project_id
     --
-    group_id: CHAR(26)
-    assignee: CHAR(26)
-    name: VARCHAR(50)
-    status: TINYINT
-    progress_rate: TINYINT
-    deadline: TIMESTAMP
-    overview: TEXT
-    parent_task_id(FK): CHAR(26)
+    project_name
+    project_overview
+    project_status
+    progress_rate
 }
 
+entity project_member {
+    project_id(FK)
+    user_id
+    --
+    project_participation_status
+    role
+}
+
+entity ticket {
+    project_id(FK)
+    ticket_id
+    --
+    parent_ticket_id(FK)
+    ticket_assignment(FK)
+    ticket_name
+    ticket_overview
+    progress_rate
+    status
+}
+
+project ||--|{ project_member
+project ||--o{ ticket
 @enduml

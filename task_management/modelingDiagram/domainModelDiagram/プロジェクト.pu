@@ -34,21 +34,6 @@ package "プロジェクト集約(ProjectAggregation)" {
         finished(終了済み)
     }
 
-    note bottom of ProjectId
-        ULIDの形式
-    end note
-
-    note bottom of ProjectName
-        ・プロジェクト名は、100文字以内
-        ・ユーザーが管理しているプロジェクトの中で一意な名前を設定する
-        ・プロジェクトリーダーのみが変更できる
-    end note
-
-    note bottom of ProjectOverview
-        ・プロジェクトの概要は、500文字以内
-        ・プロジェクトリーダーのみが変更できる
-    end note
-
     class ProjectMember {
         - userId: UserId
         - projectParticipationStatus: ProjectParticipationStatus
@@ -65,6 +50,21 @@ package "プロジェクト集約(ProjectAggregation)" {
         member(メンバー)
     }
 
+    note bottom of ProjectId
+        ULIDの形式
+    end note
+
+    note bottom of ProjectName
+        ・プロジェクト名は、100文字以内
+        ・ユーザーが管理しているプロジェクトの中で一意な名前を設定する
+        ・プロジェクトリーダーのみが変更できる
+    end note
+
+    note bottom of ProjectOverview
+        ・プロジェクトの概要は、500文字以内
+        ・プロジェクトリーダーのみが変更できる
+    end note
+
     note bottom of ProjectMember
         ・プロジェクトリーダーのみがメンバーを招待できる
         ・プロジェクトリーダーは退会できない
@@ -74,6 +74,7 @@ package "プロジェクト集約(ProjectAggregation)" {
         ・メンバーがプロジェクトに参加すると、リーダーにメールが届く
         ・プロジェクトメンバーは退会できる
         ・メンバーが退会すると、リーダーにメールが届く
+        ・チケットの担当者に設定されているメンバーは退会不可
     end note
 
     note bottom of UserId
