@@ -40,7 +40,7 @@ class LoginTest extends TestCase
         $this->laravelPassportClientFetcher = new LaravelPassportClientFetcher();
     }
 
-    public function test_メールアドレスとパスワードが異なる場合に、ログインページにリダイレクトされる()
+    public function test_メールアドレスとパスワードが異なる場合に、404エラーがレスポンスされる()
     {
         // given
         // 認証アカウントを作成する
@@ -54,13 +54,14 @@ class LoginTest extends TestCase
         $存在しないパスワード = 'abcABC123_';
 
         // クライアントを作成する
+        $redirectUrl = config('app.url') . '/auth/callback';
         $clientData = ClientTestDataCreator::create(
-            redirectUrl: config('app.url') . '/auth/callback'
+            redirectUrl: $redirectUrl
         );
 
         // when
         $scopeString = Scope::ReadAccount->value . ' ' . Scope::EditAccount->value . ' ' . Scope::DeleteAccount->value;
-        $response = $this->post('/login', [
+        $response = $this->post('/api/login', [
             'email' => $存在しないメールアドレス,
             'password' => $存在しないパスワード,
             'client_id' => $clientData->id,
@@ -68,54 +69,74 @@ class LoginTest extends TestCase
             'response_type' => 'code',
             'state' => 'abcdefg',
             'scope' => $scopeString
+        ],[
+            'Accept' => 'application/vnd.example.v1+json',
         ]);
 
         // then
-        // ログインページにリダイレクトされることを確認する
-        $response->assertStatus(302);
+        $response->assertStatus(401);
+        $response->assertJson([
+            'success' => false,
+            'error' => [
+                'code' => 'Unauthorized',
+                'details' => [
+                    'accountLocked' => false
+                ]
+            ]
+        ]);
     }
 
-    public function test_正しいメールアドレスとパスワード場合に、認可コード取得画面にリダイレクトされる()
+    public function test_正しいメールアドレスとパスワードの場合に、認可コード取得URLを取得できる()
     {
         // 認証アカウントを作成する
         $this->authenticationAccountTestDataCreator->create(
-            email: new UserEmail('test@example.com'),
+            email: new UserEmail('invalid_address@example.com'),
             password: UserPassword::create('abcABC123!',  new Argon2HashPasswordManager()),
             definitiveRegistrationCompletedStatus: DefinitiveRegistrationCompletedStatus::Completed,
             loginRestriction: LoginRestriction::initialization()
         );
 
         // クライアントを作成する
-        $clientData = ClientTestDataCreator::create(
-            redirectUrl: config('app.url') . '/auth/callback'
+        $redirectUrl = config('app.url') . '/auth/callback';
+        $client = ClientTestDataCreator::create(
+            redirectUrl: $redirectUrl
         );
 
         // when
         // 正しいメールアドレスとパスワードを入力してログインする
-        $email = 'test@example.com';
+        $email = 'invalid_address@example.com';
         $password = 'abcABC123!';
+        $responseType = 'code';
+        $state = 'abcdefg';
         $scopeString = Scope::ReadAccount->value . ' ' . Scope::EditAccount->value . ' ' . Scope::DeleteAccount->value;
-        $response = $this->post('/login', [
+        $response = $this->post('/api/login', [
             'email' => $email,
             'password' => $password,
-            'client_id' => $clientData->id,
-            'redirect_url' => $clientData->redirect,
-            'response_type' => 'code',
-            'state' => 'abcdefg',
+            'client_id' => $client->id,
+            'redirect_url' => $client->redirect,
+            'response_type' => $responseType,
+            'state' => $state,
             'scope' => $scopeString
+        ],[
+            'Accept' => 'application/vnd.example.v1+json',
         ]);
 
         // then
-        // 認可コード取得画面にリダイレクトされることを確認する
-        $response->assertStatus(302);
-        // 認可コード取得画面のURLを取得する
-        $actualClient = $this->laravelPassportClientFetcher->fetchById(new ClientId($clientData->id));
-        $actualScopeList = ScopeList::createFromString($scopeString);
-        $response->assertRedirect($actualClient->urlForObtainingAuthorizationCode(
-            new RedirectUrl($clientData->redirect),
-            'code',
-            'abcdefg',
-            $actualScopeList
-        ));
+        $response->assertStatus(200);
+
+        $clientData = $this->laravelPassportClientFetcher->fetchById(new ClientId($client->id));
+        $expectedAuthorizationUrl = $clientData->urlForObtainingAuthorizationCode(
+            new RedirectUrl($client->redirect),
+            $responseType,
+            $state,
+            ScopeList::createFromString($scopeString)
+        );
+        $expectedData = [
+            'success' => true,
+            'data' => [
+                'authorizationUrl' => $expectedAuthorizationUrl
+            ]
+        ];
+        $response->assertJson($expectedData);
     }
 }

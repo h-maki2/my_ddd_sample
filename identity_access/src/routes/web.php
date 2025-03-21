@@ -16,8 +16,6 @@ Route::post('/definitive_register', [DefinitiveRegistrationController::class, 'd
 Route::get('/resend', [ResendDefinitiveRegistrationConfirmation::class, 'resendDefinitiveRegistrationConfirmationForm']);
 Route::post('/resend', [ResendDefinitiveRegistrationConfirmation::class, 'resendDefinitiveRegistrationConfirmation']);
 
-Route::post('/login', [LoginController::class, 'login']);
-
 Route::middleware(['auth:api'])->group(function () {
     // 認証が必要なAPIのルーティング
 });

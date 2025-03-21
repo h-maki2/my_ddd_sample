@@ -12,3 +12,11 @@ Route::middleware(['api.version', 'auth:api'])->group(function () {
         return $container->call([$controller, 'changePassword']);
     });
 });
+
+Route::middleware(['api.version'])->group(function () {
+    Route::post('/login', function (Request $request, ApiVersionResolver $resolver, Container $container) {
+        $version = $request->attributes->get('api_version');
+        $controller = $resolver->resolve($version, 'authentication\login\LoginController');
+        return $container->call([$controller, 'login']);
+    });
+});
