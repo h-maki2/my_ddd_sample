@@ -16,7 +16,6 @@ Route::post('/definitive_register', [DefinitiveRegistrationController::class, 'd
 Route::get('/resend', [ResendDefinitiveRegistrationConfirmation::class, 'resendDefinitiveRegistrationConfirmationForm']);
 Route::post('/resend', [ResendDefinitiveRegistrationConfirmation::class, 'resendDefinitiveRegistrationConfirmation']);
 
-Route::get('/login', [LoginController::class, 'displayLoginForm']);
 Route::post('/login', [LoginController::class, 'login']);
 
 Route::middleware(['auth:api'])->group(function () {
