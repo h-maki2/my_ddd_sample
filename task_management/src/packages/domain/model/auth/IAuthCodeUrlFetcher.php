@@ -3,10 +3,13 @@
 namespace packages\domain\model\auth;
 
 /**
- * 認可コードURL生成インターフェース
+ * 認可コードURL取得インターフェース
  */
-interface IAuthCodeUrlBuilder
+interface IAuthCodeUrlFetcher
 {
+    /**
+     * 認可コードURLを取得する
+     */
     public function authCodeUrlFrom(
         string $email,
         string $password
