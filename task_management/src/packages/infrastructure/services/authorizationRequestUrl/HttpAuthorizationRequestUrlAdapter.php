@@ -1,6 +1,6 @@
 <?php
 
-namespace packages\infrastructure\services\authCodeUrl;
+namespace packages\infrastructure\services\AuthorizationRequestUrlBuilder;
 
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
@@ -10,11 +10,11 @@ use packages\infrastructure\services\common\identityAccessApi\IdentityAccessApiA
 use packages\infrastructure\services\common\identityAccessApi\IdentityAccessApiFaildException;
 use packages\infrastructure\services\common\identityAccessApi\IdentityAccessApiResponse;
 
-class HttpAuthCodeUrlAdapter
+class HttpAuthorizationRequestUrlAdapter
 {
     private const URL_TEMPLATE = 'api/login';
 
-    public function fetchAuthCodeUrl(
+    public function authorizationRequestUrlFrom(
         string $email,
         string $password,
         string $oneTimeToken
