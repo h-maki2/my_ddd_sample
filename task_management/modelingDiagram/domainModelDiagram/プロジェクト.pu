@@ -16,10 +16,6 @@ package "プロジェクト集約(ProjectAggregation)" {
         - value: string
     }
 
-    class UserEmail {
-        - value: string
-    }
-
     class ProjectName {
         - value: string
     }
@@ -48,6 +44,14 @@ package "プロジェクト集約(ProjectAggregation)" {
     enum ProjectRole {
         leader(リーダー)
         member(メンバー)
+    }
+
+    class UserId {
+        - value: string
+    }
+
+    class ProjectProgresRate {
+        - value: int
     }
 
     note bottom of ProjectId
@@ -91,8 +95,10 @@ package "プロジェクト集約(ProjectAggregation)" {
     Project *-down- ProjectOverview
     Project *-down- ProjectStatus
     Project "1" *-down- "1..*" ProjectMember
-    Project *-down- ProjectProgresRate
-    Project -down-> auth.UserId
+    ProjectMember *-down- ProjectProgresRate
+    ProjectMember -down-> UserId
+    ProjectMember *-down- ProjectParticipationStatus
+    ProjectMember *-down- ProjectRole
 }
 
 @enduml
