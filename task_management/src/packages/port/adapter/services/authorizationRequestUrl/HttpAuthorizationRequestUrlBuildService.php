@@ -1,6 +1,6 @@
 <?php
 
-namespace packages\port\adapter\services\AuthorizationRequestUrlBuildService;
+namespace packages\port\adapter\services\authorizationRequestUrl;
 
 use packages\domain\model\auth\IAuthorizationRequestUrlBuildService;
 

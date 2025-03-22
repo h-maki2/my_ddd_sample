@@ -1,6 +1,6 @@
 <?php
 
-namespace packages\port\adapter\services\AuthorizationRequestUrlBuildService;
+namespace packages\port\adapter\services\authorizationRequestUrl;
 
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;

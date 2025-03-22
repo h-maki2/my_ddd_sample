@@ -1,6 +1,6 @@
 <?php
 
-class CreateAuthorizationRequestUrlResult
+class LoginResult
 {
     readonly string $authorizationRequestUrl;
     readonly bool $isSuccess;

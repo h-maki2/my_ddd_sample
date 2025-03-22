@@ -2,7 +2,7 @@
 
 namespace packages\application\login;
 
-use CreateAuthorizationRequestUrlResult;
+use LoginResult;
 use packages\domain\model\auth\IAuthCodeFetcher;
 use packages\domain\model\auth\IAuthorizationRequestUrlBuildService;
 use packages\domain\service\auth\AOneTimeTokenSessionService;
@@ -11,27 +11,24 @@ use packages\domain\service\auth\AuthorizationRequestUrlBuilder;
 class LoginApplicationService
 {
     private AOneTimeTokenSessionService $oneTimeTokenSessionService;
-    private IAuthCodeFetcher $authCodeFetcher;
     private IAuthorizationRequestUrlBuildService $authorizationRequestUrlBuildService;
 
     public function __construct(
         AOneTimeTokenSessionService $oneTimeTokenSessionService,
-        IAuthCodeFetcher $authCodeFetcher,
         IAuthorizationRequestUrlBuildService $authorizationRequestUrlBuildService
     )
     {
         $this->oneTimeTokenSessionService = $oneTimeTokenSessionService;
-        $this->authCodeFetcher = $authCodeFetcher;
         $this->authorizationRequestUrlBuildService = $authorizationRequestUrlBuildService;
     }
 
     /**
-     * 認可リクエスト用のURLを生成
+     * ログインする
      */
-    public function createAuthorizationRequestUrl(
+    public function login(
         string $email,
         string $password
-    ): CreateAuthorizationRequestUrlResult
+    ): LoginResult
     {
         $authRequestUrlBuilder = new AuthorizationRequestUrlBuilder(
             $this->oneTimeTokenSessionService,
@@ -42,17 +39,17 @@ class LoginApplicationService
             $authRequestUrl = $authRequestUrlBuilder->build($email, $password);
         } catch (AccountLockedException $e) {
             // アカウントがロックされている場合
-            return CreateAuthorizationRequestUrlResult::createWhenFailure(
+            return LoginResult::createWhenFailure(
                 accountLocked: true
             );
         }
 
         if ($authRequestUrl === null) {
-            return CreateAuthorizationRequestUrlResult::createWhenFailure(
+            return LoginResult::createWhenFailure(
                 accountLocked: false
             );
         }
 
-        return CreateAuthorizationRequestUrlResult::createWhenSuccess($authRequestUrl);
+        return LoginResult::createWhenSuccess($authRequestUrl);
     }
 }
