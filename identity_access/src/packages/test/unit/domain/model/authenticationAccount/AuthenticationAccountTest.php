@@ -375,10 +375,10 @@ class AuthenticationAccountTest extends TestCase
         );
 
         // when
-        $result = $authenticationAccount->canLoggedIn(new DateTimeImmutable());
+        $result = $authenticationAccount->isRestricted(new DateTimeImmutable());
 
         // then
-        $this->assertFalse($result);
+        $this->assertTrue($result);
     }
 
     public function test_ログイン制限が有効状態で再ログインが可能である場合、ログインが可能であることを判定できる()
@@ -397,10 +397,10 @@ class AuthenticationAccountTest extends TestCase
         );
 
         // when
-        $result = $authenticationAccount->canLoggedIn(new DateTimeImmutable());
+        $result = $authenticationAccount->isRestricted(new DateTimeImmutable());
 
         // then
-        $this->assertTrue($result);
+        $this->assertFalse($result);
     }
 
     public function test_ログイン制限が有効状態ではない場合、ログインが可能であることを判定できる()
@@ -419,23 +419,7 @@ class AuthenticationAccountTest extends TestCase
         );
 
         // when
-        $result = $authenticationAccount->canLoggedIn(new DateTimeImmutable());
-
-        // then
-        $this->assertTrue($result);
-    }
-
-    public function test_認証ステータスが未認証の場合、ログイン不可であることを判定できる()
-    {
-        // given
-        // 認証ステータスが未認証の認証アカウントを生成する
-        $definitiveRegistrationCompletedStatus = DefinitiveRegistrationCompletedStatus::Incomplete;
-        $authenticationAccount = $this->testAuthenticationAccountFactory->create(
-            definitiveRegistrationCompletedStatus: $definitiveRegistrationCompletedStatus
-        );
-
-        // when
-        $result = $authenticationAccount->canLoggedIn(new DateTimeImmutable());
+        $result = $authenticationAccount->isRestricted(new DateTimeImmutable());
 
         // then
         $this->assertFalse($result);

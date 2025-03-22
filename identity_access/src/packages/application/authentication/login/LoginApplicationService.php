@@ -52,8 +52,12 @@ class LoginApplicationService implements LoginInputBoundary
             return LoginResult::createWhenLoginFailed(false);
         }
 
+        if (!$authenticationAccount->hasCompletedRegistration()) {
+            return LoginResult::createWhenLoginFailed(false);
+        }
+
         $currentDateTime = new DateTimeImmutable();
-        if (!$authenticationAccount->canLoggedIn($currentDateTime)) {
+        if ($authenticationAccount->isRestricted($currentDateTime)) {
             return LoginResult::createWhenLoginFailed(true);
         }
 
@@ -81,7 +85,7 @@ class LoginApplicationService implements LoginInputBoundary
         }
         $this->authenticationAccountRepository->save($authenticationAccount);
 
-        if (!$authenticationAccount->canLoggedIn($currentDateTime)) {
+        if (!$authenticationAccount->isRestricted($currentDateTime)) {
             return LoginResult::createWhenLoginFailed(true);
         }
 

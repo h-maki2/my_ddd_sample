@@ -146,7 +146,7 @@ class AuthenticationAccount
             throw new DomainException('本登録済みのユーザーではありません。');
         }
 
-        if (!$this->canLoggedIn($currentDateTime)) {
+        if ($this->isRestricted($currentDateTime)) {
             throw new DomainException('アカウントがロックされています。');
         }
 
@@ -159,7 +159,7 @@ class AuthenticationAccount
             throw new DomainException('本登録済みのユーザーではありません。');
         }
 
-        if (!$this->canLoggedIn($currentDateTime)) {
+        if ($this->isRestricted($currentDateTime)) {
             throw new DomainException('アカウントがロックされています。');
         }
 
@@ -203,23 +203,19 @@ class AuthenticationAccount
     }
 
     /**
-     * ログイン可能かどうかを判定
+     * アカウントが有効状態かどうかを判定
      */
-    public function canLoggedIn(DateTimeImmutable $currentDateTime): bool
+    public function isRestricted(DateTimeImmutable $currentDateTime): bool
     {
-        if (!$this->hasCompletedRegistration()) {
+        if (!$this->loginRestriction->isRestricted()) {
             return false;
         }
 
-        if (!$this->loginRestriction->isRestricted()) {
-            return true;
-        }
-
         if ($this->canUnlocking($currentDateTime)) {
-            return true;
+            return false;
         }
 
-        return false;
+        return true;
     }
 
     /**
