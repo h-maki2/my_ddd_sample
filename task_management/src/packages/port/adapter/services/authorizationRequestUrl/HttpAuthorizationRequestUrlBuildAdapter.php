@@ -1,16 +1,16 @@
 <?php
 
-namespace packages\infrastructure\services\AuthorizationRequestUrlBuilder;
+namespace packages\port\adapter\services\AuthorizationRequestUrlBuildService;
 
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use packages\adapter\presenter\common\json\HttpStatus;
 use packages\domain\model\auth\Scope;
-use packages\infrastructure\services\common\identityAccessApi\IdentityAccessApiAcceptCreator;
-use packages\infrastructure\services\common\identityAccessApi\IdentityAccessApiFaildException;
-use packages\infrastructure\services\common\identityAccessApi\IdentityAccessApiResponse;
+use packages\port\adapter\services\common\identityAccessApi\IdentityAccessApiAcceptCreator;
+use packages\port\adapter\services\common\identityAccessApi\IdentityAccessApiFaildException;
+use packages\port\adapter\services\common\identityAccessApi\IdentityAccessApiResponse;
 
-class HttpAuthorizationRequestUrlAdapter
+class HttpAuthorizationRequestUrlBuildAdapter
 {
     private const URL_TEMPLATE = 'api/login';
 
@@ -28,9 +28,9 @@ class HttpAuthorizationRequestUrlAdapter
 
         $identityAccessApiResponse = new IdentityAccessApiResponse($response);
 
-        if ($response->status() === HttpStatus::Unauthorized->value) {
-            $accountRock = $identityAccessApiResponse->errorResponse()['accountLocked'];
-            if ($accountRock) {
+        if ($response->status() >= 400) {
+            $errorRespone = $identityAccessApiResponse->errorResponse();
+            if (isset($errorRespone['accountLocked']) && $errorRespone['accountLocked']) {
                 throw new AccountRockException('アカウントがロックされています。');
             }
 

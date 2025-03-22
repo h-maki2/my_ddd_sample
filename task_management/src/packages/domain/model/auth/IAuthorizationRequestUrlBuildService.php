@@ -5,7 +5,7 @@ namespace packages\domain\model\auth;
 /**
  * 認可リクエスト用のURLを生成するクラス
  */
-interface IAuthorizationRequestUrlBuilder
+interface IAuthorizationRequestUrlBuildService
 {
     /**
      * 認可リクエスト用のURLを生成

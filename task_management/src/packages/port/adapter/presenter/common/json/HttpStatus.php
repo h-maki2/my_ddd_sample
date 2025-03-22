@@ -1,6 +1,6 @@
 <?php
 
-namespace packages\ui\presenter\common\json;
+namespace packages\port\adapter\presenter\common\json;
 
 enum HttpStatus: string
 {

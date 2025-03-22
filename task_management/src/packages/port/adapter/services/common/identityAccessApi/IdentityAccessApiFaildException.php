@@ -1,6 +1,6 @@
 <?php
 
-namespace packages\infrastructure\services\common\identityAccessApi;
+namespace packages\port\adapter\services\common\identityAccessApi;
 
 use RuntimeException;
 
