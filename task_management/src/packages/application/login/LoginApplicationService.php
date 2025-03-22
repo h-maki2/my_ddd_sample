@@ -2,10 +2,9 @@
 
 namespace packages\application\login;
 
-use LoginResult;
+use packages\domain\model\auth\AOneTimeTokenSessionService;
 use packages\domain\model\auth\IAuthCodeFetcher;
 use packages\domain\model\auth\IAuthorizationRequestUrlBuildService;
-use packages\domain\service\auth\AOneTimeTokenSessionService;
 use packages\domain\service\auth\AuthorizationRequestUrlBuilder;
 
 class LoginApplicationService

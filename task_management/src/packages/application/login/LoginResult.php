@@ -1,5 +1,7 @@
 <?php
 
+namespace packages\application\login;
+
 class LoginResult
 {
     readonly string $authorizationRequestUrl;

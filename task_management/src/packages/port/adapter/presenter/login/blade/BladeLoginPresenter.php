@@ -2,7 +2,7 @@
 
 namespace packages\port\adapter\presenter\login\blade;
 
-use LoginResult;
+use packages\application\login\LoginResult;
 
 class BladeLoginPresenter
 {

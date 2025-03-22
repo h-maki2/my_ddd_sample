@@ -2,8 +2,8 @@
 
 namespace packages\port\adapter\services\laravel;
 
+use packages\domain\model\auth\AOneTimeTokenSessionService;
 use packages\domain\model\auth\OneTimeToken;
-use packages\domain\service\auth\AOneTimeTokenSessionService;
 
 class LaravelOneTimeTokenSessionService extends AOneTimeTokenSessionService
 {

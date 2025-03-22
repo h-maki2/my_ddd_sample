@@ -3,9 +3,9 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use packages\domain\model\auth\AOneTimeTokenSessionService;
 use packages\domain\model\auth\IAuthorizationRequestUrlBuildService;
-use packages\domain\service\auth\AOneTimeTokenSessionService;
-use packages\port\adapter\services\authorizationRequestUrl\http\HttpAuthorizationRequestUrlBuildService;
+use packages\port\adapter\services\authorizationRequestUrl\HttpAuthorizationRequestUrlBuildService;
 use packages\port\adapter\services\laravel\LaravelOneTimeTokenSessionService;
 
 class AppServiceProvider extends ServiceProvider

@@ -1,6 +1,6 @@
 <?php
 
-namespace packages\domain\service\auth;
+namespace packages\domain\model\auth;
 
 use packages\domain\model\auth\OneTimeToken;
 

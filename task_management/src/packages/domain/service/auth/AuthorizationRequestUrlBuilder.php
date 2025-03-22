@@ -2,6 +2,7 @@
 
 namespace packages\domain\service\auth;
 
+use packages\domain\model\auth\AOneTimeTokenSessionService;
 use packages\domain\model\auth\IAuthorizationRequestUrlBuildService;
 use packages\domain\model\auth\OneTimeToken;
 

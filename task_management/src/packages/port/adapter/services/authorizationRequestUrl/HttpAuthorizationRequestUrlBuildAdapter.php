@@ -55,8 +55,8 @@ class HttpAuthorizationRequestUrlBuildAdapter
         ])->post($this->buildUrl(), [
             'email' => $email,
             'password' => $password,
-            'client_id' => app('app.client_id'),
-            'redirect_url' => app('app.redirect_url'),
+            'client_id' => config('app.client_id'),
+            'redirect_url' => config('app.redirect_url'),
             'response_type' => 'code',
             'state' => $oneTimeToken,
             'scope' => $this->scope(),
@@ -65,7 +65,7 @@ class HttpAuthorizationRequestUrlBuildAdapter
 
     private function buildUrl(): string
     {
-        return app('app.identity_access_uri') . self::URL_TEMPLATE;
+        return config('app.identity_access_uri') . self::URL_TEMPLATE;
     }
 
     private function scope(): string

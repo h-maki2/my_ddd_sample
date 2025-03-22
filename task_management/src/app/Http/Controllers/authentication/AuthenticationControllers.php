@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\login;
+namespace App\Http\Controllers\authentication;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Client\Request;
+use Illuminate\Http\Request;
 use packages\application\login\LoginApplicationService;
 use packages\port\adapter\presenter\login\blade\BladeLoginPresenter;
 
-class LoginControllers extends Controller
+class AuthenticationControllers extends Controller
 {
     public function displaLoginPage()
     {
-        return view('login');
+        return view('authentication.login');
     }
 
     public function login(
@@ -19,7 +19,7 @@ class LoginControllers extends Controller
         Request $request
     )
     {
-        $result = $appService(
+        $result = $appService->login(
             $request->input('email') ?? '',
             $request->input('password') ?? ''
         );
