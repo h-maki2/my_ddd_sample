@@ -6,11 +6,15 @@ use packages\domain\model\auth\IAuthorizationRequestUrlBuildService;
 
 class HttpAuthorizationRequestUrlBuildService implements IAuthorizationRequestUrlBuildService
 {
+    /**
+     * @throws AccountRockException
+     */
     public function build(
         string $email,
         string $password,
         string $oneTimeToken
-    ): string {
+    ): string 
+    {
 
         $httpAuthorizationRequestUrlBuildServiceAdapter = new HttpAuthorizationRequestUrlBuildAdapter();
         return $httpAuthorizationRequestUrlBuildServiceAdapter->authorizationRequestUrlFrom($email, $password, $oneTimeToken);

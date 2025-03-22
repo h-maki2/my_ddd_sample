@@ -14,6 +14,9 @@ class HttpAuthorizationRequestUrlBuildAdapter
 {
     private const URL_TEMPLATE = 'api/login';
 
+    /**
+     * @throws AccountRockException
+     */
     public function authorizationRequestUrlFrom(
         string $email,
         string $password,
