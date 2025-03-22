@@ -14,5 +14,5 @@ interface IAuthorizationRequestUrlBuildService
         string $email,
         string $password,
         string $oneTimeToken
-    ): string;
+    ): ?string;
 }

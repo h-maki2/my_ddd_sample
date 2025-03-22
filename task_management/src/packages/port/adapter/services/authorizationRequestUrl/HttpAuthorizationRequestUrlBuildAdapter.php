@@ -5,6 +5,7 @@ namespace packages\port\adapter\services\AuthorizationRequestUrlBuildService;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use packages\adapter\presenter\common\json\HttpStatus;
+use packages\application\login\AccountLockedException;
 use packages\domain\model\auth\Scope;
 use packages\port\adapter\services\common\identityAccessApi\IdentityAccessApiAcceptCreator;
 use packages\port\adapter\services\common\identityAccessApi\IdentityAccessApiFaildException;
@@ -15,7 +16,7 @@ class HttpAuthorizationRequestUrlBuildAdapter
     private const URL_TEMPLATE = 'api/login';
 
     /**
-     * @throws AccountRockException
+     * @throws AccountLockedException
      */
     public function authorizationRequestUrlFrom(
         string $email,
@@ -25,7 +26,7 @@ class HttpAuthorizationRequestUrlBuildAdapter
     {
         $response = $this->sendRequest($email, $password, $oneTimeToken);
 
-        if ($response->status() === HttpStatus::InternalServerError->value) {
+        if ($response->status() >= 500) {
             throw new IdentityAccessApiFaildException($response->json());
         }
 
@@ -34,7 +35,7 @@ class HttpAuthorizationRequestUrlBuildAdapter
         if ($response->status() >= 400) {
             $errorRespone = $identityAccessApiResponse->errorResponse();
             if (isset($errorRespone['accountLocked']) && $errorRespone['accountLocked']) {
-                throw new AccountRockException('アカウントがロックされています。');
+                throw new AccountLockedException('アカウントがロックされています。');
             }
 
             return null;

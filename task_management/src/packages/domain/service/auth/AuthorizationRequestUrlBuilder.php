@@ -21,7 +21,7 @@ class AuthorizationRequestUrlBuilder
     /**
      * 認可リクエスト用のURLを生成
      */
-    public function build(string $email, string $password): string
+    public function build(string $email, string $password): ?string
     {
         $oneTimeToken = OneTimeToken::create();
         $this->oneTimeTokenSessionService->save(

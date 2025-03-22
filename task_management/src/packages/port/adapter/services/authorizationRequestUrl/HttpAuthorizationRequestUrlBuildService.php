@@ -7,13 +7,13 @@ use packages\domain\model\auth\IAuthorizationRequestUrlBuildService;
 class HttpAuthorizationRequestUrlBuildService implements IAuthorizationRequestUrlBuildService
 {
     /**
-     * @throws AccountRockException
+     * @throws AccountLockedException
      */
     public function build(
         string $email,
         string $password,
         string $oneTimeToken
-    ): string 
+    ): ?string 
     {
 
         $httpAuthorizationRequestUrlBuildServiceAdapter = new HttpAuthorizationRequestUrlBuildAdapter();
