@@ -14,23 +14,29 @@ class LoginController extends Controller
     public function index(Request $request)
     {
         // 認証が成功した場合、セッションにユーザーを保存
-        $a = AuthenticationAccount::where('username', 'example_user')->first();
-        $b = AuthenticationAccount::where('user_id', '11111')->first();
         // print_r($b->user_id);
-        Auth::guard('web')->loginUsingId($b->user_id);
-        // print Auth::id();
-        // if (Auth::check()) {
-        //     print 'aaaaa';
-        // }
-        // return;
+        // print_r(session()->all());
+        // print "\n";
+        print_r(session()->all());
+        print Auth::id();
+        print "\n";
+        Auth::guard('web')->loginUsingId('0195be8e-bd52-72ea-bcc5-44caa24a7f94');
+        session()->put('test_session', 'test');
+        print Auth::id();
+        print "\n";
+        print_r(session()->all());
+        print "\n";
+        if (Auth::check()) {
+            print 'aaaaa';
+        }
 
-        $client = Client::where('id', '5')->first();
+        $client = Client::where('id', '1')->first();
         // return response()->json([
         //     'authorization_url' => url('/oauth/authorize?response_type=code&client_id='.$client->id.'&redirect_uri='.$request->redirect_uri)
-        // ]);
-        return response()->json([
-            'authorization_url' => url('/oauth/authorize?response_type=code&client_id='.$client->id.'&redirect_uri=http://identity.todoapp.local/test/token')
-        ]);
+
+        // return redirect(url('/oauth/authorize?response_type=code&client_id='.$client->id.'&redirect_uri=' . $client->redirect));
+
+        // return redirect('/test');
     }
 
     public function token(Request $request)

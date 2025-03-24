@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\LoginController as ControllersLoginController;
+use App\Http\Controllers\TestController;
 use App\Http\Controllers\Web\authentication\login\LoginController;
 use App\Http\Controllers\Web\registration\DefinitiveRegistrationController;
 use App\Http\Controllers\Web\registration\ProvisionalRegistrationController;
@@ -16,6 +18,8 @@ Route::post('/definitive_register', [DefinitiveRegistrationController::class, 'd
 Route::get('/resend', [ResendDefinitiveRegistrationConfirmation::class, 'resendDefinitiveRegistrationConfirmationForm']);
 Route::post('/resend', [ResendDefinitiveRegistrationConfirmation::class, 'resendDefinitiveRegistrationConfirmation']);
 
-Route::middleware(['auth:api'])->group(function () {
-    // 認証が必要なAPIのルーティング
+Route::get('login', [ControllersLoginController::class, 'index']);
+
+Route::middleware(['auth:web'])->group(function () {
+    Route::get('test', [TestController::class, 'test']);
 });

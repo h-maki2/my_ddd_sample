@@ -56,7 +56,7 @@ class HttpAuthorizationRequestUrlBuildAdapter
             'email' => $email,
             'password' => $password,
             'client_id' => config('app.client_id'),
-            'redirect_url' => config('app.redirect_url'),
+            'redirect_url' => config('app.redirect_uri'),
             'response_type' => 'code',
             'state' => $oneTimeToken,
             'scope' => $this->scope(),
