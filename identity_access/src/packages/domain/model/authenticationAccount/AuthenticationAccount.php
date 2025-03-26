@@ -179,6 +179,18 @@ class AuthenticationAccount
     }
 
     /**
+     * ログイン失敗回数を初期化する
+     */
+    public function initializeFailedLoginCount(): void
+    {
+        if (!$this->hasCompletedRegistration()) {
+            throw new DomainException('本登録済みのユーザーではありません。');
+        }
+
+        $this->loginRestriction = LoginRestriction::initialization();
+    }
+
+    /**
      * ログイン制限を有効にする
      */
     public function locking(DateTimeImmutable $currentDateTime): void

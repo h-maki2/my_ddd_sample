@@ -10,7 +10,7 @@ use packages\port\adapter\presenter\login\blade\BladeLoginPresenter;
 
 class AuthenticationControllers extends Controller
 {
-    public function displaLoginPage()
+    public function displayLoginPage()
     {
         return view('authentication.login');
     }
@@ -28,8 +28,8 @@ class AuthenticationControllers extends Controller
         $presenter = new BladeLoginPresenter($result);
 
         if ($presenter->loginSuccess()) {
-            //return redirect($presenter->authenticationRequestUrl());
-            print($presenter->authenticationRequestUrl());
+            print_r($presenter->authenticationRequestUrl());
+            //redirect($presenter->authenticationRequestUrl());
             return;
         }
 

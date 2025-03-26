@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Laravel\Passport\Client;
 use App\Http\Controllers\Controller;
 use App\Models\authenticationAccount;
+use App\Models\AuthenticationInformation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -14,29 +15,10 @@ class LoginController extends Controller
     public function index(Request $request)
     {
         // 認証が成功した場合、セッションにユーザーを保存
-        // print_r($b->user_id);
-        // print_r(session()->all());
-        // print "\n";
-        print_r(session()->all());
-        print Auth::id();
-        print "\n";
-        Auth::guard('web')->loginUsingId('0195be8e-bd52-72ea-bcc5-44caa24a7f94');
-        session()->put('test_session', 'test');
-        print Auth::id();
-        print "\n";
-        print_r(session()->all());
-        print "\n";
-        if (Auth::check()) {
-            print 'aaaaa';
-        }
 
-        $client = Client::where('id', '1')->first();
-        // return response()->json([
-        //     'authorization_url' => url('/oauth/authorize?response_type=code&client_id='.$client->id.'&redirect_uri='.$request->redirect_uri)
-
-        // return redirect(url('/oauth/authorize?response_type=code&client_id='.$client->id.'&redirect_uri=' . $client->redirect));
-
-        // return redirect('/test');
+        $user = AuthenticationInformation::find('0195be8e-bd52-72ea-bcc5-44caa24a7f94');
+        Auth::guard('web')->loginUsingId($user->user_id);
+        session()->put('user', 'test');
     }
 
     public function token(Request $request)

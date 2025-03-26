@@ -11,13 +11,12 @@ class LaravelAuthenticationService implements AuthenticationService
 {
     public function markAsLoggedIn(UserId $userId): void
     {
-        Auth::guard('web')->loginUsingId($userId->value);
-        Log::info(Auth::id());
+        Auth::guard('web')->loginUsingId($userId->value, true);
     }
 
     public function loggedInUserId(): ?UserId
     {
-        if (Auth::check()) {
+        if (Auth::guard('web')->check()) {
             return new UserId(Auth::id());
         }
 

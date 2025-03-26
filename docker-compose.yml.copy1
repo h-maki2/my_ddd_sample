@@ -1,0 +1,113 @@
+version: '3.8'
+
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - app-network
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    restart: always
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "9092:9092"
+    networks:
+      - app-network
+
+  control-center:
+    image: confluentinc/cp-enterprise-control-center:latest
+    depends_on:
+      - kafka
+    ports:
+      - "9021:9021"
+    environment:
+      CONTROL_CENTER_BOOTSTRAP_SERVERS: kafka:9092
+      CONTROL_CENTER_REPLICATION_FACTOR: 1
+    networks:
+      - app-network
+  
+  kafka-connect:
+    image: debezium/connect:3.0.0.Final
+    container_name: kafka-connect
+    restart: always
+    depends_on:
+      - kafka
+    environment:
+      BOOTSTRAP_SERVERS: kafka:9092
+      GROUP_ID: "1"
+      CONFIG_STORAGE_TOPIC: "connect-configs"
+      OFFSET_STORAGE_TOPIC: "connect-offsets"
+      STATUS_STORAGE_TOPIC: "connect-status"
+      KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+      VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+      VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
+    ports:
+      - "8083:8083"
+    networks:
+      - app-network
+
+  identity_access_mysql:
+    image: mysql:8.0
+    container_name: identity_access_mysql
+    command: --default-authentication-plugin=mysql_native_password --server-id=1 --log-bin=mysql-bin --binlog_format=ROW
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: laravel_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - app-network
+    ports:
+      - "3307:3306"
+
+  taskmanage_mysql:
+    image: mysql:8.0
+    container_name: taskmanage_mysql
+    command: --default-authentication-plugin=mysql_native_password --server-id=2 --log-bin=mysql-bin --binlog_format=ROW
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: laravel_db_taskmanage
+      MYSQL_USER: user2
+      MYSQL_PASSWORD: password2
+    volumes:
+      - dbdata_taskmanage:/var/lib/mysql
+    networks:
+      - app-network
+    ports:
+      - "3308:3306"
+  
+  apache:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: apache
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "80:80"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  dbdata:
+    driver: local
+  dbdata_taskmanage:
+    driver: local

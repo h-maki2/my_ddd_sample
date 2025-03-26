@@ -8,11 +8,10 @@ class TestController extends Controller
 {
     public function test()
     {
-        print_r(session()->all());
-        print Auth::id();
-        if (Auth::check()) {
-            print 'aaaaa';
+        if (Auth::guard('web')->check()) {
+            print 'aaaa';
         }
-        return;
+
+        print session()->get('user');
     }
 }

@@ -24,10 +24,7 @@ RUN apt-get update && apt-get install -y \
 # Composer のインストール
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-RUN a2enmod proxy
-RUN a2enmod proxy_http
-
-RUN sed -i "s|DocumentRoot /var/www/html|DocumentRoot /var/www/html/identity_access/src/public|" /etc/apache2/sites-available/000-default.conf
+COPY ./vhost.conf /etc/apache2/sites-available/000-default.conf
 
 # Apacheモジュールの有効化
 RUN a2enmod rewrite
@@ -35,4 +32,4 @@ RUN a2enmod rewrite
 # ポートの公開
 EXPOSE 80
 
-WORKDIR /var/www/html/identity_access
+WORKDIR /var/www/html

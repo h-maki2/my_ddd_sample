@@ -5,11 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 
 class AuthenticationInformation extends Authenticatable
 {
-    use HasApiTokens, HasFactory;
+    use HasApiTokens, HasFactory, Notifiable;
     
     protected $table = 'authentication_informations';
 
@@ -31,6 +32,11 @@ class AuthenticationInformation extends Authenticatable
     public function getAuthIdentifierName()
     {
         return $this->primaryKey;
+    }
+
+    public function getAuthIdentifier()
+    {
+        return $this->user_id;
     }
 
     public function user()

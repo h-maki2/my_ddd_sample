@@ -85,7 +85,7 @@ class LoginApplicationService implements LoginInputBoundary
         }
         $this->authenticationAccountRepository->save($authenticationAccount);
 
-        if (!$authenticationAccount->isRestricted($currentDateTime)) {
+        if ($authenticationAccount->isRestricted($currentDateTime)) {
             return LoginResult::createWhenLoginFailed(true);
         }
 
