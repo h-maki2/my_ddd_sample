@@ -1,6 +1,6 @@
 <?php
 
-namespace packages\domain\model\auth;
+namespace packages\domain\model\authToken;
 
 use DateTime;
 use DateTimeImmutable;
