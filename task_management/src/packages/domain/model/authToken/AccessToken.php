@@ -2,7 +2,6 @@
 
 namespace packages\domain\model\authToken;
 
-use DateTime;
 use DateTimeImmutable;
 use InvalidArgumentException;
 
