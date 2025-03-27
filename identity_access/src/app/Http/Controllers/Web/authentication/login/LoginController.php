@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\v1\authentication\login;
+namespace App\Http\Controllers\Web\authentication\login;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
@@ -15,7 +15,12 @@ use packages\application\authentication\login\LoginInputBoundary;
 
 class LoginController extends Controller
 {
-    public function login(Request $request, LoginApplicationService $appService): JsonResponse
+    public function displayLoginForm()
+    {
+
+    }
+
+    public function login(Request $request, LoginApplicationService $appService)
     {
         $result = $appService->login(
             $request->input('email') ?? '',
@@ -27,8 +32,7 @@ class LoginController extends Controller
             $request->input('scope') ?? ''
         );
 
-        $presenter = new JsonLoginPresenter($result);
-        $jsonResponseData = $presenter->jsonResponseData();
-        return response()->json($jsonResponseData->value, $jsonResponseData->httpStatusCode());
+        $view = new BladeLoginView($result);
+        return $view->response();
     }
 }
