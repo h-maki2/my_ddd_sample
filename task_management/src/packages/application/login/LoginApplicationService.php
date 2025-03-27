@@ -6,49 +6,24 @@ use packages\domain\model\auth\AOneTimeTokenSessionService;
 use packages\domain\model\auth\IAuthCodeFetcher;
 use packages\domain\model\auth\IAuthorizationRequestUrlBuildService;
 use packages\domain\service\auth\AuthorizationRequestUrlBuilder;
+use packages\domain\service\auth\LoginUrlCreator;
 
 class LoginApplicationService
 {
     private AOneTimeTokenSessionService $oneTimeTokenSessionService;
-    private IAuthorizationRequestUrlBuildService $authorizationRequestUrlBuildService;
+    private LoginUrlCreator $loginUrlCreator;
 
     public function __construct(
         AOneTimeTokenSessionService $oneTimeTokenSessionService,
-        IAuthorizationRequestUrlBuildService $authorizationRequestUrlBuildService
+        LoginUrlCreator $loginUrlCreator
     )
     {
         $this->oneTimeTokenSessionService = $oneTimeTokenSessionService;
-        $this->authorizationRequestUrlBuildService = $authorizationRequestUrlBuildService;
+        $this->loginUrlCreator = $loginUrlCreator;
     }
 
-    /**
-     * ログインする
-     */
-    public function login(
-        string $email,
-        string $password
-    ): LoginResult
+    public function createLoginUrl(): string
     {
-        $authRequestUrlBuilder = new AuthorizationRequestUrlBuilder(
-            $this->oneTimeTokenSessionService,
-            $this->authorizationRequestUrlBuildService
-        );
-
-        try {
-            $authRequestUrl = $authRequestUrlBuilder->build($email, $password);
-        } catch (AccountLockedException $e) {
-            // アカウントがロックされている場合
-            return LoginResult::createWhenFailure(
-                accountLocked: true
-            );
-        }
-
-        if ($authRequestUrl === null) {
-            return LoginResult::createWhenFailure(
-                accountLocked: false
-            );
-        }
-
-        return LoginResult::createWhenSuccess($authRequestUrl);
+        return $this->loginUrlCreator->createLoginUrl();
     }
 }

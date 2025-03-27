@@ -1,11 +1,11 @@
 <?php
 
-namespace packages\port\adapter\services\laravel;
+namespace packages\port\adapter\services\oauth;
 
 use packages\domain\model\auth\AOneTimeTokenSessionService;
 use packages\domain\model\auth\OneTimeToken;
 
-class LaravelOneTimeTokenSessionService extends AOneTimeTokenSessionService
+class OneTimeTokenSessionService extends AOneTimeTokenSessionService
 {
     public function save(OneTimeToken $oneTimeToken): void
     {

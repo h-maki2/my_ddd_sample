@@ -10,32 +10,16 @@ use packages\port\adapter\presenter\login\blade\BladeLoginPresenter;
 
 class AuthenticationControllers extends Controller
 {
-    public function displayLoginPage()
+    private LoginApplicationService $loginApplicationService;
+
+    public function __construct(LoginApplicationService $loginApplicationService)
     {
-        return view('authentication.login');
+        $this->loginApplicationService = $loginApplicationService;
     }
 
-    public function login(
-        LoginApplicationService $appService,
-        Request $request
-    )
+    public function displayLoginPage()
     {
-        $result = $appService->login(
-            $request->input('email') ?? '',
-            $request->input('password') ?? ''
-        );
-
-        $presenter = new BladeLoginPresenter($result);
-
-        if ($presenter->loginSuccess()) {
-            print_r($presenter->authenticationRequestUrl());
-            //redirect($presenter->authenticationRequestUrl());
-            return;
-        }
-
-        return redirect()
-                ->back()
-                ->withErrors($presenter->faildMessage())
-                ->withInput();
+        $loginUrl = $this->loginApplicationService->createLoginUrl();
+        return view('authentication.login', ['loginUrl' => $loginUrl]);
     }
 }

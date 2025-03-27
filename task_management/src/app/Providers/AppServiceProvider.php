@@ -5,8 +5,10 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use packages\domain\model\auth\AOneTimeTokenSessionService;
 use packages\domain\model\auth\IAuthorizationRequestUrlBuildService;
+use packages\domain\service\auth\LoginUrlCreator;
 use packages\port\adapter\services\authorizationRequestUrl\HttpAuthorizationRequestUrlBuildService;
-use packages\port\adapter\services\laravel\LaravelOneTimeTokenSessionService;
+use packages\port\adapter\services\oauth\OauthLoginUrlCreator;
+use packages\port\adapter\services\oauth\OneTimeTokenSessionService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -17,12 +19,12 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(
             AOneTimeTokenSessionService::class,
-            LaravelOneTimeTokenSessionService::class
+            OneTimeTokenSessionService::class
         );
 
         $this->app->bind(
-            IAuthorizationRequestUrlBuildService::class,
-            HttpAuthorizationRequestUrlBuildService::class
+            LoginUrlCreator::class,
+            OauthLoginUrlCreator::class
         );
     }
 
