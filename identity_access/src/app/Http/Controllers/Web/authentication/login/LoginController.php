@@ -19,7 +19,7 @@ class LoginController extends Controller
 
     public function __construct(Request $request)
     {
-        $this->request = $this->request;
+        $this->request = $request;
     }
 
     public function displayLoginForm()

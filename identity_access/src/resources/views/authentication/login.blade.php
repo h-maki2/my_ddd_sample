@@ -21,7 +21,7 @@
         <input type="hidden" name="redirect_url" value="{{ old('redirect_url', $redirectUrl) }}">
         <input type="hidden" name="response_type" value="{{ old('response_type', $responseType) }}">
         <input type="hidden" name="state" value="{{ old('state', $state) }}">
-        <input type="hidden" name="scope" value="{{ old('scope', $scopes) }}">
+        <input type="hidden" name="scope" value="{{ old('scope', $scope) }}">
         <div><input type="submit" value="ログイン"></div>
     </form>
 </body>
