@@ -15,21 +15,34 @@ use packages\application\authentication\login\LoginInputBoundary;
 
 class LoginController extends Controller
 {
-    public function displayLoginForm()
-    {
+    private Request $request;
 
+    public function __construct(Request $request)
+    {
+        $this->request = $this->request;
     }
 
-    public function login(Request $request, LoginApplicationService $appService)
+    public function displayLoginForm()
+    {
+        return view('authentication.login', [
+            'clientId' => $this->request->query('client_id', ''),
+            'redirectUrl' => $this->request->query('redirect_url', ''),
+            'responseType' => $this->request->query('response_type', ''),
+            'state' => $this->request->query('state', ''),
+            'scope' => $this->request->query('scope', '')
+        ]);
+    }
+
+    public function login(LoginApplicationService $appService)
     {
         $result = $appService->login(
-            $request->input('email') ?? '',
-            $request->input('password') ?? '',
-            $request->input('client_id') ?? '',
-            $request->input('redirect_url') ?? '',
-            $request->input('response_type') ?? '',
-            $request->input('state') ?? '',
-            $request->input('scope') ?? ''
+            $this->request->input('email') ?? '',
+            $this->request->input('password') ?? '',
+            $this->request->input('client_id') ?? '',
+            $this->request->input('redirect_url') ?? '',
+            $this->request->input('response_type') ?? '',
+            $this->request->input('state') ?? '',
+            $this->request->input('scope') ?? ''
         );
 
         $view = new BladeLoginView($result);
