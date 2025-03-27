@@ -126,5 +126,7 @@ return [
     'client_id' => env('CLIENT_ID'),
     'client_secret' => env('CLIENT_SECRET'),
     'redirect_url' => env('REDIRECT_URI'),
+    
     'identity_access_uri' => env('IDENTITY_ACCESS_URI'),
+    'identity_access_container_uri' => env('IDENTITY_ACCESS_CONTAINER_URI'),
 ];
