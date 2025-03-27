@@ -18,6 +18,6 @@ class OauthLoginUrlCreator extends LoginUrlCreator
 
     protected function baseLoginUrl(): string
     {
-        return config('app.identity_access_uri') . '/login';
+        return config('app.identity_access_uri') . 'login';
     }
 }

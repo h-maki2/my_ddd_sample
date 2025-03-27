@@ -13,7 +13,7 @@ abstract class LoginUrlCreator
 
     protected const RESPONSE_TYPE = 'code';
 
-    protected function __construct(
+    public function __construct(
         AOneTimeTokenSessionService $oneTimeTokenSessionService,
     ) {
         $this->oneTimeTokenSessionService = $oneTimeTokenSessionService;
