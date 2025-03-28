@@ -14,7 +14,7 @@ class HttpAuthTokenService implements IAuthTokenService
         return $adapter->toAuthToken($authCode);
     }
 
-    public function refreshAuthToken(RefreshToken $refreshToken): AuthToken
+    public function refreshAuthToken(RefreshToken $refreshToken): ?AuthToken
     {
         $adapter = new HttpRefreshAuthTokenAdapter();
         return $adapter->toAuthToken($refreshToken);

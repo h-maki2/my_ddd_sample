@@ -2,7 +2,7 @@
 
 namespace packages\port\adapter\services\oauth;
 
-use packages\domain\service\auth\LoginUrlCreator;
+use packages\domain\model\auth\LoginUrlCreator;
 
 class OauthLoginUrlCreator extends LoginUrlCreator
 {

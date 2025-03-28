@@ -7,8 +7,8 @@ use packages\domain\model\auth\AuthenticationException;
 use packages\domain\model\auth\IAuthCodeFetcher;
 use packages\domain\model\auth\IAuthorizationRequestUrlBuildService;
 use packages\domain\model\auth\OneTimeToken;
-use packages\domain\service\auth\AuthorizationRequestUrlBuilder;
-use packages\domain\service\auth\LoginUrlCreator;
+use packages\domain\model\auth\AuthorizationRequestUrlBuilder;
+use packages\domain\model\auth\LoginUrlCreator;
 
 class LoginApplicationService
 {

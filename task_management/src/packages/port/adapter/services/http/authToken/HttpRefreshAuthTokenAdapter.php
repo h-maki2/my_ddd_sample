@@ -3,6 +3,7 @@
 namespace packages\port\adapter\services\http\authToken;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use packages\domain\model\auth\AuthenticationException;
 use packages\domain\model\authToken\AccessToken;
 use packages\domain\model\authToken\AuthToken;
@@ -13,14 +14,18 @@ class HttpRefreshAuthTokenAdapter
     private const URL_TEMPLATE = 'oauth/token';
     private const GRANT_TYPE = 'refresh_token';
 
-    public function toAuthToken(RefreshToken $refreshToken): AuthToken
+    public function toAuthToken(RefreshToken $refreshToken): ?AuthToken
     {
         $result = $this->sendRequest($refreshToken);
+
+        if ($result === null) {
+            return null;
+        }
 
         return $this->arrayToAuthToken($result);
     }
 
-    private function sendRequest(RefreshToken $refreshToken): array
+    private function sendRequest(RefreshToken $refreshToken): ?array
     {
         $response = Http::asForm()->post($this->buildUrl(), [
             'grant_type'    => self::GRANT_TYPE,
@@ -30,7 +35,8 @@ class HttpRefreshAuthTokenAdapter
         ]);
 
         if ($response->status() >= 400) {
-            throw new AuthenticationException(print_r($response->json(), true));
+            Log::error(print_r($response->json(), true));
+            return null;
         }
 
         return $response->json();

@@ -5,7 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use packages\domain\model\auth\AOneTimeTokenSessionService;
 use packages\domain\model\auth\IAuthorizationRequestUrlBuildService;
-use packages\domain\service\auth\LoginUrlCreator;
+use packages\domain\model\auth\LoginUrlCreator;
 use packages\port\adapter\services\authorizationRequestUrl\HttpAuthorizationRequestUrlBuildService;
 use packages\port\adapter\services\oauth\OauthLoginUrlCreator;
 use packages\port\adapter\services\oauth\OneTimeTokenSessionService;

@@ -6,5 +6,5 @@ interface IAuthTokenService
 {
     public function fetchByAuthCode(string $authCode): AuthToken;
 
-    public function refreshAuthToken(RefreshToken $refreshToken): AuthToken;
+    public function refreshAuthToken(RefreshToken $refreshToken): ?AuthToken;
 }

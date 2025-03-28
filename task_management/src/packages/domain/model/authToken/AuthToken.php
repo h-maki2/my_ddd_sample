@@ -5,7 +5,7 @@ namespace packages\domain\model\authToken;
 class AuthToken
 {
     private AccessToken $accessToken;
-    private RefreshToken $refreshToken;
+    readonly RefreshToken $refreshToken;
 
     public function __construct(AccessToken $accessToken, RefreshToken $refreshToken)
     {
@@ -16,11 +16,6 @@ class AuthToken
     public function accessToken(): string
     {
         return $this->accessToken->value;
-    }
-
-    public function refreshToken(): string
-    {
-        return $this->refreshToken->value;
     }
 
     public function accessTokenExpiresIn(): int
