@@ -25,9 +25,14 @@ abstract class AAuthTokenStore
             return $authToken;
         }
 
-        return $authTokenService->refreshAuthToken(
+        $authToken = $authTokenService->refreshAuthToken(
             $authToken->refreshToken
         );
+        if ($authToken === null) {
+            return null;
+        }
+        $this->save($authToken);
+        return $authToken;
     }
 
     abstract public function clear(): void;
