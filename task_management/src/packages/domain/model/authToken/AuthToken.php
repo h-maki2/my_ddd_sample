@@ -23,6 +23,11 @@ class AuthToken
         return $this->refreshToken->value;
     }
 
+    public function accessTokenExpiresIn(): int
+    {
+        return $this->accessToken->expiresIn();
+    }
+
     /**
      * アクセストークンの有効期限が切れているかどうかを判定
      */

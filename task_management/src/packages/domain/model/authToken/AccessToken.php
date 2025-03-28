@@ -30,6 +30,11 @@ class AccessToken
         }
     }
 
+    public function expiresIn(): int
+    {
+        return $this->expiresIn->getTimestamp();
+    }
+
     /**
      * アクセストークンの有効期限が切れているかどうかを判定
      */
