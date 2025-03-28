@@ -1,6 +1,6 @@
 <?php
 
-namespace packages\tests\domain\model\authToken;
+namespace packages\domain\model\authToken;
 
 use InvalidArgumentException;
 

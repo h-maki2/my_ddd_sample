@@ -2,8 +2,6 @@
 
 namespace packages\domain\model\authToken;
 
-use packages\tests\domain\model\authToken\RefreshToken;
-
 class AuthToken
 {
     private AccessToken $accessToken;

@@ -1,14 +1,25 @@
 <?php
 
-namespace packages\port\adapter\services\http\authToken\fetch;
+namespace packages\port\adapter\services\http\authToken;
 
+use DateTimeImmutable;
 use Illuminate\Support\Facades\Http;
 use packages\domain\model\auth\AuthenticationException;
+use packages\domain\model\authToken\AccessToken;
+use packages\domain\model\authToken\AuthToken;
+use packages\domain\model\authToken\RefreshToken;
 
-class HttpAuthTokenAdapter
+class HttpAuthTokenFetchAdapter
 {
     private const URL_TEMPLATE = 'oauth/token';
     private const GRANT_TYPE = 'authorization_code';
+
+    public function toAuthToken(string $authCode): AuthToken
+    {
+        $result = $this->sendRequest($authCode);
+
+        return $this->arrayToAuthToken($result);
+    }
 
     private function sendRequest(string $authCode): array
     {
@@ -30,5 +41,18 @@ class HttpAuthTokenAdapter
     private function buildUrl(): string
     {
         return config('app.identity_access_container_uri') . self::URL_TEMPLATE;
+    }
+
+    private function arrayToAuthToken(array $result): AuthToken
+    {
+        return new AuthToken(
+            new AccessToken(
+                $result['access_token'],
+                (int)$result['expires_in']
+            ),
+            new RefreshToken(
+                $result['refresh_token']
+            )
+        );
     }
 }

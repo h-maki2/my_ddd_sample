@@ -2,7 +2,9 @@
 
 namespace packages\domain\model\authToken;
 
-interface IAuthTokenFetcher
+interface IAuthTokenService
 {
     public function fetchByAuthCode(string $authCode): AuthToken;
+
+    public function refreshAuthToken(RefreshToken $refreshToken): AuthToken;
 }
