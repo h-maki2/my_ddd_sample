@@ -32,7 +32,7 @@ class UserNameFormatCheckerTest extends TestCase
     }
 
     #[DataProvider('validUserNameProvider')]
-    public function test_ユーザー名が適切な形式の場合に、onlyWhiteSpaceメソッドの戻り値がfalseになる(string $userName)
+    public function test_ユーザー名が空白以外の場合に、onlyWhiteSpaceメソッドの戻り値がfalseになる(string $userName)
     {
         // given
 
@@ -44,7 +44,7 @@ class UserNameFormatCheckerTest extends TestCase
     }
 
     #[DataProvider('invalidUserNameProvider')]
-    public function test_ユーザー名が不適切な形式の場合に、onlyWhiteSpaceメソッドの戻り値がtrueになる(string $userName)
+    public function test_ユーザー名が空白の場合に、onlyWhiteSpaceメソッドの戻り値がtrueになる(string $userName)
     {
         // given
 
