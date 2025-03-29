@@ -25,7 +25,7 @@ class CookieAuthTokenStore extends AAuthTokenStore
         Cookie::queue(Cookie::forget(self::TOKEN_EXPIRATION_KEY_NAME));
     }
 
-    protected function getFromKeyName(): ?AuthToken
+    public function get(): ?AuthToken
     {
         $accessToken = Cookie::get(self::ACCESS_TOKEN_KEY_NAME);
         $refreshToken = Cookie::get(self::REFRESH_TOKEN_KEY_NAME);

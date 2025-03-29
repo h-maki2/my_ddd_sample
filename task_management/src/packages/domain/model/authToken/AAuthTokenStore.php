@@ -14,28 +14,7 @@ abstract class AAuthTokenStore
 
     abstract public function save(AuthToken $authToken): void;
 
-    public function get(IAuthTokenService $authTokenService): ?AuthToken
-    {
-        $authToken = $this->getFromKeyName();
-        if ($authToken === null) {
-            return null;
-        }
-
-        if (!$authToken->accessTokenIsExpired()) {
-            return $authToken;
-        }
-
-        $authToken = $authTokenService->refreshAuthToken(
-            $authToken->refreshToken
-        );
-        if ($authToken === null) {
-            return null;
-        }
-        $this->save($authToken);
-        return $authToken;
-    }
+    abstract public function get(): ?AuthToken;
 
     abstract public function clear(): void;
-
-    abstract protected function getFromKeyName(): ?AuthToken;
 }
