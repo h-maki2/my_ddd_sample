@@ -215,7 +215,7 @@ class AuthenticationAccount
     }
 
     /**
-     * アカウントが有効状態かどうかを判定
+     * アカウントがロックされているかどうかを判定
      */
     public function isRestricted(DateTimeImmutable $currentDateTime): bool
     {

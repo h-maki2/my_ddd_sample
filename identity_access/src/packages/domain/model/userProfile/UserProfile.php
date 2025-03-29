@@ -2,7 +2,9 @@
 
 namespace packages\domain\model\userProfile;
 
+use DateTimeImmutable;
 use DomainException;
+use packages\domain\model\authenticationAccount\IAuthenticationAccountRepository;
 use packages\domain\model\authenticationAccount\UserId;
 use packages\domain\service\userProfile\UserProfileService;
 
