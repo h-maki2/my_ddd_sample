@@ -1,6 +1,5 @@
 <?php
 
-use Lcobucci\JWT\Signer\Key\InMemory;
 use packages\adapter\persistence\inMemory\InMemoryAuthenticationAccountRepository;
 use packages\adapter\persistence\inMemory\InMemoryUserProfileRepository;
 use packages\domain\model\userProfile\SelfIntroductionText;
@@ -44,7 +43,7 @@ class UserProfileTest extends TestCase
             id: $userId
         );
 
-        // ユーザープロフィールを登録しておく
+        // ユーザープロフィールを登録する
         $this->userProfileTestDataCreator->create(
             userId: $userId
         );
@@ -60,6 +59,84 @@ class UserProfileTest extends TestCase
             new UserProfileService(
                 $this->userProfileRepository
             )
+        );
+    }
+
+    public function test_ユーザー名を変更する()
+    {
+        // given
+        // アカウントを登録しておく
+        $userId = $this->authenticationAccountRepository->nextUserId();
+        $this->authAccountTestDataCreator->create(
+            id: $userId
+        );
+
+        // ユーザープロフィールを登録する
+        $変更前のユーザー名 = new UserName('変更前のユーザー名');
+        $selfIntroductionText = new SelfIntroductionText('test-self-introduction-text');
+        $userProfile = $this->userProfileTestDataCreator->create(
+            userId: $userId,
+            userName: $変更前のユーザー名,
+            selfIntroductionText: $selfIntroductionText
+        );
+
+        // when
+        // ユーザープロフィールを変更する
+        $変更後のユーザー名 = new UserName('変更後のユーザー名');
+        $userProfile->changeName($変更後のユーザー名);
+        $this->userProfileRepository->save($userProfile);
+
+        // then
+        // ユーザープロフィールが変更されていることを確認する
+        $userProfile = $this->userProfileRepository->findById($userId);
+        $this->assertEquals(
+            $変更後のユーザー名,
+            $userProfile->name()
+        );
+
+        // ユーザー名以外は変更されていないことを確認する
+        $this->assertEquals(
+            $selfIntroductionText,
+            $userProfile->selfIntroductionText()
+        );
+    }
+
+    public function test_自己紹介文を変更する()
+    {
+        // given
+        // アカウントを登録しておく
+        $userId = $this->authenticationAccountRepository->nextUserId();
+        $this->authAccountTestDataCreator->create(
+            id: $userId
+        );
+
+        // ユーザープロフィールを登録する
+        $変更前の自己紹介文 = new SelfIntroductionText('変更前の自己紹介文');
+        $userName = new UserName('test-user-name');
+        $userProfile = $this->userProfileTestDataCreator->create(
+            userId: $userId,
+            selfIntroductionText: $変更前の自己紹介文,
+            userName: $userName
+        );
+
+        // when
+        // ユーザープロフィールを変更する
+        $変更後の自己紹介文 = new SelfIntroductionText('変更後の自己紹介文');
+        $userProfile->changeSelfIntroductionText($変更後の自己紹介文);
+        $this->userProfileRepository->save($userProfile);
+
+        // then
+        // ユーザープロフィールが変更されていることを確認する
+        $userProfile = $this->userProfileRepository->findById($userId);
+        $this->assertEquals(
+            $変更後の自己紹介文,
+            $userProfile->selfIntroductionText()
+        );
+
+        // 自己紹介文以外は変更されていないことを確認する
+        $this->assertEquals(
+            $userName,
+            $userProfile->name()
         );
     }
 }
