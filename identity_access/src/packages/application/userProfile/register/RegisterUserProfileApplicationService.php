@@ -2,7 +2,6 @@
 
 namespace packages\application\userProfile\register;
 
-use packages\domain\model\authenticationAccount\AuthenticationService;
 use packages\domain\model\common\exception\AuthenticationException;
 use packages\domain\model\common\validator\ValidationHandler;
 use packages\domain\model\oauth\scope\IScopeAuthorizationChecker;
@@ -13,6 +12,7 @@ use packages\domain\model\userProfile\UserName;
 use packages\domain\model\userProfile\UserProfile;
 use packages\domain\model\userProfile\validation\SelfIntroductionTextValidation;
 use packages\domain\model\userProfile\validation\UserNameValidation;
+use packages\domain\service\authenticationAccount\AuthenticationService;
 use packages\domain\service\oauth\LoggedInUserIdFetcher;
 use packages\domain\service\userProfile\UserProfileService;
 use RuntimeException;
@@ -46,10 +46,7 @@ class RegisterUserProfileApplicationService implements RegisterUserProfileInputB
         $userId = $this->loggedInUserIdFetcher->fetch(Scope::from($scopeString));
 
         $validationHandler = new ValidationHandler();
-        $validationHandler->addValidator(new UserNameValidation(
-            $this->userProfileRepository,
-            $userNameString
-        ));
+        $validationHandler->addValidator(new UserNameValidation($userNameString));
         $validationHandler->addValidator(new SelfIntroductionTextValidation($selfIntroductionTextString));
         if (!$validationHandler->validate()) {
             return RegisterUserProfileResult::createWhenFailure($validationHandler->errorMessages());
@@ -60,7 +57,6 @@ class RegisterUserProfileApplicationService implements RegisterUserProfileInputB
 
         $userProfile = UserProfile::create(
             $userId,
-            $this->userProfileRepository->nextUserProfileId(),
             $userName,
             $selfIntroductionText,
             $this->userProfileService

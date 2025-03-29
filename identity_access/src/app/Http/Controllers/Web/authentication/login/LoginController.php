@@ -13,7 +13,7 @@ use packages\application\authentication\displayLoginForm\DisplayLoginFormApplica
 use packages\application\authentication\login\LoginApplicationService;
 use packages\application\authentication\login\LoginInputBoundary;
 
-class LoginController extends Controller
+class LoginController
 {
     private Request $request;
 

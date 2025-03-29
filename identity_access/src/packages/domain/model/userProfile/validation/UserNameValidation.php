@@ -10,12 +10,10 @@ use packages\domain\service\userProfile\UserProfileService;
 
 class UserNameValidation extends Validator
 {
-    private UserProfileService $userProfileService;
     private string $userName;
 
-    public function __construct(IUserProfileRepository $userProfileRepository, string $userName)
+    public function __construct(string $userName)
     {
-        $this->userProfileService = new UserProfileService($userProfileRepository);
         $this->userName = $userName;
     }
 
@@ -28,12 +26,6 @@ class UserNameValidation extends Validator
         
         if (UserNameFormatChecker::onlyWhiteSpace($this->userName)) {
             $this->setErrorMessage('ユーザー名に空白文字列のみは使用できません。');
-            return false;
-        }
-
-        $userName = new UserName($this->userName);
-        if ($this->userProfileService->alreadyExistsUserName($userName)) {
-            $this->setErrorMessage('既に登録されているユーザー名です。');
             return false;
         }
 

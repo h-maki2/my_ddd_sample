@@ -11,4 +11,10 @@ Route::middleware(['api.version', 'auth:api'])->group(function () {
         $controller = $resolver->resolve($version, 'changePassword\ChangePasswordController');
         return $container->call([$controller, 'changePassword']);
     });
+
+    Route::post('/profile/register', function (Request $request, ApiVersionResolver $resolver, Container $container) {
+        $version = $request->attributes->get('api_version');
+        $controller = $resolver->resolve($version, 'userProfile\UserProfileController');
+        return $container->call([$controller, 'register']);
+    });
 });
