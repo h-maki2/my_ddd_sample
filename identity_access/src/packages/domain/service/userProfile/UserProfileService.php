@@ -2,6 +2,7 @@
 
 namespace packages\domain\service\userProfile;
 
+use packages\domain\model\authenticationAccount\UserId;
 use packages\domain\model\userProfile\IUserProfileRepository;
 use packages\domain\model\userProfile\UserName;
 
@@ -17,8 +18,8 @@ class UserProfileService
     /**
      * 既に登録されているユーザー名かどうかを判定する
      */
-    public function alreadyExistsUserName(UserName $userName): bool
+    public function isExists(UserId $userId): bool
     {
-        return $this->userProfileRepository->findByUserName($userName) !== null;
+        return $this->userProfileRepository->findById($userId) !== null;
     }
 }

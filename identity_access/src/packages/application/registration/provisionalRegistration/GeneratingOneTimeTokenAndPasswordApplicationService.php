@@ -50,7 +50,7 @@ class GeneratingOneTimeTokenAndPasswordApplicationService
             return;
         }
 
-        $authAccount = $this->authenticationAccountRepository->findById($userId, UnsubscribeStatus::Subscribed);
+        $authAccount = $this->authenticationAccountRepository->findById($userId);
 
         $this->transactionManage->performTransaction(function () use ($definitiveRegistrationConfirmation, $authAccount) {
             $definitiveRegistrationConfirmation = DefinitiveRegistrationConfirmation::create(

@@ -58,8 +58,7 @@ class DefinitiveRegistrationApplicationService implements DefinitiveRegistration
         $definitiveRegistrationConfirmation = $this->definitiveRegistrationConfirmationRepository->findByTokenValue($oneTimeTokenValue);
 
         $authAccount = $this->authenticationAccountRepository->findById(
-            $definitiveRegistrationConfirmation->userId, 
-            UnsubscribeStatus::Subscribed
+            $definitiveRegistrationConfirmation->userId
         );
 
         try {

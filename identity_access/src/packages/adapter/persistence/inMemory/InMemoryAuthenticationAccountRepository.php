@@ -34,14 +34,10 @@ class InMemoryAuthenticationAccountRepository implements IAuthenticationAccountR
         return null;
     }
 
-    public function findById(UserId $id, UnsubscribeStatus $unsubscribeStatus): ?AuthenticationAccount
+    public function findById(UserId $id): ?AuthenticationAccount
     {
         $authenticationAccountObj = $this->authenticationAccountList[$id->value] ?? null;
         if ($authenticationAccountObj === null) {
-            return null;
-        }
-
-        if ($authenticationAccountObj->unsubscribe !== $unsubscribeStatus->value) {
             return null;
         }
 

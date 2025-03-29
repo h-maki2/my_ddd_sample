@@ -64,7 +64,7 @@ class EloquentAuthenticationAccountRepositoryTest extends TestCase
 
         // then
         // 保存したデータを取得できることを確認する
-        $actualAuthenticationAccount = $this->authenticationAccountRepository->findById($userId, UnsubscribeStatus::Subscribed);
+        $actualAuthenticationAccount = $this->authenticationAccountRepository->findById($userId);
         $this->assertEquals($authenticationAccount, $actualAuthenticationAccount);
     }
 
@@ -82,14 +82,14 @@ class EloquentAuthenticationAccountRepositoryTest extends TestCase
 
         // when
         // パスワードを変更して保存する
-        $authenticationAccount = $this->authenticationAccountRepository->findById($userId, UnsubscribeStatus::Subscribed);
+        $authenticationAccount = $this->authenticationAccountRepository->findById($userId);
         $newPassword = UserPassword::create('acbABC123_',  new Argon2HashPasswordManager());
         $authenticationAccount->changePassword($newPassword, new DateTimeImmutable());
         $this->authenticationAccountRepository->save($authenticationAccount);
 
         // then
         // 変更した認証アカウントを取得できることを確認する
-        $actualAuthenticationAccount = $this->authenticationAccountRepository->findById($userId, UnsubscribeStatus::Subscribed);
+        $actualAuthenticationAccount = $this->authenticationAccountRepository->findById($userId);
         $this->assertEquals($newPassword, $actualAuthenticationAccount->password());
     }
 
@@ -133,7 +133,7 @@ class EloquentAuthenticationAccountRepositoryTest extends TestCase
         );
 
         // when
-        $actualAuthenticationAccount = $this->authenticationAccountRepository->findById($検索対象のユーザーID, UnsubscribeStatus::Subscribed);
+        $actualAuthenticationAccount = $this->authenticationAccountRepository->findById($検索対象のユーザーID);
 
         // then
         $this->assertEquals($検索対象の認証アカウント, $actualAuthenticationAccount);
@@ -161,10 +161,10 @@ class EloquentAuthenticationAccountRepositoryTest extends TestCase
 
         // then
         // 削除した認証アカウントを取得できないことを確認する
-        $this->assertNull($this->authenticationAccountRepository->findById($削除対象のユーザーID, UnsubscribeStatus::Subscribed));
+        $this->assertNull($this->authenticationAccountRepository->findById($削除対象のユーザーID));
 
         // 削除対象ではない認証アカウントは取得できることを確認する
-        $actualAuthenticationAccount = $this->authenticationAccountRepository->findById($削除対象ではないユーザーID, UnsubscribeStatus::Subscribed);
+        $actualAuthenticationAccount = $this->authenticationAccountRepository->findById($削除対象ではないユーザーID);
         $this->assertEquals($削除対象ではない認証アカウント, $actualAuthenticationAccount);
     }
 }

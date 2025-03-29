@@ -64,7 +64,7 @@ class ChangePasswordApplicationServiceTest extends TestCase
         $this->assertEmpty($result->validationErrorMessageList);
 
         // パスワードが変更されていることを確認する
-        $authAccount = $this->authAccountRepository->findById($authAccount->id(), UnsubscribeStatus::Subscribed);
+        $authAccount = $this->authAccountRepository->findById($authAccount->id());
         $this->assertTrue($authAccount->password()->equals($変更後のパスワード));
     }
 
@@ -106,7 +106,7 @@ class ChangePasswordApplicationServiceTest extends TestCase
         $this->assertEquals($expectedValidationErrorMessageList, $result->validationErrorMessageList);
 
         // パスワードが変更されていないことを確認する
-        $authAccount = $this->authAccountRepository->findById($authAccount->id(), UnsubscribeStatus::Subscribed);
+        $authAccount = $this->authAccountRepository->findById($authAccount->id());
         $this->assertTrue($authAccount->password()->equals($変更前のパスワード));
     }
 

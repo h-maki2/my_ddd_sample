@@ -26,7 +26,6 @@ class UserProfileTestDataCreator
 
     public function create(
         UserId $userId,
-        ?UserProfileId $profileId = null,
         ?UserName $userName = null,
         ?SelfIntroductionText $selfIntroductionText = null
     ): UserProfile 
@@ -36,7 +35,7 @@ class UserProfileTestDataCreator
             throw new \RuntimeException('認証アカウントテーブルに事前にデータを登録してください。');
         }
 
-        $userProfile = TestUserProfileFactory::create($userId, $profileId, $userName, $selfIntroductionText);
+        $userProfile = TestUserProfileFactory::create($userId, $userName, $selfIntroductionText);
         $this->userProfileRepository->save($userProfile);
 
         return $userProfile;

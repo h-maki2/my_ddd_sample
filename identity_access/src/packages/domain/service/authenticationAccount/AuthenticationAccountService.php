@@ -24,4 +24,9 @@ class AuthenticationAccountService
 
         return $authenticationAccount !== null;
     }
+
+    public function isUnsubscribed(UserId $userId): bool
+    {
+        
+    }
 }

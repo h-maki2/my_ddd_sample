@@ -39,7 +39,7 @@ class EloquentTransactionManageTest extends TestCase
 
         // then
         // 認証アカウントが登録されていることを確認する
-        $actualAuthInfo = $this->authenticationAccountRepository->findById($userId, UnsubscribeStatus::Subscribed);
+        $actualAuthInfo = $this->authenticationAccountRepository->findById($userId);
         $this->assertNotEmpty($actualAuthInfo);
     }
 
@@ -62,7 +62,7 @@ class EloquentTransactionManageTest extends TestCase
 
         // then
         // 認証アカウントが登録されていないことを確認する
-        $actualAuthInfo = $this->authenticationAccountRepository->findById($userId, UnsubscribeStatus::Subscribed);
+        $actualAuthInfo = $this->authenticationAccountRepository->findById($userId);
         $this->assertEmpty($actualAuthInfo);
     }
 }

@@ -9,56 +9,46 @@ use packages\domain\service\userProfile\UserProfileService;
 class UserProfile
 {
     private UserId $userId;
-    private UserProfileId $userProfileId;
     private UserName $userName;
     private SelfIntroductionText $selfIntroductionText;
 
     private function __construct(
         UserId $userId, 
-        UserProfileId $userProfileId, 
         UserName $userName, 
         SelfIntroductionText $selfIntroductionText
     )
     {
         $this->userId = $userId;
-        $this->userProfileId = $userProfileId;
         $this->userName = $userName;
         $this->selfIntroductionText = $selfIntroductionText;
     }
 
     public static function create(
         UserId $userId, 
-        UserProfileId $userProfileId, 
         UserName $userName, 
         SelfIntroductionText $selfIntroductionText,
         UserProfileService $userProfileService
     ): self
     {
-        if ($userProfileService->alreadyExistsUserName($userName)) {
-            throw new DomainException('既に登録されているユーザー名です。userName: ' . $userName->value);
+        if ($userProfileService->isExists($userId)) {
+            throw new DomainException('ユーザープロフィールが既に存在します。userId: ' . $userId->value);
         }
 
-        return new self($userId, $userProfileId, $userName, $selfIntroductionText);
+        return new self($userId, $userName, $selfIntroductionText);
     }
 
     public static function reconstruct(
         UserId $userId, 
-        UserProfileId $userProfileId, 
         UserName $userName, 
         SelfIntroductionText $selfIntroductionText
     ): self
     {
-        return new self($userId, $userProfileId, $userName, $selfIntroductionText);
+        return new self($userId, $userName, $selfIntroductionText);
     }
 
     public function userId(): UserId
     {
         return $this->userId;
-    }
-
-    public function profileId(): UserProfileId
-    {
-        return $this->userProfileId;
     }
 
     public function name(): UserName
@@ -74,12 +64,8 @@ class UserProfile
     /**
      * ユーザー名を変更する
      */
-    public function changeName(UserName $userName, UserProfileService $userProfileService): void
+    public function changeName(UserName $userName): void
     {
-        if ($userProfileService->alreadyExistsUserName($userName)) {
-            throw new DomainException('既に登録されているユーザー名です。userName: ' . $userName->value);
-        }
-
         $this->userName = $userName;
     }
 

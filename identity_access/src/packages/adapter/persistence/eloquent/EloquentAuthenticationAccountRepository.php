@@ -35,17 +35,15 @@ class EloquentAuthenticationAccountRepository implements IAuthenticationAccountR
         return $this->toAuthenticationAccount($authInfoModel, $authInfoModel->user);
     }
 
-    public function findById(UserId $id, UnsubscribeStatus $unsubscribeStatus): ?AuthenticationAccount
+    public function findById(UserId $id): ?AuthenticationAccount
     {
-        $userModel = EloquentUser::where('id', $id->value)
-                               ->where('unsubscribe', $unsubscribeStatus->value)
-                               ->first();
+        $authInfoModel = EloquentAuthenticationInformation::find($id->value);
 
-        if ($userModel === null) {
+        if ($authInfoModel === null) {
             return null;
         }
 
-        return $this->toAuthenticationAccount($userModel->authenticationInformation, $userModel);
+        return $this->toAuthenticationAccount($authInfoModel, $authInfoModel->user);
     }
 
     public function save(AuthenticationAccount $authenticationAccount): void

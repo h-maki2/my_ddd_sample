@@ -69,7 +69,7 @@ class DefinitiveRegistrationApplicationServiceTest extends TestCase
         $this->assertEmpty($result->validationErrorMessage);
 
         // 認証アカウントが本登録済みになっていることを確認
-        $updatedAuthenticationAccount = $this->authenticationAccountRepository->findById($userId, UnsubscribeStatus::Subscribed);
+        $updatedAuthenticationAccount = $this->authenticationAccountRepository->findById($userId);
         $this->assertEquals(DefinitiveRegistrationCompletedStatus::Completed, $updatedAuthenticationAccount->definitiveRegistrationCompletedStatus());
 
         // 本登録確認情報が削除されていることを確認

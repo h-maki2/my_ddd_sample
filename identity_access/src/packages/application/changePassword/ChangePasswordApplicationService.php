@@ -50,7 +50,7 @@ class ChangePasswordApplicationService implements ChangePasswordApplicationInput
             return ChangePasswordResult::createWhenFaild($passwordValidation->errorMessageList());
         }
 
-        $authAccount = $this->authenticationAccountRepository->findById($userId, UnsubscribeStatus::Subscribed);
+        $authAccount = $this->authenticationAccountRepository->findById($userId);
         if ($authAccount === null) {
             throw new RuntimeException('ユーザーが見つかりません');
         }
