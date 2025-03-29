@@ -39,7 +39,7 @@ class InMemoryUserProfileRepository implements IUserProfileRepository
     {
         return UserProfile::reconstruct(
             new UserId($record->user_id),
-            new UserName($record->user_name),
+            new UserName($record->name),
             new SelfIntroductionText($record->self_introduction_text)
         );
     }

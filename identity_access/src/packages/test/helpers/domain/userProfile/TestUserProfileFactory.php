@@ -13,14 +13,12 @@ class TestUserProfileFactory
 {
     public static function create(
         UserId $userId,
-        ?UserProfileId $profileId = null,
         ?UserName $userName = null,
         ?SelfIntroductionText $selfIntroductionText = null
     ): UserProfile
     {
         return UserProfile::reconstruct(
             $userId,
-            $profileId ?? new UserProfileId(Uuid::uuid7()),
             $userName ?? new UserName('test-user-name'),
             $selfIntroductionText ?? new SelfIntroductionText('test-self-introduction-text')
         );
