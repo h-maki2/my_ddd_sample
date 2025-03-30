@@ -11,6 +11,7 @@ use packages\adapter\presenter\errorResponse\ErrorResponse;
 use packages\adapter\presenter\errorResponse\JsonErrorResponse;
 use packages\application\common\exception\TransactionException;
 use packages\domain\model\common\exception\AuthenticationException;
+use RuntimeException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -32,6 +33,11 @@ class Handler extends ExceptionHandler
         }
 
         if ($exception instanceof DomainException) {
+            $jsonResponseData = JsonErrorResponse::get(HttpStatus::BadRequest);
+            return response()->json($jsonResponseData->value, $jsonResponseData->httpStatusCode());
+        }
+
+        if ($exception instanceof RuntimeException) {
             $jsonResponseData = JsonErrorResponse::get(HttpStatus::BadRequest);
             return response()->json($jsonResponseData->value, $jsonResponseData->httpStatusCode());
         }

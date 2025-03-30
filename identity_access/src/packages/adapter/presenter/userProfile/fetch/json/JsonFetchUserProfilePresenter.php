@@ -28,9 +28,10 @@ class JsonFetchUserProfilePresenter implements JsonPresenter
         }
 
         return [
-            'userProfileId' => $this->result->userProfileId,
+            'userId' => $this->result->userId,
             'userName' => $this->result->userName,
-            'selfIntroductionText' => $this->result->selfIntroductionText
+            'selfIntroductionText' => $this->result->selfIntroductionText,
+            'email' => $this->result->email,
         ];
     }
 

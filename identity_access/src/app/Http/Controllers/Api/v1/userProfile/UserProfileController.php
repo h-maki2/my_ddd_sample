@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Api\v1\userProfile;
 use Illuminate\Database\Eloquent\Casts\Json;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use packages\adapter\presenter\userProfile\fetch\json\JsonFetchUserProfilePresenter;
 use packages\adapter\presenter\userProfile\register\json\JsonRegisterUserProfilePresenter;
 use packages\application\userProfile\create\CreateUserProfileApplicationService;
+use packages\application\userProfile\fetch\FetchUserProfileApplicationService;
 
 class UserProfileController
 {
@@ -16,6 +18,16 @@ class UserProfileController
     {
         $this->request = $request;
     }
+
+    public function fetch(FetchUserProfileApplicationService $appService): JsonResponse
+    {
+        $result = $appService->handle($this->request->query('scope') ?? '');
+
+        $presenter = new JsonFetchUserProfilePresenter($result);
+        $jsonResponseData = $presenter->jsonResponseData();
+        return response()->json($jsonResponseData->value, $jsonResponseData->httpStatusCode());
+    }
+
 
     public function create(CreateUserProfileApplicationService $appService): JsonResponse
     {

@@ -4,35 +4,39 @@ namespace packages\application\userProfile\fetch;
 
 class FetchUserProfileResult
 {
-    readonly string $userProfileId;
+    readonly string $userId;
     readonly string $userName;
     readonly string $selfIntroductionText;
+    readonly string $email;
     readonly bool $isExistsUserProfile;
 
     private function __construct(
-        string $userProfileId, 
+        string $userId, 
         string $userName, 
         string $selfIntroductionText,
+        string $email,
         bool $isExistsUserProfile
     )
     {
-        $this->userProfileId = $userProfileId;
+        $this->userId = $userId;
         $this->userName = $userName;
         $this->selfIntroductionText = $selfIntroductionText;
+        $this->email = $email;
         $this->isExistsUserProfile = $isExistsUserProfile;
     }
 
-    public static function createWhenNotFound(): FetchUserProfileResult
+    public static function createWhenNotFound(): self
     {
-        return new FetchUserProfileResult('', '', '', false);
+        return new self('', '', '', '', false);
     }
 
     public static function createWhenFound(
-        string $userProfileId, 
+        string $userId, 
         string $userName, 
-        string $selfIntroductionText
-    ): FetchUserProfileResult
+        string $selfIntroductionText,
+        string $email
+    ): self
     {
-        return new FetchUserProfileResult($userProfileId, $userName, $selfIntroductionText, true);
+        return new self($userId, $userName, $selfIntroductionText, $email, true);
     }
 }
