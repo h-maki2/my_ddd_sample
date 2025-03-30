@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Casts\Json;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use packages\adapter\presenter\userProfile\register\json\JsonRegisterUserProfilePresenter;
-use packages\application\userProfile\register\RegisterUserProfileApplicationService;
+use packages\application\userProfile\create\CreateUserProfileApplicationService;
 
 class UserProfileController
 {
@@ -17,9 +17,9 @@ class UserProfileController
         $this->request = $request;
     }
 
-    public function register(RegisterUserProfileApplicationService $appService): JsonResponse
+    public function create(CreateUserProfileApplicationService $appService): JsonResponse
     {
-        $result = $appService->register(
+        $result = $appService->create(
             $this->request->input('name') ?? '',
             $this->request->input('selfIntroductionText') ?? '',
             $this->request->input('scope') ?? ''

@@ -1,6 +1,6 @@
 <?php
 
-namespace packages\application\userProfile\register;
+namespace packages\application\userProfile\create;
 
 use packages\domain\model\common\exception\AuthenticationException;
 use packages\domain\model\common\validator\ValidationHandler;
@@ -17,7 +17,7 @@ use packages\domain\service\oauth\LoggedInUserIdFetcher;
 use packages\domain\service\userProfile\UserProfileService;
 use RuntimeException;
 
-class RegisterUserProfileApplicationService implements RegisterUserProfileInputBoundary
+class CreateUserProfileApplicationService
 {
     private IUserProfileRepository $userProfileRepository;
     private UserProfileService $userProfileService;
@@ -35,13 +35,13 @@ class RegisterUserProfileApplicationService implements RegisterUserProfileInputB
     }
 
     /**
-     * ユーザー登録を行う
+     * ユーザープロフィールを作成する
      */
-    public function register(
+    public function create(
         string $userNameString, 
         string $selfIntroductionTextString,
         string $scopeString
-    ): RegisterUserProfileResult
+    ): CreateUserProfileResult
     {
         $userId = $this->loggedInUserIdFetcher->fetch(Scope::from($scopeString));
 
@@ -49,7 +49,7 @@ class RegisterUserProfileApplicationService implements RegisterUserProfileInputB
         $validationHandler->addValidator(new UserNameValidation($userNameString));
         $validationHandler->addValidator(new SelfIntroductionTextValidation($selfIntroductionTextString));
         if (!$validationHandler->validate()) {
-            return RegisterUserProfileResult::createWhenFailure($validationHandler->errorMessages());
+            return CreateUserProfileResult::createWhenFailure($validationHandler->errorMessages());
         }
 
         $userName = New UserName($userNameString);
@@ -63,6 +63,6 @@ class RegisterUserProfileApplicationService implements RegisterUserProfileInputB
         );
         $this->userProfileRepository->save($userProfile);
 
-        return RegisterUserProfileResult::createWhenSuccess();
+        return CreateUserProfileResult::createWhenSuccess();
     }
 }

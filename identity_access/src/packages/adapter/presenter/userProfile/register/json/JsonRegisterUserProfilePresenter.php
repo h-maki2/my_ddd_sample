@@ -5,16 +5,16 @@ namespace packages\adapter\presenter\userProfile\register\json;
 use packages\adapter\presenter\common\json\HttpStatus;
 use packages\adapter\presenter\common\json\JsonPresenter;
 use packages\adapter\presenter\common\json\JsonResponseData;
-use packages\application\userProfile\register\RegisterUserProfileOutputBoundary;
-use packages\application\userProfile\register\RegisterUserProfileResult;
+use packages\application\userProfile\create\RegisterUserProfileOutputBoundary;
+use packages\application\userProfile\create\CreateUserProfileResult;
 
 class JsonRegisterUserProfilePresenter implements JsonPresenter
 {
-    private RegisterUserProfileResult $registerUserProfileResult;
+    private CreateUserProfileResult $CreateUserProfileResult;
 
-    public function __construct(RegisterUserProfileResult $registerUserProfileResult)
+    public function __construct(CreateUserProfileResult $CreateUserProfileResult)
     {
-        $this->registerUserProfileResult = $registerUserProfileResult;
+        $this->CreateUserProfileResult = $CreateUserProfileResult;
     }
 
     public function jsonResponseData(): JsonResponseData
@@ -24,12 +24,12 @@ class JsonRegisterUserProfilePresenter implements JsonPresenter
 
     private function responseData(): array
     {
-        if ($this->registerUserProfileResult->isSuccess) {
+        if ($this->CreateUserProfileResult->isSuccess) {
             return [];
         }
 
         $responseData = [];
-        foreach ($this->registerUserProfileResult->validationErrorMessageList as $validationErrorMessage) {
+        foreach ($this->CreateUserProfileResult->validationErrorMessageList as $validationErrorMessage) {
             $responseData[$validationErrorMessage->fieldName] = $validationErrorMessage->errorMessageList;
         }
         return $responseData;
@@ -37,6 +37,6 @@ class JsonRegisterUserProfilePresenter implements JsonPresenter
 
     private function httpStatus(): HttpStatus
     {
-        return $this->registerUserProfileResult->isSuccess ? HttpStatus::Success : HttpStatus::BadRequest;
+        return $this->CreateUserProfileResult->isSuccess ? HttpStatus::Success : HttpStatus::BadRequest;
     }
 }

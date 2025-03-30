@@ -1,8 +1,8 @@
 <?php
 
-namespace packages\application\userProfile\register;
+namespace packages\application\userProfile\create;
 
-class RegisterUserProfileResult
+class CreateUserProfileResult
 {
     readonly bool $isSuccess;
     readonly array $validationErrorMessageList;
