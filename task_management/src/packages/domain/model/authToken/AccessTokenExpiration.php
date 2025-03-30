@@ -7,30 +7,30 @@ use InvalidArgumentException;
 
 class AccessTokenExpiration
 {
-    private DateTimeImmutable $value;
+    readonly DateTimeImmutable $value;
 
     private function __construct(DateTimeImmutable $value) 
     {
         $this->value = $value;
     }
 
-    public static function create(int $expiresInTimeStamp): self
+    public static function create(int $expirationTimeStamp): self
     {
-        if ($expiresInTimeStamp <= 0) {
+        if ($expirationTimeStamp <= 0) {
             throw new InvalidArgumentException('アクセストークンの有効期限のタイムスタンプ値が不正です。');
         }
 
         $currentTimeStamp = (new DateTimeImmutable())->getTimestamp();
-        $tokenExpiration = $currentTimeStamp + $expiresInTimeStamp;
+        $tokenExpiration = $currentTimeStamp + $expirationTimeStamp;
         return new self((new DateTimeImmutable())->setTimestamp($tokenExpiration));
     }
 
-    public function reconstruct(DateTimeImmutable $value): self
+    public static function reconstruct(DateTimeImmutable $value): self
     {
         return new self($value);
     }
 
-    public function value(): string
+    public function stringValue(): string
     {
         return $this->value->format('Y-m-d H:i:s');
     }
@@ -38,8 +38,8 @@ class AccessTokenExpiration
     /**
      * アクセストークンの有効期限が切れているかどうかを判定
      */
-    public function isExpired(): bool
+    public function isExpired(DateTimeImmutable $currentDateTime): bool
     {
-        return $this->value < new DateTimeImmutable();
+        return $this->value < $currentDateTime;
     }
 }

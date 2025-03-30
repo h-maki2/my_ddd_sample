@@ -24,7 +24,7 @@ class AccessToken
 
     public function expiration(): string
     {
-        return $this->expiration->value();
+        return $this->expiration->stringValue();
     }
 
     /**
@@ -32,6 +32,6 @@ class AccessToken
      */
     public function isExpired(): bool
     {
-        return $this->expiration->isExpired();
+        return $this->expiration->isExpired(new DateTimeImmutable());
     }
 }
