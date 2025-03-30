@@ -15,9 +15,9 @@ class CookieAuthTokenStore extends AAuthTokenStore
 {
     public function save(AuthToken $authToken): void
     {
-        Cookie::queue(self::ACCESS_TOKEN_KEY_NAME, $authToken->accessToken(), self::TOKEN_EXPIRATION_KEY_NAME);
-        Cookie::queue(self::REFRESH_TOKEN_KEY_NAME, $authToken->refreshToken->value, self::TOKEN_EXPIRATION_KEY_NAME);
-        Cookie::queue(self::TOKEN_EXPIRATION_KEY_NAME, $authToken->accessTokenExpiresIn(), self::COOKIE_EXPIRATION_MINUTES);
+        Cookie::queue(self::ACCESS_TOKEN_KEY_NAME, $authToken->accessToken->value, self::COOKIE_EXPIRATION_MINUTES);
+        Cookie::queue(self::REFRESH_TOKEN_KEY_NAME, $authToken->refreshToken->value, self::COOKIE_EXPIRATION_MINUTES);
+        Cookie::queue(self::TOKEN_EXPIRATION_KEY_NAME, $authToken->accessToken->expiration(), self::COOKIE_EXPIRATION_MINUTES);
     }
 
     public function clear(): void
