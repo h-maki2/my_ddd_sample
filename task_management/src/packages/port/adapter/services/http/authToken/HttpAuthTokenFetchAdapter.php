@@ -18,8 +18,6 @@ class HttpAuthTokenFetchAdapter
     public function toAuthToken(string $authCode): AuthToken
     {
         $result = $this->sendRequest($authCode);
-        print_r($result);
-
         return $this->arrayToAuthToken($result);
     }
 

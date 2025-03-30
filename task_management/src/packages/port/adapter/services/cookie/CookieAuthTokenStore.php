@@ -2,10 +2,12 @@
 
 namespace packages\port\adapter\services\cookie;
 
+use DateTimeImmutable;
 use Illuminate\Support\Facades\Cookie;
 use packages\domain\model\authToken\AAuthTokenCookieService;
 use packages\domain\model\authToken\AAuthTokenStore;
 use packages\domain\model\authToken\AccessToken;
+use packages\domain\model\authToken\AccessTokenExpiration;
 use packages\domain\model\authToken\AuthToken;
 use packages\domain\model\authToken\RefreshToken;
 
@@ -36,7 +38,12 @@ class CookieAuthTokenStore extends AAuthTokenStore
         }
 
         return new AuthToken(
-            new AccessToken($accessToken, (int)$tokenExpiration),
+            new AccessToken(
+                $accessToken, 
+                AccessTokenExpiration::reconstruct(
+                    new DateTimeImmutable($tokenExpiration),
+                )
+            ),
             new RefreshToken($refreshToken)
         );
     }
