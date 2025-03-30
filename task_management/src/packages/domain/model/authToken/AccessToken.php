@@ -27,6 +27,11 @@ class AccessToken
         return $this->expiration->stringValue();
     }
 
+    public function headerValue(): string
+    {
+        return 'Bearer ' . $this->value;
+    }
+
     /**
      * アクセストークンの有効期限が切れているかどうかを判定
      */
