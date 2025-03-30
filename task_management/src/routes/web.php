@@ -9,6 +9,6 @@ Route::get('/', function () {
 });
 
 Route::get('/login', [AuthenticationControllers::class, 'displayLoginPage']);
-Route::post('/auth/callback', [AuthenticationControllers::class, 'login']);
+Route::get('/auth/callback', [AuthenticationControllers::class, 'login']);
 
 Route::get('/test', [TestController::class, 'index']);

@@ -23,7 +23,7 @@ abstract class LoginUrlCreator
     {
         return $this->baseLoginUrl() . '?' . http_build_query([
             'client_id' => $this->clientId(),
-            'redirect_uri' => $this->redirectUrl(),
+            'redirect_url' => $this->redirectUrl(),
             'response_type' => self::RESPONSE_TYPE,
             'state' => $this->state(),
             'scope' => $this->scope(),

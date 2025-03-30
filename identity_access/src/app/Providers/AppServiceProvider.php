@@ -105,5 +105,7 @@ class AppServiceProvider extends ServiceProvider
             'edit_account' => 'edit account information',
             'delete_account' => 'delete account information',
         ]);
+
+        Passport::tokensExpireIn(now()->addMinutes(30));
     }
 }

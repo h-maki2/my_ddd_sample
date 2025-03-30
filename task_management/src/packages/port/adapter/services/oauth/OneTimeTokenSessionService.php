@@ -9,11 +9,15 @@ class OneTimeTokenSessionService extends AOneTimeTokenSessionService
 {
     public function save(OneTimeToken $oneTimeToken): void
     {
-        session(self::ONE_TIME_TOKEN_SESSION_KEY, $oneTimeToken);
+        session([self::ONE_TIME_TOKEN_SESSION_KEY => $oneTimeToken]);
     }
 
     public function get(): ?OneTimeToken
     {
+        $oneTimeTokenString = session(self::ONE_TIME_TOKEN_SESSION_KEY);
+        if ($oneTimeTokenString === null) {
+            return null;
+        }
         return session(self::ONE_TIME_TOKEN_SESSION_KEY);
     }
 

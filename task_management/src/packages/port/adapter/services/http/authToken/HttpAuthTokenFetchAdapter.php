@@ -6,6 +6,7 @@ use DateTimeImmutable;
 use Illuminate\Support\Facades\Http;
 use packages\domain\model\auth\AuthenticationException;
 use packages\domain\model\authToken\AccessToken;
+use packages\domain\model\authToken\AccessTokenExpiration;
 use packages\domain\model\authToken\AuthToken;
 use packages\domain\model\authToken\RefreshToken;
 
@@ -17,6 +18,7 @@ class HttpAuthTokenFetchAdapter
     public function toAuthToken(string $authCode): AuthToken
     {
         $result = $this->sendRequest($authCode);
+        print_r($result);
 
         return $this->arrayToAuthToken($result);
     }
@@ -48,7 +50,7 @@ class HttpAuthTokenFetchAdapter
         return new AuthToken(
             new AccessToken(
                 $result['access_token'],
-                (int)$result['expires_in']
+                AccessTokenExpiration::create((int)$result['expires_in'])
             ),
             new RefreshToken(
                 $result['refresh_token']

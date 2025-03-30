@@ -18,9 +18,9 @@ class AuthToken
         return $this->accessToken->value;
     }
 
-    public function accessTokenExpiresIn(): int
+    public function accessTokenExpiresIn(): string
     {
-        return $this->accessToken->expiresIn();
+        return $this->accessToken->expiration();
     }
 
     /**
