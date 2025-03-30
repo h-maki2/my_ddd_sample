@@ -6,7 +6,11 @@ use Illuminate\Support\ServiceProvider;
 use packages\domain\model\auth\AOneTimeTokenSessionService;
 use packages\domain\model\auth\IAuthorizationRequestUrlBuildService;
 use packages\domain\model\auth\LoginUrlCreator;
+use packages\domain\model\authToken\AAuthTokenStore;
+use packages\domain\model\authToken\IAuthTokenService;
 use packages\port\adapter\services\authorizationRequestUrl\HttpAuthorizationRequestUrlBuildService;
+use packages\port\adapter\services\cookie\CookieAuthTokenStore;
+use packages\port\adapter\services\http\authToken\HttpAuthTokenService;
 use packages\port\adapter\services\oauth\OauthLoginUrlCreator;
 use packages\port\adapter\services\oauth\OneTimeTokenSessionService;
 
@@ -25,6 +29,16 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             LoginUrlCreator::class,
             OauthLoginUrlCreator::class
+        );
+
+        $this->app->bind(
+            IAuthTokenService::class,
+            HttpAuthTokenService::class
+        );
+
+        $this->app->bind(
+            AAuthTokenStore::class,
+            CookieAuthTokenStore::class
         );
     }
 

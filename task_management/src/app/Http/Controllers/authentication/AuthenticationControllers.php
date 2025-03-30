@@ -22,4 +22,14 @@ class AuthenticationControllers extends Controller
         $loginUrl = $this->loginApplicationService->createLoginUrl();
         return view('authentication.login', ['loginUrl' => $loginUrl]);
     }
+
+    public function login(Request $request)
+    {
+        $this->loginApplicationService->login(
+            $request->query('code') ?? '',
+            $request->query('state') ?? ''
+        );
+
+        return redirect('/');
+    }
 }
