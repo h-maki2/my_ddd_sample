@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use packages\domain\model\auth\AuthenticationException;
 use packages\domain\model\authToken\AccessToken;
+use packages\domain\model\authToken\AccessTokenExpiration;
 use packages\domain\model\authToken\AuthToken;
 use packages\domain\model\authToken\RefreshToken;
 
@@ -52,7 +53,7 @@ class HttpRefreshAuthTokenAdapter
         return new AuthToken(
             new AccessToken(
                 $result['access_token'],
-                (int)$result['expires_in']
+                AccessTokenExpiration::create((int)$result['expires_in'])
             ),
             new RefreshToken(
                 $result['refresh_token']
