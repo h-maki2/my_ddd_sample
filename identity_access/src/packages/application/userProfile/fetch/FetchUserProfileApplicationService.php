@@ -2,6 +2,7 @@
 
 namespace packages\application\userProfile\fetch;
 
+use packages\application\userProfile\fetch\fetchLoggedInUserProfile\FetchLoggedInUserProfileResult;
 use packages\domain\model\authenticationAccount\IAuthenticationAccountRepository;
 use packages\domain\model\oauth\scope\IScopeAuthorizationChecker;
 use packages\domain\model\oauth\scope\Scope;
@@ -28,7 +29,7 @@ class FetchUserProfileApplicationService
         $this->authenticationAccountRepository = $authenticationAccountRepository;
     }
 
-    public function handle(string $scope): FetchUserProfileResult
+    public function fetchLoggedInUserProfile(string $scope): FetchLoggedInUserProfileResult
     {
         $userId = $this->loggedInUserIdFetcher->fetch(Scope::from($scope));
 
@@ -36,10 +37,10 @@ class FetchUserProfileApplicationService
         
         $userProfile = $this->userProfileRepository->findById($userId);
         if ($userProfile === null) {
-            return FetchUserProfileResult::createWhenNotFound();
+            return FetchLoggedInUserProfileResult::createWhenNotFound();
         }
 
-        return FetchUserProfileResult::createWhenFound(
+        return FetchLoggedInUserProfileResult::createWhenFound(
             $userProfile->userId()->value,
             $userProfile->name()->value,
             $userProfile->selfIntroductionText()->value,

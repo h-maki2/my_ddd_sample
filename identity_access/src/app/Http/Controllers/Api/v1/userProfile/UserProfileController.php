@@ -19,9 +19,9 @@ class UserProfileController
         $this->request = $request;
     }
 
-    public function fetch(FetchUserProfileApplicationService $appService): JsonResponse
+    public function fetchLoggedInUserProfile(FetchUserProfileApplicationService $appService): JsonResponse
     {
-        $result = $appService->handle($this->request->query('scope') ?? '');
+        $result = $appService->fetchLoggedInUserProfile($this->request->query('scope') ?? '');
 
         $presenter = new JsonFetchUserProfilePresenter($result);
         $jsonResponseData = $presenter->jsonResponseData();

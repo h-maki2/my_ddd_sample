@@ -1,8 +1,8 @@
 <?php
 
-namespace packages\application\userProfile\fetch;
+namespace packages\application\userProfile\fetch\fetchLoggedInUserProfile;
 
-class FetchUserProfileResult
+class FetchLoggedInUserProfileResult
 {
     readonly string $userId;
     readonly string $userName;

@@ -5,13 +5,13 @@ namespace packages\adapter\presenter\userProfile\fetch\json;
 use packages\adapter\presenter\common\json\HttpStatus;
 use packages\adapter\presenter\common\json\JsonPresenter;
 use packages\adapter\presenter\common\json\JsonResponseData;
-use packages\application\userProfile\fetch\FetchUserProfileResult;
+use packages\application\userProfile\fetch\fetchLoggedInUserProfile\FetchLoggedInUserProfileResult;
 
 class JsonFetchUserProfilePresenter implements JsonPresenter
 {
-    private FetchUserProfileResult $result;
+    private FetchLoggedInUserProfileResult $result;
 
-    public function __construct(FetchUserProfileResult $result)
+    public function __construct(FetchLoggedInUserProfileResult $result)
     {
         $this->result = $result;
     }

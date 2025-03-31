@@ -4,7 +4,7 @@ use Lcobucci\JWT\Signer\Key\InMemory;
 use packages\adapter\persistence\inMemory\InMemoryAuthenticationAccountRepository;
 use packages\adapter\persistence\inMemory\InMemoryUserProfileRepository;
 use packages\application\userProfile\fetch\FetchUserProfileApplicationService;
-use packages\application\userProfile\fetch\FetchUserProfileResult;
+use packages\application\userProfile\fetch\fetchLoggedInUserProfile\FetchLoggedInUserProfileResult;
 use packages\domain\model\authenticationAccount\IAuthenticationAccountRepository;
 use packages\domain\model\authenticationAccount\UserEmail;
 use packages\domain\model\oauth\scope\IScopeAuthorizationChecker;
@@ -82,7 +82,7 @@ class FetchUserProfileApplicationServiceTest extends TestCase
         $scopeString = Scope::ReadAccount->value;
 
         // when
-        $result = $this->fetchUserProfileApplicationService->handle($scopeString);
+        $result = $this->fetchUserProfileApplicationService->fetchLoggedInUserProfile($scopeString);
 
         // then
         $this->assertEquals($name->value, $result->userName);
@@ -105,7 +105,7 @@ class FetchUserProfileApplicationServiceTest extends TestCase
         $scopeString = Scope::ReadAccount->value;
 
         // when
-        $result = $this->fetchUserProfileApplicationService->handle($scopeString);
+        $result = $this->fetchUserProfileApplicationService->fetchLoggedInUserProfile($scopeString);
 
         // then
         $this->assertEquals('', $result->userName);
