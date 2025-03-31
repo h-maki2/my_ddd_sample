@@ -24,7 +24,7 @@ class HttpCreateUserProfileRequestService implements CreateUserProfileRequestSer
         $response = Http::asForm()
                 ->withHeaders([
                     'Authorization' => $accessToken->headerValue(),
-                    'Accept' => IdentityAccessApiAcceptCreator::create('v1'),
+                    'Accept' => IdentityAccessApiAcceptCreator::create(IdentityAccessApiVersion::V1),
                 ])
                 ->post($this->buildUrl(), [
                     'name' => $name,
