@@ -1,0 +1,9 @@
+@startuml
+title ユーザープロフィール関連
+left to right direction
+actor ユーザー
+rectangle {
+   ユーザー --> (ユーザープロフィールを登録する)
+   ユーザー --> (ユーザープロフィールを取得する)
+}
+@enduml

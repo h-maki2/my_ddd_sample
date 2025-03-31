@@ -1,0 +1,35 @@
+@startuml ユーザープロフィール集約
+
+title ユーザープロフィール集約
+
+package "ユーザープロフィール集約\nUserProfile" {
+    class "UserProfile\nユーザープロフィール" as UserProfile << (R,red) RootEntity >> {
+        userId: UserId
+        name: UserName
+        selfIntroductionText 自己紹介文: SelfIntroduction
+    }
+
+    class UserName {
+        - value: string
+    }
+
+    class SelfIntroduction {
+        - value: string
+    }
+
+    note bottom of UserName
+        ・1文字以上50文字以下
+        ・空白のみは不可
+    end note
+
+    note bottom of SelfIntroduction
+        ・0文字以上500文字以下
+        ・nullでも可
+    end note
+
+    UserProfile -down-> AuthenticationAccount.UserId
+    UserProfile *-down- UserName
+    UserProfile *-down- SelfIntroduction
+}
+
+@enduml

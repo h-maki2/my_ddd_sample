@@ -28,19 +28,6 @@ class AuthenticationAccountService
     }
 
     /**
-     * ユーザーが退会済みかどうかを判定
-     */
-    public function isUnsubscribed(UserId $userId): bool
-    {
-        $authenticationAccount = $this->authenticationAccountRepository->findById($userId);
-        if ($authenticationAccount === null) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * アカウントロックされているかどうかを判定
      */
     public function isAccountLocked(UserId $userId): bool

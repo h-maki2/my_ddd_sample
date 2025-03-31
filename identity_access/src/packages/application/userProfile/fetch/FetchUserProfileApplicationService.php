@@ -33,10 +33,7 @@ class FetchUserProfileApplicationService
         $userId = $this->loggedInUserIdFetcher->fetch(Scope::from($scope));
 
         $authAccount = $this->authenticationAccountRepository->findById($userId);
-        if ($authAccount === null) {
-            throw new RuntimeException('アカウントが見つかりません。userId: ' . $userId->value);
-        }
-
+        
         $userProfile = $this->userProfileRepository->findById($userId);
         if ($userProfile === null) {
             return FetchUserProfileResult::createWhenNotFound();
