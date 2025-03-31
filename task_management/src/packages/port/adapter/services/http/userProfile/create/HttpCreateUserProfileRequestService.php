@@ -3,17 +3,20 @@
 namespace packages\port\adapter\services\http\userProfile\create;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use packages\application\userProfile\CreateUserProfileRequestService;
 use packages\application\userProfile\CreateUserProfileResponseData;
 use packages\domain\model\auth\AuthenticationException;
+use packages\domain\model\auth\Scope;
 use packages\domain\model\authToken\AccessToken;
 use packages\port\adapter\services\common\identityAccessApi\IdentityAccessApiAcceptCreator;
 use packages\port\adapter\services\common\identityAccessApi\IdentityAccessApiException;
 use packages\port\adapter\services\common\identityAccessApi\IdentityAccessApiResponse;
+use packages\port\adapter\services\common\identityAccessApi\IdentityAccessApiVersion;
 
 class HttpCreateUserProfileRequestService implements CreateUserProfileRequestService
 {
-    private const URL_TEMPLATE = 'create';
+    private const URL_TEMPLATE = 'api/profile/create';
 
     public function send(
         AccessToken $accessToken,
@@ -28,7 +31,8 @@ class HttpCreateUserProfileRequestService implements CreateUserProfileRequestSer
                 ])
                 ->post($this->buildUrl(), [
                     'name' => $name,
-                    'selfIntroductionText' => $selfIntroductionText
+                    'selfIntroductionText' => $selfIntroductionText,
+                    'scope' => Scope::EditAccount->value
                 ]);
 
         

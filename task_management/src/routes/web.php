@@ -4,11 +4,9 @@ use App\Http\Controllers\authentication\AuthenticationControllers;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\userProfile\CreateUserProfileController;
 use Illuminate\Support\Facades\Route;
-use packages\port\adapter\services\cookie\CookieAuthTokenStore;
 
 Route::get('/', function () {
-    $store = new CookieAuthTokenStore();
-    print_r($store->get());
+    print_r('Hello World');
 });
 
 Route::get('/login', [AuthenticationControllers::class, 'displayLoginPage']);

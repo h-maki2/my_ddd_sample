@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use DomainException;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Log;
 use InvalidArgumentException;
 use packages\adapter\presenter\common\json\HttpStatus;
 use packages\adapter\presenter\errorResponse\ErrorResponse;
@@ -23,6 +24,21 @@ class Handler extends ExceptionHandler
 
     public function register()
     {
+        
+    }
+
+    public function report(Throwable $exception)
+    {
+        if ($exception instanceof InvalidArgumentException) {
+            Log::warning('InvalidArgumentException occurred: ' . $exception->getMessage());
+        }
+
+        if ($exception instanceof AuthenticationException) {
+            Log::error('AuthenticationException occurred: ' . $exception->getMessage());
+        }
+
+        // デフォルトの報告処理を呼び出す
+        parent::report($exception);
     }
 
     public function render($request, Throwable $exception)

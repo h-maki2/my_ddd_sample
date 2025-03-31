@@ -2,6 +2,7 @@
 
 namespace packages\application\userProfile\create;
 
+use Illuminate\Support\Facades\Log;
 use packages\domain\model\common\exception\AuthenticationException;
 use packages\domain\model\common\validator\ValidationHandler;
 use packages\domain\model\oauth\scope\IScopeAuthorizationChecker;

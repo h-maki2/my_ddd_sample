@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\userProfile;
 
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 use packages\application\userProfile\CreateUserProfileApplicationService;
 
 class CreateUserProfileController

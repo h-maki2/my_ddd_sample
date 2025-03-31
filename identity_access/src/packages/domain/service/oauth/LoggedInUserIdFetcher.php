@@ -2,6 +2,7 @@
 
 namespace packages\domain\service\oauth;
 
+use Illuminate\Support\Facades\Log;
 use packages\domain\model\authenticationAccount\UserId;
 use packages\domain\model\common\exception\AuthenticationException;
 use packages\domain\model\oauth\scope\IScopeAuthorizationChecker;

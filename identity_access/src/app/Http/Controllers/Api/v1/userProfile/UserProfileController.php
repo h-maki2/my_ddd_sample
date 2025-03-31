@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers\Api\v1\userProfile;
 
+use App\Http\Controllers\Api\ApiController;
 use Illuminate\Database\Eloquent\Casts\Json;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use packages\adapter\presenter\userProfile\fetch\json\JsonFetchUserProfilePresenter;
 use packages\adapter\presenter\userProfile\register\json\JsonRegisterUserProfilePresenter;
 use packages\application\userProfile\create\CreateUserProfileApplicationService;
 use packages\application\userProfile\fetch\FetchUserProfileApplicationService;
 
-class UserProfileController
+class UserProfileController extends ApiController
 {
     private Request $request;
 
