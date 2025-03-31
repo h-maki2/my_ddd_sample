@@ -11,22 +11,21 @@ class UserProfile extends Model
 
     protected $table = 'user_profiles';
 
-    protected $primaryKey = 'user_profile_id';
+    protected $primaryKey = 'user_id';
 
     public $incrementing = false;
 
     protected $keyType = 'string';
 
     protected $fillable = [
-        'user_profile_id',
         'user_id',
         'name',
         'user_name',
         'self_introduction_text',
     ];
 
-    public function AuthenticationAccount()
+    public function user()
     {
-        return $this->belongsTo(AuthenticationAccount::class, 'user_id', 'user_id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }
