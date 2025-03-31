@@ -4,6 +4,8 @@ namespace packages\application\userProfile;
 
 use packages\domain\model\auth\AuthenticationException;
 use packages\domain\model\authToken\AAuthTokenStore;
+use packages\domain\model\authToken\AccessTokenFetcher;
+use packages\domain\model\authToken\IAuthTokenService;
 use packages\domain\model\authToken\LoggedInChecker;
 
 /**
@@ -12,17 +14,17 @@ use packages\domain\model\authToken\LoggedInChecker;
 class CreateUserProfileApplicationService
 {
     private CreateUserProfileRequestService $createUserProfileRequestService;
-    private AAuthTokenStore $authTokenStore;
     private LoggedInChecker $loggedInChecker;
+    private AccessTokenFetcher $accessTokenFetcher;
 
     public function __construct(
         CreateUserProfileRequestService $createUserProfileRequestService,
         AAuthTokenStore $authTokenStore,
-        LoggedInChecker $loggedInChecker
+        IAuthTokenService $authTokenService
     ) {
         $this->createUserProfileRequestService = $createUserProfileRequestService;
-        $this->authTokenStore = $authTokenStore;
-        $this->loggedInChecker = $loggedInChecker;
+        $this->loggedInChecker = new LoggedInChecker($authTokenStore, $authTokenService);
+        $this->accessTokenFetcher = new AccessTokenFetcher($authTokenStore, $authTokenService);
     }
 
     public function create(
@@ -30,13 +32,10 @@ class CreateUserProfileApplicationService
         string $selfIntroductionText
     ): CreateUserProfileResult
     {
-        $authToken = $this->authTokenStore->get();
-        if (!$this->loggedInChecker->check($authToken)) {
-            throw new AuthenticationException('ログインしていません。');
-        }
+        $accessToken = $this->accessTokenFetcher->fetch();
 
         $result = $this->createUserProfileRequestService->send(
-            $authToken->accessToken,
+            $accessToken,
             $name,
             $selfIntroductionText
         );

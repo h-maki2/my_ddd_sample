@@ -16,8 +16,9 @@ class LoggedInChecker
     /**
      * ログイン済みかどうかを判定
      */
-    public function check(?AuthToken $authToken): bool
+    public function check(): bool
     {
+        $authToken = $this->authTokenStore->get();
         if ($authToken === null) {
             return false;
         }
