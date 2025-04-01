@@ -2,7 +2,7 @@
 
 namespace packages\domain\service\userProfile;
 
-use packages\domain\model\authenticationAccount\UserId;
+use packages\domain\model\userProfile\userAccount\UserId;
 use packages\domain\model\userProfile\IUserProfileRepository;
 use packages\domain\model\userProfile\UserName;
 

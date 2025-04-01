@@ -1,6 +1,6 @@
 <?php
 
-namespace packages\domain\model\userAccount;
+namespace packages\domain\model\userProfile\userAccount;
 
 class UserAccountData
 {

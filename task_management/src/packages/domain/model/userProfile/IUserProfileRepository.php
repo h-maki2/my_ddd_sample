@@ -2,7 +2,7 @@
 
 namespace packages\domain\model\userProfile;
 
-use packages\domain\model\authenticationAccount\UserId;
+use packages\domain\model\userProfile\userAccount\UserId;
 
 interface IUserProfileRepository
 {
