@@ -42,11 +42,6 @@ class AppServiceProvider extends ServiceProvider
             AAuthTokenStore::class,
             CookieAuthTokenStore::class
         );
-
-        $this->app->bind(
-            CreateUserProfileRequestService::class,
-            HttpCreateUserProfileRequestService::class
-        );
     }
 
     /**

@@ -12,9 +12,9 @@ Route::middleware(['api.version', 'auth:api'])->group(function () {
         return $container->call([$controller, 'changePassword']);
     });
 
-    Route::post('/profile/create', function (Request $request, ApiVersionResolver $resolver, Container $container) {
+    Route::post('/account/get', function (Request $request, ApiVersionResolver $resolver, Container $container) {
         $version = $request->attributes->get('api_version');
-        $controller = $resolver->resolve($version, 'userProfile\UserProfileController');
-        return $container->call([$controller, 'create']);
+        $controller = $resolver->resolve($version, 'authenticationAccount\AuthenticationAccountController');
+        return $container->call([$controller, 'fetchAuthAccount']);
     });
 });

@@ -64,7 +64,6 @@ class AppServiceProvider extends ServiceProvider
        // リポジトリ
        $this->app->bind(IDefinitiveRegistrationConfirmationRepository::class, EloquentDefinitiveRegistrationConfirmationRepository::class);
        $this->app->bind(IAuthenticationAccountRepository::class, EloquentAuthenticationAccountRepository::class);
-       $this->app->bind(IUserProfileRepository::class, EloquentUserProfileRepository::class);
 
        $this->app->bind(IEventStore::class, EloquentEventStore::class);
 
