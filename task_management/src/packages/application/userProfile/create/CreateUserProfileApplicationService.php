@@ -3,15 +3,16 @@
 namespace packages\application\userProfile\create;
 
 use Illuminate\Support\Facades\Log;
+use packages\domain\model\auth\Scope;
 use packages\domain\model\authToken\AAuthTokenStore;
 use packages\domain\model\authToken\AccessTokenFetcher;
 use packages\domain\model\authToken\IAuthTokenService;
 use packages\domain\model\common\exception\AuthenticationException;
 use packages\domain\model\common\validator\ValidationHandler;
 use packages\domain\model\oauth\scope\IScopeAuthorizationChecker;
-use packages\domain\model\oauth\scope\Scope;
 use packages\domain\model\userProfile\IUserProfileRepository;
 use packages\domain\model\userProfile\SelfIntroductionText;
+use packages\domain\model\userProfile\userAccount\IUserAccountService;
 use packages\domain\model\userProfile\UserName;
 use packages\domain\model\userProfile\UserProfile;
 use packages\domain\model\userProfile\validation\SelfIntroductionTextValidation;
@@ -26,17 +27,19 @@ class CreateUserProfileApplicationService
     private IUserProfileRepository $userProfileRepository;
     private UserProfileService $userProfileService;
     private AccessTokenFetcher $accessTokenFetcher;
+    private IUserAccountService $userAccountService;
 
     public function __construct(
         IUserProfileRepository $userProfileRepository,
-        AuthenticationService $authService,
         AAuthTokenStore $authTokenStore,
-        IAuthTokenService $authTokenService
+        IAuthTokenService $authTokenService,
+        IUserAccountService $userAccountService
     )
     {
         $this->userProfileRepository = $userProfileRepository;
         $this->userProfileService = new UserProfileService($userProfileRepository);
         $this->accessTokenFetcher = new AccessTokenFetcher($authTokenStore, $authTokenService);
+        $this->userAccountService = $userAccountService;
     }
 
     /**
@@ -44,11 +47,12 @@ class CreateUserProfileApplicationService
      */
     public function create(
         string $userNameString, 
-        string $selfIntroductionTextString,
-        string $scopeString
+        string $selfIntroductionTextString
     ): CreateUserProfileResult
     {
         $accessToken = $this->accessTokenFetcher->fetch();
+
+        $userAccount = $this->userAccountService->userAccountFrom($accessToken, Scope::ReadAccount);
 
         $validationHandler = new ValidationHandler();
         $validationHandler->addValidator(new UserNameValidation($userNameString));
@@ -61,7 +65,7 @@ class CreateUserProfileApplicationService
         $selfIntroductionText = new SelfIntroductionText($selfIntroductionTextString);
 
         $userProfile = UserProfile::create(
-            $userId,
+            $userAccount,
             $userName,
             $selfIntroductionText,
             $this->userProfileService
