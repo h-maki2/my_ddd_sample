@@ -26,10 +26,10 @@ class FetchAuthenticationAccountApplicationService
         $authenticationAccount = $this->authenticationAccountRepository->findById($userId);
 
         if ($authenticationAccount === null) {
-            throw new DomainException('アカウントが退会済みです。');
+            return FetchAuthenticationAccountResult::createWhenAccountNotExists();
         }
 
-        return new FetchAuthenticationAccountResult(
+        return FetchAuthenticationAccountResult::createWhenAccountExists(
             $authenticationAccount->id()->value,
             $authenticationAccount->email()->value
         );
