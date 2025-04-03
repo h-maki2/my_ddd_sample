@@ -16,7 +16,7 @@ class TestAuthTokenFactory
     ): AuthToken
     {
         return new AuthToken(
-            $accessToken ?? new AccessToken('test_access_token', new AccessTokenExpiration(new DateTimeImmutable('+30 minutes'))),
+            $accessToken ?? new AccessToken('test_access_token', AccessTokenExpiration::create((new DateTimeImmutable('+30 minutes'))->getTimestamp())),
             $refreshToken ?? new RefreshToken('test_refresh_token')
         );
     }

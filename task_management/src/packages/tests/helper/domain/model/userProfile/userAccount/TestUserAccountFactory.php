@@ -1,6 +1,6 @@
 <?php
 
-namespace packages\test\helpers\domain\userProfile\userAccount;
+namespace packages\tests\helper\domain\model\userProfile\userAccount;
 
 use packages\domain\model\userProfile\userAccount\UserAccountData;
 use packages\domain\model\userProfile\userAccount\UserEmail;

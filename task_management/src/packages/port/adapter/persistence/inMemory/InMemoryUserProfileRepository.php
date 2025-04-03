@@ -1,6 +1,6 @@
 <?php
 
-namespace packages\adapter\persistence\inMemory;
+namespace packages\port\adapter\persistence\inMemory;
 
 use packages\domain\model\userProfile\IUserProfileRepository;
 use packages\domain\model\userProfile\SelfIntroductionText;
