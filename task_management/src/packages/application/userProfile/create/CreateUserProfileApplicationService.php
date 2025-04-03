@@ -3,11 +3,12 @@
 namespace packages\application\userProfile\create;
 
 use Illuminate\Support\Facades\Log;
+use packages\domain\model\auth\AuthenticationException;
 use packages\domain\model\auth\Scope;
 use packages\domain\model\authToken\AAuthTokenStore;
 use packages\domain\model\authToken\AccessTokenFetcher;
 use packages\domain\model\authToken\IAuthTokenService;
-use packages\domain\model\common\exception\AuthenticationException;
+use packages\domain\model\authToken\LoggedInChecker;
 use packages\domain\model\common\validator\ValidationHandler;
 use packages\domain\model\oauth\scope\IScopeAuthorizationChecker;
 use packages\domain\model\userProfile\IUserProfileRepository;
@@ -28,6 +29,7 @@ class CreateUserProfileApplicationService
     private UserProfileService $userProfileService;
     private AccessTokenFetcher $accessTokenFetcher;
     private IUserAccountService $userAccountService;
+    private LoggedInChecker $loggedInChecker;
 
     public function __construct(
         IUserProfileRepository $userProfileRepository,
@@ -39,6 +41,7 @@ class CreateUserProfileApplicationService
         $this->userProfileRepository = $userProfileRepository;
         $this->userProfileService = new UserProfileService($userProfileRepository);
         $this->accessTokenFetcher = new AccessTokenFetcher($authTokenStore, $authTokenService);
+        $this->loggedInChecker = new LoggedInChecker($authTokenStore, $authTokenService);
         $this->userAccountService = $userAccountService;
     }
 
@@ -50,6 +53,10 @@ class CreateUserProfileApplicationService
         string $selfIntroductionTextString
     ): CreateUserProfileResult
     {
+        if (!$this->loggedInChecker->check()) {
+            throw new AuthenticationException('ログインしていません');
+        }
+
         $accessToken = $this->accessTokenFetcher->fetch();
 
         $userAccount = $this->userAccountService->userAccountFrom($accessToken, Scope::ReadAccount);
