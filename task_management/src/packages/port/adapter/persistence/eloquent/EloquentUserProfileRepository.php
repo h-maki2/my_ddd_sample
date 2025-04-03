@@ -1,6 +1,6 @@
 <?php
 
-namespace packages\adapter\persistence\eloquent;
+namespace packages\port\adapter\persistence\eloquent;
 
 use packages\domain\model\userProfile\IUserProfileRepository;
 use packages\domain\model\userProfile\SelfIntroductionText;

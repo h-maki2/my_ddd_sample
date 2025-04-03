@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use packages\adapter\persistence\eloquent\EloquentUserProfileRepository;
+use packages\port\adapter\persistence\eloquent\EloquentUserProfileRepository;
 use packages\application\userProfile\CreateUserProfileRequestService;
 use packages\domain\model\auth\AOneTimeTokenSessionService;
 use packages\domain\model\auth\IAuthorizationRequestUrlBuildService;

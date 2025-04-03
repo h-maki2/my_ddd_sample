@@ -10,6 +10,7 @@ use packages\domain\model\userProfile\userAccount\UserEmail;
 use packages\domain\model\userProfile\userAccount\UserId;
 use packages\port\adapter\services\common\identityAccessApi\IdentityAccessApiAcceptCreator;
 use packages\port\adapter\services\common\identityAccessApi\IdentityAccessApiException;
+use packages\port\adapter\services\common\identityAccessApi\IdentityAccessApiResponse;
 use packages\port\adapter\services\common\identityAccessApi\IdentityAccessApiVersion;
 
 class HttpUserAccountAdapter
@@ -18,14 +19,15 @@ class HttpUserAccountAdapter
 
     public function toUserAccountData(AccessToken $accessToken, Scope $scope): UserAccountData
     {
-        $apiResult = $this->sendRequest($accessToken, $scope);
+        $response = $this->sendRequest($accessToken, $scope);
+        $apiResult = $response->successResponse();
         return new UserAccountData(
             new UserId($apiResult['userId']),
             new UserEmail($apiResult['email']),
         );
     }
 
-    private function sendRequest(AccessToken $accessToken, Scope $scope): array
+    private function sendRequest(AccessToken $accessToken, Scope $scope): IdentityAccessApiResponse
     {
         $response = Http::asForm()
             ->withHeaders([
@@ -40,7 +42,7 @@ class HttpUserAccountAdapter
             throw new IdentityAccessApiException(print_r($response->json(), true));
         }
 
-        return $response->json();
+        return new IdentityAccessApiResponse($response);
     }
 
     private function buildUrl(): string
