@@ -23,4 +23,20 @@ class UpdateUserProfileController
             'selfIntroductionText' => $result->selfIntroductionText,
         ]);
     }
+
+    public function update(Request $request)
+    {
+        $result = $this->appService->update(
+            $request->input('userName') ?? '',
+            $request->input('selfIntroductionText') ?? ''
+        );
+
+        if ($result->isSuccess) {
+            return redirect('/');
+        }
+
+        return redirect('/profile/update')
+                ->withErrors($result->validationErrorMessageList)
+                ->withInput();
+    }
 }

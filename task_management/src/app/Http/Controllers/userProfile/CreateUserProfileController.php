@@ -7,14 +7,22 @@ use packages\application\userProfile\create\CreateUserProfileApplicationService;
 
 class CreateUserProfileController
 {
+    private CreateUserProfileApplicationService $createUserProfileApplicationService;
+
+    public function __construct(CreateUserProfileApplicationService $createUserProfileApplicationService)
+    {
+        $this->createUserProfileApplicationService = $createUserProfileApplicationService;
+    }
+
     public function displayForm()
     {
+        $this->createUserProfileApplicationService->displayCreateUserProfileForm();
         return view('userProfile.createUserProfileForm');
     }
 
-    public function create(Request $request, CreateUserProfileApplicationService $createUserProfileApplicationService)
+    public function create(Request $request)
     {
-        $result = $createUserProfileApplicationService->create(
+        $result = $this->createUserProfileApplicationService->create(
             $request->input('userName') ?? '',
             $request->input('selfIntroductionText') ?? ''
         );

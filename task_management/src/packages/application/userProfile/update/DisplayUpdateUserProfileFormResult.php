@@ -7,7 +7,7 @@ class DisplayUpdateUserProfileFormResult
     readonly string $userName;
     readonly string $selfIntroductionText;
 
-    private function __construct(string $userName, string $selfIntroductionText)
+    public function __construct(string $userName, string $selfIntroductionText)
     {
         $this->userName = $userName;
         $this->selfIntroductionText = $selfIntroductionText;

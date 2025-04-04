@@ -45,6 +45,21 @@ class CreateUserProfileApplicationService
         $this->userAccountService = $userAccountService;
     }
 
+    public function displayCreateUserProfileForm(): void
+    {
+        if (!$this->loggedInChecker->check()) {
+            throw new AuthenticationException('ログインしていません');
+        }
+
+        $accessToken = $this->accessTokenFetcher->fetch();
+
+        $userAccount = $this->userAccountService->userAccountFrom($accessToken, Scope::ReadAccount);
+
+        if ($this->userProfileService->isExists($userAccount->userId)) {
+            throw new RuntimeException('ユーザープロフィールはすでに存在します');
+        }
+    }
+
     /**
      * ユーザープロフィールを作成する
      */
