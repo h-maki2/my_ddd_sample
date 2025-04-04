@@ -1,6 +1,6 @@
 <?php
 
-namespace packages\test\helpers\domain\userProfile;
+namespace packages\tests\helper\domain\model\userProfile;
 
 use packages\domain\model\userProfile\SelfIntroductionText;
 use packages\domain\model\userProfile\userAccount\UserEmail;
@@ -8,7 +8,7 @@ use packages\domain\model\userProfile\userAccount\UserId;
 use packages\domain\model\userProfile\UserName;
 use packages\domain\model\userProfile\UserProfile;
 use packages\domain\model\userProfile\UserProfileId;
-use packages\test\helpers\domain\userProfile\userAccount\TestUserIdFactory;
+use packages\tests\helper\domain\model\userProfile\userAccount\TestUserIdFactory;
 use Ramsey\Uuid\Uuid;
 
 class TestUserProfileFactory
