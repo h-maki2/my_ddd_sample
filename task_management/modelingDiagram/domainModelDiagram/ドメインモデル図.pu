@@ -1,0 +1,227 @@
+@startuml task_management
+
+title task_managementコンテキスト
+
+package "ユーザープロフィール集約(UserProfileAggregation)" {
+    class UserProfile << (R,red) RootEntity >> {
+        userId: UserId
+        userName: UserName
+        userEmail: UserEmail
+        selfIntroductionText: SelfIntroductionText
+    }
+
+    class UserName {
+        - value: string
+    }
+
+    class UserEmail {
+        - value: string
+    }
+
+    class SelfIntroductionText {
+        - value: string
+    }
+
+    class UserId {
+        - value: string
+    }
+
+    note bottom of UserId
+        identity_accessコンテキストから取得する
+    end note
+
+    note bottom of UserEmail
+        ・identity_accessコンテキストから取得する
+        ・identity_accessコンテキストの変更と同期させる
+    end note
+
+    note bottom of UserName
+        ・ユーザー名は、50文字以内
+        ・変更可能
+    end note
+
+    note bottom of SelfIntroductionText
+        ・自己紹介文は、500文字以内
+        ・変更可能
+    end note
+
+    UserProfile *-down- UserId
+    UserProfile *-down- UserName
+    UserProfile *-down- UserEmail
+    UserProfile *-down- SelfIntroductionText
+}
+
+package "プロジェクト集約(ProjectAggregation)" {
+    class Project << (R,red) RootEntity >> {
+       projectId: ProjectId
+       projectName: ProjectName
+       projectOverview: ProjectOverview
+       projectStatus: ProjectStatus
+       projectMember: ProjectMember[]
+       progresRate: ProjectProgresRate
+    }
+
+    class ProjectId {
+        - value: string
+    }
+
+    class ProjectName {
+        - value: string
+    }
+
+    class ProjectOverview {
+        - value: string
+    }
+
+    enum ProjectStatus {
+        notStarted(未着手)
+        ongoing(進行中)
+        finished(終了済み)
+    }
+
+    class ProjectMember {
+        - projectId: ProjectId
+        - userId: UserId
+        - projectParticipationStatus: ProjectParticipationStatus
+        - projectRole: ProjectRole
+    }
+
+    enum ProjectParticipationStatus {
+        invited(招待済み)
+        participated(参加済み)
+    }
+
+    enum ProjectRole {
+        leader(リーダー)
+        member(メンバー)
+    }
+
+    class ProjectProgresRate {
+        - value: int
+    }
+
+    note bottom of ProjectRole
+        ・プロジェクトリーダーは各プロジェクトに1名のみ
+        ・プロジェクトリーダーは別のメンバーに権限を譲渡できる
+    end note
+
+    note bottom of ProjectId
+        ULIDの形式
+    end note
+
+    note bottom of ProjectName
+        ・プロジェクト名は、100文字以内
+        ・ユーザーが管理しているプロジェクトの中で一意な名前を設定する
+        ・プロジェクトリーダーのみが設定・変更できる
+    end note
+
+    note bottom of ProjectOverview
+        ・プロジェクトの概要は、500文字以内
+        ・プロジェクトリーダーのみが設定・変更できる
+    end note
+
+    note bottom of ProjectMember
+        ・プロジェクトリーダーのみがメンバーを招待できる
+        ・メンバーを招待するとプロジェクト参加ステータスが招待済みになり、招待したメンバーに招待メールが届く
+        ・招待されたメンバーは、招待メールに記載されたURLからプロジェクトに参加できる
+        ・メンバーがプロジェクトに参加すると、プロジェクト参加ステータスが参加済みになる
+        ・メンバーがプロジェクトに参加すると、リーダーにメールが届く
+        ・メンバーが退会すると、リーダーにメールが届く
+    end note
+
+    note bottom of ProjectProgresRate
+        ・プロジェクトの進捗率は、0%以上100%以下
+        ・toDo: チケットの進捗率と同期させる
+    end note
+
+    Project *-down- ProjectId
+    Project *-down- ProjectName
+    Project *-down- ProjectOverview
+    Project *-down- ProjectStatus
+    Project "1" *-down- "1..*" ProjectMember
+    ProjectMember *-down- ProjectId
+    ProjectMember *-down- ProjectProgresRate
+    ProjectMember -down-> UserId
+    ProjectMember *-down- ProjectParticipationStatus
+    ProjectMember *-down- ProjectRole
+}
+
+package "チケット集約(ProjectAggregation)" {
+    class Ticket << (R,red) RootEntity >> {
+       projectId: ProjectId
+       ticketId: TicketId
+       parentTicketId: ?TicketId
+       ticketName: TicketName
+       ticketOverview: TicketOverview
+       progresRate: TicketProgresRate
+       ticketAssignment チケット担当者: UserId
+       status: TicketStatus
+    }
+
+    class TicketId {
+        - value: string
+    }
+
+    class TicketName {
+        - value: string
+    }
+
+    class TicketOverview {
+        - value: string
+    }
+
+    class TicketProgresRate {
+        - value: string
+    }
+
+    enum TicketStatus {
+        notStarted(未着手)
+        ongoing(進行中)
+        finished(終了済み)
+    }
+
+    note bottom of Ticket
+        ・チケット担当者は、プロジェクトメンバーの中から設定できる
+        ・チケット担当者は一人のみ設定可能
+        ・チケットを作成したら、チケット担当者に通知がいく
+        ・チケット担当者は変更できる
+        ・チケット担当者が変更されたら、新しいチケット担当者に通知がいく
+        ・toDo: チケットにコメントを残せるようにする
+    end note
+
+    note bottom of TicketId
+        ・年月日時分秒ミリ秒の形式
+        ・プロジェクトごとに一意なID
+    end note
+
+    note bottom of TicketName
+        ・チケット名は、100文字以内
+        ・プロジェクト内で一意な名前を設定する
+    end note
+
+    note bottom of TicketOverview
+        チケットの概要は、500文字以内
+    end note
+
+    note bottom of TicketProgresRate
+        ・チケットの進捗率は、0〜100の数値
+        ・チケット担当者のみが変更できる
+        ・todo: チケットの進捗率を更新したらプロジェクトの進捗率も自動で更新できるようにする
+    end note
+
+    note bottom of TicketStatus
+        ・プロジェクト内の全てのチケットステータスが終了済みの場合、
+          プロジェクトのステータスも終了済みになる
+        ・ステータスが更新されたらプロジェクトリーダーに通知がいく
+    end note
+
+    Ticket -down-> ProjectId
+    Ticket *-down- TicketId
+    Ticket *-down- TicketName
+    Ticket *-down- TicketOverview
+    Ticket *-down- TicketProgresRate
+    Ticket *-down- TicketStatus
+    Ticket -down-> UserId
+}
+
+@enduml
