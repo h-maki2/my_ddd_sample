@@ -17,5 +17,6 @@ Route::get('/profile/create', [CreateUserProfileController::class, 'displayForm'
 Route::post('/profile/create', [CreateUserProfileController::class, 'create']);
 
 Route::get('/profile/update', [UpdateUserProfileController::class, 'displayForm']);
+Route::post('/profile/update', [UpdateUserProfileController::class, 'update']);
 
 Route::get('/test', [TestController::class, 'index']);
