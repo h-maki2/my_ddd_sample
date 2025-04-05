@@ -21,7 +21,7 @@ class UserProfileTestDataCreator
     }
 
     public function create(
-        ?UserId $userId,
+        ?UserId $userId = null,
         ?UserEmail $userEmail = null,
         ?UserName $userName = null,
         ?SelfIntroductionText $selfIntroductionText = null
