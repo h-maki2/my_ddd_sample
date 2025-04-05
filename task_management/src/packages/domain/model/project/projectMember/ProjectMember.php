@@ -109,6 +109,14 @@ class ProjectMember
     }
 
     /**
+     * プロジェクトメンバーの役割がリーダーかどうかを判定
+     */
+    public function isLeader(): bool
+    {
+        return $this->role->isLeader();
+    }
+
+    /**
      * プロジェクトメンバーが参加済みかどうかを判定
      */
     private function isParticipated(): bool
