@@ -111,7 +111,6 @@ package "プロジェクト集約(ProjectAggregation)" {
 
     note bottom of ProjectName
         ・プロジェクト名は、100文字以内
-        ・ユーザーが管理しているプロジェクトの中で一意な名前を設定する
         ・プロジェクトリーダーのみが設定・変更できる
     end note
 
