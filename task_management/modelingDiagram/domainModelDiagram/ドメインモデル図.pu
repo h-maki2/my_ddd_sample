@@ -76,7 +76,7 @@ package "プロジェクト集約(ProjectAggregation)" {
     enum ProjectStatus {
         notStarted(未着手)
         ongoing(進行中)
-        finished(終了済み)
+        completed(完了)
     }
 
     class ProjectMember {
