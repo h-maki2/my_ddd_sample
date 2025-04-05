@@ -96,10 +96,6 @@ package "プロジェクト集約(ProjectAggregation)" {
         member(メンバー)
     }
 
-    class ProjectProgresRate {
-        - value: int
-    }
-
     note bottom of ProjectRole
         ・プロジェクトリーダーは各プロジェクトに1名のみ
         ・プロジェクトリーダーは別のメンバーに権限を譲渡できる
@@ -128,18 +124,12 @@ package "プロジェクト集約(ProjectAggregation)" {
         ・メンバーが退会すると、リーダーにメールが届く
     end note
 
-    note bottom of ProjectProgresRate
-        ・プロジェクトの進捗率は、0%以上100%以下
-        ・toDo: チケットの進捗率と同期させる
-    end note
-
     Project *-down- ProjectId
     Project *-down- ProjectName
     Project *-down- ProjectOverview
     Project *-down- ProjectStatus
     Project "1" *-down- "1..*" ProjectMember
     ProjectMember *-down- ProjectId
-    ProjectMember *-down- ProjectProgresRate
     ProjectMember -down-> UserId
     ProjectMember *-down- ProjectParticipationStatus
     ProjectMember *-down- ProjectRole
