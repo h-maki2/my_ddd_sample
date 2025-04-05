@@ -14,4 +14,14 @@ enum ProjectParticipationStatus: string
             self::Participated => '参加済み',
         };
     }
+
+    public function isParticipated(): bool
+    {
+        return $this === self::Participated;
+    }
+
+    public function isInvited(): bool
+    {
+        return $this === self::Invited;
+    }
 }

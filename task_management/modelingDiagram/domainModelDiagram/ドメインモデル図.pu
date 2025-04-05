@@ -110,6 +110,11 @@ package "プロジェクト集約(ProjectAggregation)" {
         ・プロジェクトリーダーのみが設定・変更できる
     end note
 
+    note bottom of ProjectParticipationStatus
+        ・プロジェクトリーダーの場合の初期値は「参加済み」
+        ・リーダー以外の場合の初期値は「招待済み」
+    end note
+
     note bottom of ProjectOverview
         ・プロジェクトの概要は、500文字以内
         ・プロジェクトリーダーのみが設定・変更できる

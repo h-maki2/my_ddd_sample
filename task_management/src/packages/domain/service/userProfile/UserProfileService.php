@@ -16,7 +16,7 @@ class UserProfileService
     }
 
     /**
-     * 既に登録されているユーザー名かどうかを判定する
+     * 既に登録されているプロフィールかどうかを判定する
      */
     public function isExists(UserId $userId): bool
     {
